@@ -5,15 +5,15 @@
       <p>Longitud: {{ longitude }}</p>
     </div>
     <div>
-      <div id="map" style="height: 400px;"></div>
+      <div ref="map" id="map" style="height: 400px;"></div>
     </div>
   </template>
   
   <script setup>
   import { ref, onMounted, computed } from 'vue';
   
-  const latitude = ref(null);
-  const longitude = ref(null);
+  const latitude = ref(0);
+  const longitude = ref(0);
   const errorMessage = ref(null);
   
   onMounted(() => {
@@ -35,11 +35,13 @@
   });
 
   window.initMap = () => {
+    const ubiActual = { lat: latitude.value, lng: longitude.value }
     const mapOptions = {
-      center: { lat: latitude.value, lng: longitude.value },
-      zoom: 13
+      center: ubiActual,
+      zoom: 16
     };
     const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    const marker = new google.maps.Marker({ position: ubiActual, map: map })
   };
   </script>
   
