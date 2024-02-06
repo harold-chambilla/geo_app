@@ -1,13 +1,22 @@
 <template>
-    <div>
-      <p v-if="errorMessage">{{ errorMessage }}</p>
-      <p>Latitud: {{ latitude }}</p>
-      <p>Longitud: {{ longitude }}</p>
+  <div>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header">Mapa y Coordenadas</div>
+            <div class="card-body">
+              <p v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</p>
+              <p class="mb-1">Latitud: {{ latitude }}</p>
+              <p class="mb-4">Longitud: {{ longitude }}</p>
+              <div id="map" class="mb-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <div id="map" style="height: 400px;"></div>
-    </div>
-  </template>
+  </div>
+</template>
   
   <script setup>
   import { ref, onMounted, computed } from 'vue';
