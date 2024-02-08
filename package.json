@@ -28,7 +28,6 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@types/googlemaps": "^3.43.3",
-        "axios": "^1.6.7"
+        "@types/googlemaps": "^3.43.3"
     }
 }
