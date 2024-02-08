@@ -61,17 +61,17 @@
       const ubiActual = { lat: latitude.value, lng: longitude.value };
       // const ubiDestino = { lat: -12.033055274005628, lng: -76.99143343148506 };
       // const ubiDestino = { lat: -12.058597, lng: -76.964071 };
-      const ubiDestino = { lat: -12.035484, lng: -76.990205 };
+      const ubiDestino = { lat: -12.085184, lng: -76.976101};
       const mapOptions = {
-        center: ubiActual,
-        zoom: 18
+        center: ubiDestino,
+        zoom: 16
       };
       const map = new google.maps.Map(document.getElementById('map'), mapOptions);
       const marker = [ 
         new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!" }),
         new google.maps.Marker({ position: ubiDestino, map: map })
       ]
-      const radio = 300;
+      const radio = 800;
       const circle = new google.maps.Circle({
             strokeColor: '#8CD0FF',
             strokeOpacity: 0.8,
