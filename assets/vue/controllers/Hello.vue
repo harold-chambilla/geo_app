@@ -40,14 +40,14 @@
         longitude.value = position.coords.longitude;
         console.log('Ubicación del usuario obtenida: ', position);
 
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q&callback=initMap&libraries=geometry`;
-        script.defer = true;
-        script.async = true;
-        script.onerror = () => {
-          console.error("Error al cargar la API de Google Maps");
-        };
-        document.head.appendChild(script);
+        // const script = document.createElement('script');
+        // script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q&callback=initMap&libraries=geometry`;
+        // script.defer = true;
+        // script.async = true;
+        // script.onerror = () => {
+        //   console.error("Error al cargar la API de Google Maps");
+        // };
+        // document.head.appendChild(script);
       },
       (error) => {
         errorMessage.value = `Error al obtener la ubicación: ${error.message}`;

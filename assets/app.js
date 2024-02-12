@@ -1,5 +1,12 @@
 import { registerVueControllerComponents } from '@symfony/ux-vue';
 import './bootstrap.js';
+
+import { createApp } from 'vue';
+import App from "../assets/vue/controllers/App.vue";
+
+const app = createApp(App);
+
+app.mount('#app');
 /*
  * Welcome to your app's main JavaScript file!
  *
