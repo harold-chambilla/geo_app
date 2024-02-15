@@ -2,10 +2,13 @@ import { registerVueControllerComponents } from '@symfony/ux-vue';
 import './bootstrap.js';
 
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from "../assets/vue/controllers/App.vue";
 
+const pinia = createPinia();
 const app = createApp(App);
 
+app.use(pinia);
 app.mount('#app');
 /*
  * Welcome to your app's main JavaScript file!
