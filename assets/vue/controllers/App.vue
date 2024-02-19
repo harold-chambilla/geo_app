@@ -28,9 +28,11 @@
 // Dato a enviar a otro formulario se le pondra (*), los datos que no van a estar son estos (-), Datos que iran en infoWindows(+)
 // Datos que se van a quedar en la misma vista (/)
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
-import { funcionesStore } from '../../store/funciones'
-import icono from '../../img/icon.svg'
-import human from '../../img/human.svg'
+import { funcionesStore } from '../../store/funciones';
+import iconEmpresa from '../../img/icono_de_empresa.svg';
+import iconUsuario from '../../img/icono_de_usuario.svg';
+import icono from '../../img/icon.svg';
+import human from '../../img/human.svg';
 
 // Variables de ubicación
 const latitude = ref(0);
@@ -123,8 +125,8 @@ function initMap(latitud, longitud, exact) {
     })
 
     const marker = [
-      new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!", icon: { url: human, scaledSize: new google.maps.Size(50, 50) } }),
-      new google.maps.Marker({ position: ubiDestino, map: map, title: "Mi empresa", icon: { url: icono, scaledSize: new google.maps.Size(50, 50) } })
+      new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!", icon: { url: iconUsuario, scaledSize: new google.maps.Size(50, 50) } }),
+      new google.maps.Marker({ position: ubiDestino, map: map, title: "Mi empresa", icon: { url: iconEmpresa, scaledSize: new google.maps.Size(50, 50) } })
     ];
 
     const bounds = new google.maps.LatLngBounds();
@@ -161,6 +163,23 @@ function initMap(latitud, longitud, exact) {
     } else {
       const text = "No esta en la empresa";
       asistencia.value = text;
+    }
+    console.log('hora actual: ', currentTiempo.value);
+    // const horaEntrada = new Date();
+    // horaEntrada.setHours(8);
+    // horaEntrada.setTime(30);
+    // horaEntrada.setSeconds(0);
+    
+    const currentTime = new Date();
+    const hora = currentTime.setHours(8)+":"+currentTime.setMinutes(30)+":"+currentTime.setSeconds(0)
+
+    console.log('hora', hora);
+    if (dist <= radio && currentTiempo.value <= horaEntrada) {
+      console.log('Tardanza');
+    } if (dist <= radio && currentTiempo.value >= horaEntrada) {
+      console.log('Puntual');
+    } else {
+      console.log('nada');
     }
 
     distancia.value = dist;
