@@ -10,7 +10,7 @@
             <p class="card-text">Exactitud: {{ exactitud }} | {{ exactitudRadio }}(+)</p>
             <p class="card-text">Asistencia: {{ asistencia }}(*)</p>
             <p class="card-text">Distancia: {{ distancia }}(+)</p>
-            <p class="card-text">Estado: Falta casuisticas(*)</p>
+            <p class="card-text">Estado: {{ estadoEntrada }}(*)</p>
             <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
             <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
             <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
@@ -45,6 +45,7 @@ const watchId = ref(null);
 const distancia = ref(null);
 const asistencia = ref("");
 const exactitudRadio = ref(null);
+const estadoEntrada = ref("");
 
 // Llamado al Store
 const functStore = funcionesStore();
@@ -164,22 +165,22 @@ function initMap(latitud, longitud, exact) {
       const text = "No esta en la empresa";
       asistencia.value = text;
     }
-    console.log('hora actual: ', currentTiempo.value);
-    // const horaEntrada = new Date();
-    // horaEntrada.setHours(8);
-    // horaEntrada.setTime(30);
-    // horaEntrada.setSeconds(0);
-    
-    const currentTime = new Date();
-    const hora = currentTime.setHours(8)+":"+currentTime.setMinutes(30)+":"+currentTime.setSeconds(0)
 
-    console.log('hora', hora);
-    if (dist <= radio && currentTiempo.value <= horaEntrada) {
-      console.log('Tardanza');
-    } if (dist <= radio && currentTiempo.value >= horaEntrada) {
-      console.log('Puntual');
+    const horaEntrada = '08:30:00'
+    if (currentTiempo.value >= horaEntrada && dist <= radio) {
+      const text = "Tardanza y dentro de radio";
+      estadoEntrada.value = text;
+    } else if (currentTiempo.value <= horaEntrada && dist <= radio) {
+      const text = "Puntual y dentro de radio";
+      estadoEntrada.value = text;
+    } else if (currentTiempo.value <= horaEntrada && dist >= radio) {
+      const text = "Puntual y fuera de radio";
+      estadoEntrada.value = text;
+    } else if (currentTiempo.value <= horaEntrada && dist >= radio) {
+      const text = "Tardanza y fuera de radio";
+      estadoEntrada.value = text;
     } else {
-      console.log('nada');
+      console.log('Esta fuera del radio');
     }
 
     distancia.value = dist;
