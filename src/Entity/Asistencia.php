@@ -27,6 +27,12 @@ class Asistencia
     private ?\DateTimeInterface $asi_horasalida = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $asi_fotoentrada = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $asi_fotosalida = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_estadoentrada = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -90,6 +96,30 @@ class Asistencia
     public function setAsiHorasalida(?\DateTimeInterface $asi_horasalida): static
     {
         $this->asi_horasalida = $asi_horasalida;
+
+        return $this;
+    }
+
+    public function getAsiFotoentrada(): ?string
+    {
+        return $this->asi_fotoentrada;
+    }
+
+    public function setAsiFotoentrada(?string $asi_fotoentrada): static
+    {
+        $this->asi_fotoentrada = $asi_fotoentrada;
+
+        return $this;
+    }
+
+    public function getAsiFotosalida(): ?string
+    {
+        return $this->asi_fotosalida;
+    }
+
+    public function setAsiFotosalida(?string $asi_fotosalida): static
+    {
+        $this->asi_fotosalida = $asi_fotosalida;
 
         return $this;
     }
