@@ -24,7 +24,7 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $col_apellidos = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $col_dninit = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -42,7 +42,7 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $col_nombreusuario = null;
 
     /**
@@ -111,16 +111,6 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
         $this->col_dninit = $col_dninit;
 
         return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->col_dninit;
     }
 
     public function getColFechanacimiento(): ?\DateTimeInterface
@@ -200,6 +190,16 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
         $this->col_nombreusuario = $col_nombreusuario;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->col_nombreusuario;
     }
 
     /**
