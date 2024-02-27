@@ -14,6 +14,8 @@
             <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
             <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
             <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
+            <button @click="sendAsistencia">Enviar Datos</button>
+            <button @click="updateAsistencia">Actualizar Datos</button>
           </div>
         </div>
       </div>
@@ -31,6 +33,7 @@ import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import { funcionesStore } from '../../store/funciones';
 import iconEmpresa from '../../img/icono_de_empresa.svg';
 import iconUsuario from '../../img/icono_de_usuario.svg';
+import { asistenciaStore } from '../../store/asistencia';
 import icono from '../../img/icon.svg';
 import human from '../../img/human.svg';
 
@@ -49,19 +52,43 @@ const estadoEntrada = ref("");
 
 // Llamado al Store
 const functStore = funcionesStore();
+const asisStore = asistenciaStore();
+
 
 //Tiempo y fecha
 onMounted(() => { //Utilizado para inicializar todo cuando ya esta cargado
   // Iniciar la actualización de la hora
   functStore.iniciarTiempo();
 });
-const currentTiempo = computed(() => functStore.getCurrentTiempo);;
+const currentTiempo = computed(() => functStore.getCurrentTiempo);
 const currentFecha = computed(() => functStore.getCurrentFecha);
 onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
   // Limpiar el intervalo cuando el componente se desmonte y no consuma memoria mientras navegas
   clearInterval(currentTiempo);
 });
 
+//Consumo de APIs
+const sendAsistencia = async () => {
+  const newAsis = {
+    asi_fechaentrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
+    asi_horaentrada: currentTiempo.value,
+    asi_fotoentrada: 'ruta/foto_entrada.jpg',
+    asi_estadoentrada: 'Presente',
+    latitud: 'position.coords.latitude',
+    longitud: 'position.coords.latitude'
+  };
+  await asisStore.POST_ASISTENCIA(newAsis);
+}
+
+const updateAsistencia = async () => {
+  const updAsis = {
+    asi_fechasalida: currentFecha.value,
+    asi_horasalida: currentTiempo.value,
+    asi_fotosalida: 'ruta/foto_salida.jpg',
+    asi_estadosalida: 'Ausente',
+  };
+  await asisStore.PUT_ASISTENCIA(26, updAsis);
+}
 
 onMounted(() => {
   if ('geolocation' in navigator) {
@@ -84,7 +111,7 @@ onMounted(() => {
 });
 
 // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
-function initMap(latitud, longitud, exact) {
+const initMap = (latitud, longitud, exact) => {
   if (!mapInitialized.value) {
     const ubiActual = { lat: latitud, lng: longitud };
     const ubiDestino = { lat: -12.085184, lng: -76.976101 }; // Ubicación de la empresa

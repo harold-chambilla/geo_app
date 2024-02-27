@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240220200008 extends AbstractMigration
+final class Version20240225225214 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20240220200008 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE asistencia (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, asi_fechaentrada DATE DEFAULT NULL, asi_fechasalida DATE DEFAULT NULL, asi_horaentrada TIME DEFAULT NULL, asi_horasalida TIME DEFAULT NULL, asi_estadoentrada VARCHAR(255) DEFAULT NULL, asi_estadosalida VARCHAR(255) DEFAULT NULL, asi_ubicacion CLOB DEFAULT NULL, asi_eliminado BOOLEAN DEFAULT NULL, asi_colaborador_id INTEGER DEFAULT NULL, CONSTRAINT FK_D8264A8D46F7DF74 FOREIGN KEY (asi_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE asistencia (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, asi_fechaentrada DATE DEFAULT NULL, asi_fechasalida DATE DEFAULT NULL, asi_horaentrada TIME DEFAULT NULL, asi_horasalida TIME DEFAULT NULL, asi_fotoentrada VARCHAR(255) DEFAULT NULL, asi_fotosalida VARCHAR(255) DEFAULT NULL, asi_estadoentrada VARCHAR(255) DEFAULT NULL, asi_estadosalida VARCHAR(255) DEFAULT NULL, asi_ubicacion CLOB DEFAULT NULL, asi_eliminado BOOLEAN DEFAULT NULL, asi_colaborador_id INTEGER DEFAULT NULL, CONSTRAINT FK_D8264A8D46F7DF74 FOREIGN KEY (asi_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_D8264A8D46F7DF74 ON asistencia (asi_colaborador_id)');
         $this->addSql('CREATE TABLE colaborador (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, col_nombres VARCHAR(255) DEFAULT NULL, col_apellidos VARCHAR(255) DEFAULT NULL, col_dninit VARCHAR(180) NOT NULL, col_fechanacimiento DATE DEFAULT NULL, col_puesto VARCHAR(255) DEFAULT NULL, col_area VARCHAR(255) DEFAULT NULL, col_correoelectronico VARCHAR(255) DEFAULT NULL, roles CLOB NOT NULL, col_nombreusuario VARCHAR(255) DEFAULT NULL, password VARCHAR(255) NOT NULL, col_eliminado BOOLEAN DEFAULT NULL, col_empresa_id INTEGER DEFAULT NULL, col_grupo_id INTEGER DEFAULT NULL, CONSTRAINT FK_D2F80BB37F0EA5D2 FOREIGN KEY (col_empresa_id) REFERENCES empresa (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_D2F80BB378A49F5A FOREIGN KEY (col_grupo_id) REFERENCES grupo (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_D2F80BB35A0E0AD2 ON colaborador (col_dninit)');

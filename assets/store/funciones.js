@@ -12,7 +12,7 @@ export const funcionesStore = defineStore('funciones', {
             const day = now.getDate().toString().padStart(2, '0');
             const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Sumamos 1 porque los meses empiezan en 0
             const year = now.getFullYear().toString();
-            return `${day}/${month}/${year}`;
+            return `${day}-${month}-${year}`;
         },
         getCurrentTiempo(state) {
             return state.currentTime;
