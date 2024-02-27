@@ -32,6 +32,12 @@ class Asistencia
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_fotosalida = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $asi_ubicacionentrada = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $asi_ubicacionsalida = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_estadoentrada = null;
 
@@ -39,7 +45,7 @@ class Asistencia
     private ?string $asi_estadosalida = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $asi_ubicacion = null;
+    private ?array $asi_notas = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $asi_eliminado = null;
@@ -124,6 +130,30 @@ class Asistencia
         return $this;
     }
 
+    public function getAsiUbicacionentrada(): ?array
+    {
+        return $this->asi_ubicacionentrada;
+    }
+
+    public function setAsiUbicacionentrada(?array $asi_ubicacionentrada): static
+    {
+        $this->asi_ubicacionentrada = $asi_ubicacionentrada;
+
+        return $this;
+    }
+
+    public function getAsiUbicacionsalida(): ?array
+    {
+        return $this->asi_ubicacionsalida;
+    }
+
+    public function setAsiUbicacionsalida(?array $asi_ubicacionsalida): static
+    {
+        $this->asi_ubicacionsalida = $asi_ubicacionsalida;
+
+        return $this;
+    }
+
     public function getAsiEstadoentrada(): ?string
     {
         return $this->asi_estadoentrada;
@@ -148,14 +178,14 @@ class Asistencia
         return $this;
     }
 
-    public function getAsiUbicacion(): ?array
+    public function getAsiNotas(): ?array
     {
-        return $this->asi_ubicacion;
+        return $this->asi_notas;
     }
 
-    public function setAsiUbicacion(?array $asi_ubicacion): static
+    public function setAsiNotas(?array $asi_notas): static
     {
-        $this->asi_ubicacion = $asi_ubicacion;
+        $this->asi_notas = $asi_notas;
 
         return $this;
     }

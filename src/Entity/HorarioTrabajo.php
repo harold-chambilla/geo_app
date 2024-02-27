@@ -17,11 +17,17 @@ class HorarioTrabajo
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $hot_diasemana = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $hot_fecha = null;
+
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $hot_horaentrada = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $hot_horasalida = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $hot_tipojornada = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $hot_eliminado = null;
@@ -46,6 +52,18 @@ class HorarioTrabajo
         return $this;
     }
 
+    public function getHotFecha(): ?\DateTimeInterface
+    {
+        return $this->hot_fecha;
+    }
+
+    public function setHotFecha(?\DateTimeInterface $hot_fecha): static
+    {
+        $this->hot_fecha = $hot_fecha;
+
+        return $this;
+    }
+
     public function getHotHoraentrada(): ?\DateTimeInterface
     {
         return $this->hot_horaentrada;
@@ -66,6 +84,18 @@ class HorarioTrabajo
     public function setHotHorasalida(?\DateTimeInterface $hot_horasalida): static
     {
         $this->hot_horasalida = $hot_horasalida;
+
+        return $this;
+    }
+
+    public function getHotTipojornada(): ?string
+    {
+        return $this->hot_tipojornada;
+    }
+
+    public function setHotTipojornada(?string $hot_tipojornada): static
+    {
+        $this->hot_tipojornada = $hot_tipojornada;
 
         return $this;
     }
