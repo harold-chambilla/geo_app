@@ -28,21 +28,31 @@ class InicioController extends AbstractController
     }
 
     #[Route('/api/asistencia', name: 'api_asistencia_create', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    public function create(Request $request, AsistenciaRepository $asistenciaRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
+        $user = $this->getUser();
+
+        $existingEntry = $asistenciaRepository->findOneBy([
+            'asi_colaborador' => $user,
+            'asi_fechaentrada' => new \DateTime($data['asi_fechaentrada']),
+            'asi_estadosalida' => null, // Buscar una entrada sin salida
+        ]);
+    
+        // Si se encuentra una entrada sin salida, retornar un error
+        if ($existingEntry) {
+            return new JsonResponse(['message' => 'Ya existe una entrada sin salida para este colaborador en esta fecha'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+   
         // Crear una nueva instancia de la entidad Asistencia
         $asistencia = new Asistencia();
         $asistencia->setAsiFechaentrada(new \DateTime($data['asi_fechaentrada']));
-        // $asistencia->setAsiFechasalida(new \DateTime($data['asi_fechasalida']));
         $asistencia->setAsiHoraentrada(new \DateTime($data['asi_horaentrada']));
-        // $asistencia->setAsiHorasalida(new \DateTime($data['asi_horasalida']));
         $asistencia->setAsiFotoentrada($data['asi_fotoentrada']);
-        // $asistencia->setAsiFotosalida($data['asi_fotosalida']);
         $asistencia->setAsiEstadoentrada($data['asi_estadoentrada']);
-        // $asistencia->setAsiEstadosalida($data['asi_estadosalida']);
-        $asistencia->setAsiUbicacion([$data['latitud'], $data['longitud']]);
+        $asistencia->setAsiUbicacionentrada([$data['latitud'], $data['longitud']]);
+        $asistencia->setAsiColaborador($user);
         $asistencia->setAsiEliminado(false);
 
 
@@ -52,24 +62,74 @@ class InicioController extends AbstractController
         return $this->json($asistencia, Response::HTTP_CREATED);
     }
 
-    #[Route('/api/asistencia/{id}', name: 'api_asistencia_update', methods: ['PUT'])]
-    public function update(Asistencia $asistencia, Request $request): JsonResponse
+    #[Route('/api/asistencia/salida', name: 'api_asistencia_update', methods: ['POST'])]
+    public function update(Request $request, AsistenciaRepository $asistenciaRepository): JsonResponse
     {
         // Actualizar los datos de la asistencia
         $data = json_decode($request->getContent(), true);
 
+        $user = $this->getUser();
+        // Verificar si el usuario actual está autenticado
+        if (!$user) {
+            return new JsonResponse(['message' => 'Usuario no autenticado'], Response::HTTP_UNAUTHORIZED);
+        }
+        // Obtener el último registro de asistencia del usuario
+        $lastAsistencia = $asistenciaRepository->findLastAsistenciaByUser($user);
+        // Verificar si se encontró algún registro de asistencia para el usuario
+        if (!$lastAsistencia) {
+            return new JsonResponse(['message' => 'No se encontraron registros de asistencia para este usuario'], Response::HTTP_NOT_FOUND);
+        }
+        // Obtener el ID del último registro de asistencia del usuario
+        $lastAsistenciaId = $lastAsistencia->getId();
+        // Preparar la respuesta
+        $responseId = [
+            'id' => $lastAsistenciaId
+        ];
+
+        $asistencia = $asistenciaRepository->find($responseId);
         if (!$asistencia) {
             return new JsonResponse(['message' => 'No se encontró la asistencia'], JsonResponse::HTTP_NOT_FOUND);
         }
-
         $asistencia->setAsiFechasalida(new \DateTime($data['asi_fechasalida']));
         $asistencia->setAsiHorasalida(new \DateTime($data['asi_horasalida']));
         $asistencia->setAsiFotosalida($data['asi_fotosalida']);
         $asistencia->setAsiEstadosalida($data['asi_estadosalida']);
+        $asistencia->setAsiUbicacionsalida([$data['latitud'], $data['longitud']]);
 
         $this->entityManager->flush();
 
         return $this->json($asistencia, Response::HTTP_OK);
+    }
+
+
+    #[Route('/api/asistencia/prueba', name: 'api_asistencia_update_prueba', methods: ['GET'])]
+    public function prueba(Request $request, AsistenciaRepository $asistenciaRepository): JsonResponse
+    {
+        // Obtener el usuario actual
+    $user = $this->getUser();
+
+    // Verificar si el usuario actual está autenticado
+    if (!$user) {
+        return new JsonResponse(['message' => 'Usuario no autenticado'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    // Obtener el último registro de asistencia del usuario
+    $lastAsistencia = $asistenciaRepository->findLastAsistenciaByUser($user);
+
+    // Verificar si se encontró algún registro de asistencia para el usuario
+    if (!$lastAsistencia) {
+        return new JsonResponse(['message' => 'No se encontraron registros de asistencia para este usuario'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Obtener el ID del último registro de asistencia del usuario
+    $lastAsistenciaId = $lastAsistencia->getId();
+
+    // Preparar la respuesta
+    $response = [
+        'id' => $lastAsistenciaId
+    ];
+
+    return $this->json($response, Response::HTTP_OK);
     }
 
     #[Route('/api/asistencia/{id}', name: 'api_asistencia_get', methods: ['GET'])]

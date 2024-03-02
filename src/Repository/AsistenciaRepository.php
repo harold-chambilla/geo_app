@@ -45,4 +45,15 @@ class AsistenciaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findLastAsistenciaByUser($user): ?Asistencia
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.asi_colaborador = :user')
+            ->setParameter('user', $user)
+            ->andWhere('a.asi_estadosalida IS NULL')
+            ->orderBy('a.id', 'DESC') // Ordenar por ID en orden descendente para obtener el último registro
+            ->setMaxResults(1) // Obtener solo un resultado (el último registro)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -12,14 +12,14 @@ export const asistenciaStore = defineStore('asistencia', {
         async POST_ASISTENCIA(data) {
             try {
                 const response = await axios.post('/api/asistencia', data);
-                this.asistencia = response.data.asistencia;
+                // this.asistencia = response.data.asistencia;
             } catch (error) {
                 console.log(error.response.data);
             }
         },
-        async PUT_ASISTENCIA(id, data) {
+        async PUT_ASISTENCIA(data) {
             try {
-                const response = await axios.put(`/api/asistencia/${id}`, data);
+                const response = await axios.post(`/api/asistencia/salida`, data);
                 this.asistencia = response.data.asistencia;
             } catch (error) {
                 console.log(error.response.data);

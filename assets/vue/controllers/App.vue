@@ -14,8 +14,8 @@
             <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
             <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
             <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
-            <button @click="sendAsistencia">Enviar Datos</button>
-            <button @click="updateAsistencia">Actualizar Datos</button>
+            <button @click="turnoEntrada">Enviar Datos</button>
+            <button @click="turnoSalida">Actualizar Datos</button>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@ const longitude = ref(0);
 const exactitud = ref(0);
 const mapInitialized = ref(false);
 const watchId = ref(null);
-
+const verId = ref(null);
 // Variables adicionales
 const distancia = ref(null);
 const asistencia = ref("");
@@ -67,48 +67,108 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
   clearInterval(currentTiempo);
 });
 
-//Consumo de APIs
-const sendAsistencia = async () => {
-  const newAsis = {
-    asi_fechaentrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
-    asi_horaentrada: currentTiempo.value,
-    asi_fotoentrada: 'ruta/foto_entrada.jpg',
-    asi_estadoentrada: 'Presente',
-    latitud: 'position.coords.latitude',
-    longitud: 'position.coords.latitude'
-  };
-  await asisStore.POST_ASISTENCIA(newAsis);
-}
 
-const updateAsistencia = async () => {
-  const updAsis = {
-    asi_fechasalida: currentFecha.value,
-    asi_horasalida: currentTiempo.value,
-    asi_fotosalida: 'ruta/foto_salida.jpg',
-    asi_estadosalida: 'Ausente',
-  };
-  await asisStore.PUT_ASISTENCIA(26, updAsis);
-}
-
-onMounted(() => {
-  if ('geolocation' in navigator) {
-    setTimeout(() => {
-      watchId.value = navigator.geolocation.watchPosition((position) => {
+const watchCoordinates = () => {
+  return new Promise((resolve, reject) => {
+    verId.value = navigator.geolocation.getCurrentPosition(
+      (position) => {
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
         exactitud.value = position.coords.accuracy;
-        if (!mapInitialized.value) {
-          initMap(latitude.value, longitude.value, exactitud.value);
-        }
+        resolve({ latitude: latitude.value, longitude: longitude.value, accuracy: exactitud.value });
       },
-        (error) => {
-          errorMessage.value = `Error al obtener la ubicación: ${error.message}`;
-          console.error('Geolocation error:', error);
+      (error) => {
+        console.error('Geolocation error:', error);
+        reject(error);
+      }
+    );
+  });
+};
+
+const turnoEntrada = async () => {
+  try {
+    const coords = await watchCoordinates();
+    const newAsis = {
+      asi_fechaentrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
+      asi_horaentrada: currentTiempo.value,
+      asi_fotoentrada: 'ruta/foto_entrada.jpg',
+      asi_estadoentrada: 'Presente',
+      latitud: coords.latitude,
+      longitud: coords.longitude
+    };
+    console.log("CREAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
+    await asisStore.POST_ASISTENCIA(newAsis);
+  } catch (error) {
+    console.error("Error al enviar los datos de entrada: ", error);
+  }
+}
+
+const turnoSalida = async () => {
+  try {
+    const coords = await watchCoordinates();
+    const updAsis = {
+      asi_fechasalida: currentFecha.value,
+      asi_horasalida: currentTiempo.value,
+      asi_fotosalida: 'ruta/foto_salida.jpg',
+      asi_estadosalida: 'Ausente',
+      latitud: coords.latitude,
+      longitud: coords.longitude
+    };
+    // const nuevoAsistenciaId = asisStore.asistencia.id;
+    console.log("ACTUALIZAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
+    await asisStore.PUT_ASISTENCIA(updAsis);
+  } catch (error) {
+    console.error("Error al enviar los datos de salida: ", error);
+  }
+};
+
+onMounted(() => {
+  if ('geolocation' in navigator) {
+    setTimeout(() => {    
+      const coordenadasInitMap = async () => {
+        try {
+          const coords = await watchCoordinates();
+          // coords es un objeto con latitude y longitude
+          latitude.value = coords.latitude;
+          longitude.value = coords.longitude;
+          exactitud.value = coords.accuracy;
+          if (!mapInitialized.value) { // Función a aparecer al actualizar la web
+            initMap(latitude.value, longitude.value, exactitud.value);
+            // console.log("no creo: ", latitude.value);
+          }
+        } catch (error) {
+          console.error("Error al obtener coordenadas:", error);
         }
-      )
+      };
+      coordenadasInitMap();
     }, 500);
   }
 });
+
+// onMounted(() => {
+//   if ('geolocation' in navigator) {
+//     setTimeout(() => {
+//       watchId.value = navigator.geolocation.getCurrentPosition(
+//         async (position) => {
+//           latitude.value = position.coords.latitude;
+//           longitude.value = position.coords.longitude;
+//           exactitud.value = position.coords.accuracy;
+//           if (!mapInitialized.value) { // Función a aparecer al actualizar la web
+//             initMap(latitude.value, longitude.value, exactitud.value);
+//             // console.log("no creo: ", latitude.value);
+//           } else { // Funciones que pueden funcionar despues de la inicialización y cierre del mapa
+//             await updateAsistencia(latitude.value, longitude.value);
+//             // sendAsistencia(latitude.value, longitude.value)
+//             console.log("no creo: ", latitude.value);
+//           }
+//         },
+//         (error) => {
+//           errorMessage.value = `Error al obtener la ubicación: ${error.message}`;
+//           console.error('Geolocation error:', error);
+//         })
+//     }, 500);
+//   }
+// });
 
 // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
 const initMap = (latitud, longitud, exact) => {
@@ -167,13 +227,14 @@ const initMap = (latitud, longitud, exact) => {
     //const lat = new google.maps.LatLng(-12.033077753513151, -76.99137861370299)
 
     const tiles = new google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
-      if (!mapInitialized.value) {
+      if (!mapInitialized.value) { // El mapa ya esta inicializado, por lo que no lo que el watch se limpiara y no se volvera a actualizar
         mapInitialized.value = true;
         // Limpiar el observador de ubicación una vez que el usuario esté satisfecho con la ubicación  
         navigator.geolocation.clearWatch(watchId.value);
       }
     });
 
+    
 
     // infoWindow.open(map, marker[0]);
     marker[0].addListener("click", () => { //debido al emergente, el mapa se centra automaticamente en este, por eso tome como opcion cerrarlo para abrirlo.
