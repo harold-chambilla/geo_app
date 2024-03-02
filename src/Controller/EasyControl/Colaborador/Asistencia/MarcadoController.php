@@ -24,6 +24,7 @@ class MarcadoController extends AbstractController
     {
         return $this->render('easy_control/colaborador/asistencia/marcado.html.twig');
     }
+    
     #[Route('/api/asistencia', name: 'api_asistencia_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {

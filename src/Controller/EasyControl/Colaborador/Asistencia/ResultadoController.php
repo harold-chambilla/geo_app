@@ -24,6 +24,7 @@ class ResultadoController extends AbstractController
     {
         return $this->render('easy_control/colaborador/asistencia/resultado.html.twig');
     }
+    
     #[Route('/api/asistencia/{id}', name: 'api_asistencia_get', methods: ['GET'])]
     public function get(Asistencia $asistencia, AsistenciaRepository $asistenciaRepository): JsonResponse
     {

@@ -2,4 +2,83 @@
 
 {% block title %}Resultado - EasyControl!{% endblock %}
 
-{% block body %}{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/asistencia/resultado.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <!-- Encabezado con botón de retroceso -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header d-flex justify-content-center align-items-center">
+                    <a href="#" class="back-link">
+                        <span class="back-arrow">&lt;</span>
+                    </a> 
+                    <span class="text-dark">ANGEL BENAVIDES CORDOVA</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con imagen y texto -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="image-container">
+                    <img class="ico" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_puntualidad.png') }}" alt="Imagen">
+                </div>
+                <div class="text-container">
+                    <div class="text-box">
+                        <span class="text">Puntual</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Sección de información de puntualidad -->
+                    <div class="text-container">
+                        <div class="form-group">
+                            <p>Información de la puntualidad</p>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_calendario.png') }}" width="20" height="20">
+                                <label class="label_text" for="inp_fecha">FECHA</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_h_marcacion.png') }}" width="30" height="30">
+                                <label class="label_text" for="inp_hora">hora</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_puntualidad_02.png') }}" width="30" height="40">
+                                <label class="label_text inp_ubicacion" for="inp_ubicacion">ubicacion</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-6">
+                    <!-- Datos personales -->
+                    <div class="text-container">
+                        <div class="form-group">
+                            <p>Datos personales</p>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_usuario.png') }}" width="20" height="20">
+                                <label class="label_text" for="inp_usuario">ANGEL BENAVIDES CORDOVA</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_DNI.png') }}" width="30" height="30">
+                                <label class="label_text" for="inp_DNI">71401017</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ asset('ico/easy_control/colaborador/asistencia/ico_presencial.png') }}" width="30" height="30">
+                                <label class="label_text" for="inp_formato">Presencial</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

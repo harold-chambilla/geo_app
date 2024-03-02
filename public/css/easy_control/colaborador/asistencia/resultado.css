@@ -1,0 +1,177 @@
+/* Estilos generales */
+body {
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+/*----encabezado ---*/
+.header {
+  color: #000; 
+  padding: 15px 0;
+}
+
+.back-link {
+  color: #0074D9;
+  text-decoration: none;
+  margin-right: 20px;
+  font-weight: bold;
+  text-decoration: none;     
+
+}
+
+.back-arrow {
+  margin-right: 5px;  
+  
+}
+
+.text-dark{
+  font-size: 28px; 
+  font-family: 'Poppins', sans-serif; 
+  font-weight: 600; 
+}
+
+/*------------------ Sección principal con imagen y texto ------------------------------*/
+.image-container {
+text-align: center; 
+margin-top: 10px;
+margin-bottom: 20px;
+}
+.ico{
+height: 82px;
+width: 82px;
+}
+
+.text-container {
+display: flex;
+justify-content: center; 
+
+}
+
+.text-box {
+display: flex;
+align-items: center; 
+}
+
+.text {
+font-size: 28px; 
+color: #fff; 
+background-color: #06D80E;
+padding: 5px 45px;
+border-radius: 10px ; 
+border: #E5EFFF;
+margin-bottom: 27px;
+}
+
+
+
+.custom-input {
+border: none;  
+margin-left: 2px; 
+border: 0px solid #ced4da;
+display: block;
+width: 90%;
+height: calc(1.5em + 0.75rem + 2px);
+padding: 1.5rem 1.5rem;
+font-size: 1rem;
+font-weight: 400;
+line-height: 1.5;
+color: #495057;
+background-color: #fff;
+background-clip: padding-box;
+border: 0px solid #ced4da;
+transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.inp_ubicacion{ 
+color: #fff; 
+background-color: #06d80d98;
+padding: 5px 45px;
+border-radius: 10px ; 
+border: #E5EFFF;
+}
+
+/*----------------------Sección de información de puntualidad --------------------------*/
+.form-group{
+  margin-top: 35px;
+  margin-left: 35px;
+  align-items: center;
+width: 350px;
+font-size: 19px;
+}
+
+.icono_label{
+margin-right: 25px;
+display: flex;
+align-items: center;
+text-align: center;
+}
+
+.custom-ico {
+    width: 100%;
+    display: -ms-flexbox;
+    display: inline-block;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 15px 25px;
+    margin: 25px auto;  
+    font-weight: 400; 
+    line-height: 1.5; 
+    text-align: center;
+    border-radius: 10px; 
+    margin: 5px;
+}
+
+
+.label_text {
+width: 350px;
+border-bottom: 1px solid black; 
+}  
+
+@media screen and (max-width: 800px) {
+  .text-dark{
+    font-size: 18px; 
+  }
+  
+  .ico{
+    height: 72px;
+    width: 72px;
+    }
+    
+  .text {
+      font-size: 20px; 
+      }
+  .custom-input {  
+        margin-left: 2px; 
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.545rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+  .form-group{
+      font-size: 16px;
+    }
+  .custom-ico {
+      padding: 5px 15px;
+      margin: 25px auto;  
+  }
+  .form-group{
+    margin-left: 10px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .text-dark{
+    font-size: 15px; 
+  }
+  .text {
+    font-size: 18px; 
+    }
+  .form-group{
+      font-size: 14px;
+    }
+  .label_text {
+      width: 250px;
+      border-bottom: 1px solid black; 
+      }
+}

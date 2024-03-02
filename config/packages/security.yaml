@@ -20,6 +20,8 @@ security:
                 login_path: app_easycontrol_colaborador_seguridad_acceder
                 check_path: app_easycontrol_colaborador_seguridad_acceder
                 enable_csrf: true
+            json_login:
+                check_path: app_easycontrol_colaborador_seguridad_api_acceder
             logout:
                 path: app_easycontrol_colaborador_seguridad_desconectarse
                 # where to redirect after logout
