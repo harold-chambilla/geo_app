@@ -59,6 +59,7 @@
             <h1 class="text-login">{{ contenido.titulo.valor }}</h1>
         </div> 
         <form class="col-md-12 text-center" method="post">
+            {# No es parte del diseño origianl #}
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
