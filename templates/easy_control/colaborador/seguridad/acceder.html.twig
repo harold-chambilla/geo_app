@@ -2,6 +2,11 @@
 
 {% block title %}Iniciar sesión - EasyControl!{% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/seguridad/acceder.css') }}">
+{% endblock %}
+
 {% block body %}
     <form method="post">
         {% if error %}
@@ -39,4 +44,38 @@
             Sign in
         </button>
     </form>
+
+    <div class="login-container">
+        <div class="col-md-12 logo"> 
+            <img class="img-fluid"   src="{{ asset('img/easy_control/general/ec_logo_del_software.png') }}" > 
+        </div>
+        <div class="col-md-12 center-text">
+            <h1 class="text-login">¡Bienvenidos. Puntualidad hoy, logros mañana!</h1>
+        </div> 
+        <form class="col-md-12 text-center">
+            <div class="form-group"  >
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ asset('ico/easy_control/colaborador/seguridad/ico_empresa.png') }}"  width="20" height="20">
+                    <input type="text" class="custom-input" id="ID" placeholder="ID de empresa">
+                </span>
+            </div>
+            <div class="form-group">
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ asset('ico/easy_control/colaborador/seguridad/ico_usuario.png') }}"  width="20" height="20">
+                    <input type="text" class="custom-input" id="usuario" placeholder="Usuario">
+                </span>
+            </div>
+            <div class="form-group">
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ asset('ico/easy_control/colaborador/seguridad/ico_contraseña.png') }}"  width="20" height="20">
+                    <input type="text" class="custom-input" id="Contraseña" placeholder="Contraseña">
+                </span>
+            </div>
+            <button type="submit" class="boton">INGRESAR</button>
+        </form>
+        <footer>
+            <p>V. 1.2 - Creación de EASY CONTROL</p>
+            <p><a href="#">Terms of Service</a></p>
+        </footer>
+    </div>
 {% endblock %}

@@ -2,4 +2,67 @@
 
 {% block title %}Marcar Asistencia - EasyControl!{% endblock %}
 
-{% block body %}{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/asistencia/marcado.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% set remoto = false %}
+{% if remoto == true %}
+    <section class="A-Fondo" >
+        <div class="container">
+            <div class="col-md-12 box">
+                <div class="time-box" id="current-time"></div>
+            </div>
+            <div class="container">
+                <div class="col-md-12 box">
+                    <div class="F-blanca">
+                        <iframe class="maps"  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3874.381451369873!2d-122.40660548489284!3d37.785932372596036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858078b5d719cd%3A0x1b4d2d369cc6f379!2sGolden%20Gate%20Bridge!5e0!3m2!1ses!2sus!4v1645423700625!5m2!1ses!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <button class="B-Verde border-0">ENTRADA</button>
+                        <button class="B-ROJO  border-0">SALIDA</button>
+                    </div>
+                </div>
+            </div> 
+            <footer class="A-blanca" >
+                <button type="submit" class="boton">
+                    <img src="{{ asset('ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario.png') }}" alt="Icono" class="custom-btn-icon" width="25" height="30">
+                    HORARIO
+                </button>
+            </footer>
+        </div> 
+    </section>
+{% else %}
+    <section class="A-Fondo" >
+        <div class="container">
+            <div class="col-md-12 box">
+                <div class="time-box" id="current-time"></div>
+            </div>
+        
+            <div class="container">
+                <div class="col-md-12 box">
+                    <div class="F-blanca">
+                        <img src="{{ asset('ico/easy_control/colaborador/asistencia/marcado/remoto/ico_remoto.png') }}" class="img-central">
+                        <p class="parrafo1">¿ Ya registraste tu entrada o salida ?</p>      
+                        <p class="parrafo2">En remoto, la puntualidad es la esencia del compromiso.</p>
+                        <button class="B-Verde border-0">ENTRADA</button>
+                        <button class="B-ROJO  border-0">SALIDA</button>
+        
+                    </div>
+                </div>
+            </div>
+            <footer class="A-blanca" >
+                <button type="submit" class="boton">
+                    <img src="{{ asset('ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario.png') }}"  alt="Icono" class="custom-btn-icon" width="20" height="20">
+                        HORARIO
+                </button>
+            </footer> 
+        </div>
+    </section>   
+{% endif %}
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('js/easy_control/colaborador/asistencia/js_hora.js') }}"></script>
+{% endblock %}
