@@ -2,6 +2,80 @@
 
 {% block title %}Marcar Asistencia - EasyControl!{% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/asistencia/marcado.css') }}">
+{% endblock %}
+
 {% block body %}
 <div id="app"></div>
+    {# Variables #}
+    {% set contenido = {
+        "remoto": false,
+        "seccion": {
+            "remoto": {
+                "relleno": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_remoto.png"
+                },
+                "texto_01": "¿Ya registraste tu entrada o salida?",
+                "texto_02": "En remoto, la puntualidad es la esencia del compromiso."
+            },
+            "presencial": {
+                "relleno": {
+                    "tipo": "url",
+                    "valor": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3874.381451369873!2d-122.40660548489284!3d37.785932372596036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858078b5d719cd%3A0x1b4d2d369cc6f379!2sGolden%20Gate%20Bridge!5e0!3m2!1ses!2sus!4v1645423700625!5m2!1ses!2sus"
+                }
+            }, 
+            "botones": {
+                "entrada": {
+                    "valor": "ENTRADA"
+                },
+                "salida": {
+                    "valor": "SALIDA"
+                }
+            },
+            "horario": {
+                "imagen": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario.png"
+                },
+                "valor": "HORARIO"
+            }
+        }
+    } %}
+
+    <section class="A-Fondo" >
+        <div class="container">
+            <div class="col-md-12 box">
+                <div class="time-box" id="current-time"></div>
+            </div>
+            <div class="container">
+                <div class="col-md-12 box">
+                    <div class="F-blanca">
+                        {% if true == contenido.remoto %}
+                            <img src="{{ contenido.seccion.remoto.relleno.tipo == 'local' ? asset(contenido.seccion.remoto.relleno.valor) : contenido.seccion.remoto.relleno.valor }}" class="img-central">
+                            <p class="parrafo1">{{ contenido.seccion.remoto.texto_01 }}</p>      
+                            <p class="parrafo2">{{ contenido.seccion.remoto.texto_02 }}</p>
+                        {% else %}
+                            <iframe class="maps"  src="{{ contenido.seccion.presencial.relleno.tipo == 'local' ? asset(contenido.seccion.presencial.relleno.valor) : contenido.seccion.presencial.relleno.valor }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        {% endif %}
+                        <button class="B-Verde border-0">{{ contenido.seccion.botones.entrada.valor }}</button>
+                        <button class="B-ROJO  border-0">{{ contenido.seccion.botones.salida.valor }}</button>
+                    </div>
+                </div>
+            </div>
+            <footer class="A-blanca" >
+                <button type="submit" class="boton">
+                    <img src="{{ contenido.seccion.horario.imagen.tipo == 'local' ? asset(contenido.seccion.horario.imagen.valor) : contenido.seccion.horario.imagen.valor }}" alt="Icono" class="custom-btn-icon" width="25" height="30">
+                    {{ contenido.seccion.horario.valor }}
+                </button>
+            </footer>
+        </div>
+    </section>    
+{% endblock %}
+
+{% block js %}
+    {# Se mantendra a futuro. (Se podria hacer con vue) #}
+    <script src="{{ asset('js/easy_control/colaborador/asistencia/js_hora.js') }}"></script>
 {% endblock %}

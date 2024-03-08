@@ -2,6 +2,139 @@
 
 {% block title %}Resultado - EasyControl!{% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/asistencia/resultado.css') }}">
+{% endblock %}
+
 {% block body %}
-<div id="salida"></div>
+    <div id="salida"></div>
+    {% set contenido = {
+        "usuario": {
+            "nombre": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_usuario.png"
+                },
+                "valor": "ANGEL BENAVIDES CORDOVA"
+            },
+            "dni": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_DNI.png"
+                },
+                "valor": "71401017"
+            }
+        },
+        "resultado": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_puntualidad.png"
+            },
+            "estado": {
+                "valor": "Puntual"
+            },
+            "fecha": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_calendario.png"
+                },
+                "valor": "Fecha"
+            },
+            "hora": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_h_marcacion.png"
+                },
+                "valor": "Hora"
+            },
+            "ubicacion": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_puntualidad_02.png"
+                },
+                "valor": "Ubicacion"
+            },
+            "modalidad": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/easy_control/colaborador/asistencia/resultado/ico_presencial.png"
+                },
+                "valor": "Presencial"
+            }
+        }
+    } %}
+    <div class="container">
+        <!-- Encabezado con botón de retroceso -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header d-flex justify-content-center align-items-center">
+                    <a href="#" class="back-link">
+                        <span class="back-arrow">&lt;</span>
+                    </a> 
+                    <span class="text-dark">{{ contenido.usuario.nombre.valor }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con imagen y texto -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="image-container">
+                    <img class="ico" src="{{ contenido.resultado.icono.tipo == 'local' ? asset(contenido.resultado.icono.valor) : contenido.resultado.icono.valor }}" alt="Imagen">
+                </div>
+                <div class="text-container">
+                    <div class="text-box">
+                        <span class="text">{{ contenido.resultado.estado.valor }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Sección de información de puntualidad -->
+                    <div class="text-container">
+                        <div class="form-group">
+                            <p>Información de la puntualidad</p>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.resultado.fecha.icono.tipo == 'local' ? asset(contenido.resultado.fecha.icono.valor) : contenido.resultado.fecha.icono.valor }}" width="20" height="20">
+                                <label class="label_text" for="inp_fecha">{{ contenido.resultado.fecha.valor }}</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.resultado.hora.icono.tipo == 'local' ? asset(contenido.resultado.hora.icono.valor) : contenido.resultado.hora.icono.valor }}" width="30" height="30">
+                                <label class="label_text" for="inp_hora">{{ contenido.resultado.hora.valor }}</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.resultado.ubicacion.icono.tipo == 'local' ? asset(contenido.resultado.ubicacion.icono.valor) : contenido.resultado.ubicacion.icono.valor }}" width="30" height="40">
+                                <label class="label_text inp_ubicacion" for="inp_ubicacion">{{ contenido.resultado.ubicacion.valor }}</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-6">
+                    <!-- Datos personales -->
+                    <div class="text-container">
+                        <div class="form-group">
+                            <p>Datos personales</p>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.usuario.nombre.icono.tipo == 'local' ? asset(contenido.usuario.nombre.icono.valor) : contenido.usuario.nombre.icono.valor }}" width="20" height="20">
+                                <label class="label_text" for="inp_usuario">{{ contenido.usuario.nombre.valor }}</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.usuario.dni.icono.tipo == 'local' ? asset(contenido.usuario.dni.icono.valor) : contenido.usuario.dni.icono.valor }}" width="30" height="30">
+                                <label class="label_text" for="inp_DNI">{{ contenido.usuario.dni.valor }}</label>
+                            </span>
+                            <span class="custom-ico input-group-prepend">
+                                <img class="icono_label" src="{{ contenido.resultado.modalidad.icono.tipo == 'local' ? asset(contenido.resultado.modalidad.icono.valor) : contenido.resultado.modalidad.icono.valor }}" width="30" height="30">
+                                <label class="label_text" for="inp_formato">{{ contenido.resultado.modalidad.valor }}</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
