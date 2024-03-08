@@ -14,8 +14,9 @@
             <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
             <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
             <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
-            <button @click="turnoEntrada">Enviar Datos</button>
-            <button @click="turnoSalida">Actualizar Datos</button>
+            <button @click="turnoEntrada" ref="">Entrada</button>
+            <button @click="turnoSalida">Salida</button>
+            <input type="file" ref="fileInput" accept="image/*" capture="camera">
           </div>
         </div>
       </div>
@@ -44,6 +45,8 @@ const exactitud = ref(0);
 const mapInitialized = ref(false);
 const watchId = ref(null);
 const verId = ref(null);
+const fileInput = ref(null);
+
 // Variables adicionales
 const distancia = ref(null);
 const asistencia = ref("");
@@ -89,15 +92,16 @@ const turnoEntrada = async () => {
   try {
     const coords = await watchCoordinates();
     const newAsis = {
-      asi_fechaentrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
-      asi_horaentrada: currentTiempo.value,
-      asi_fotoentrada: 'ruta/foto_entrada.jpg',
-      asi_estadoentrada: 'Presente',
+      fechaEntrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
+      horaEntrada: currentTiempo.value,
+      fotoEntrada: fileInput.value.files[0],
+      estadoEntrada: 'Presente',
       latitud: coords.latitude,
       longitud: coords.longitude
     };
     console.log("CREAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
     await asisStore.POST_ASISTENCIA(newAsis);
+    // window.location.href = '/resultado';
   } catch (error) {
     console.error("Error al enviar los datos de entrada: ", error);
   }
@@ -107,16 +111,17 @@ const turnoSalida = async () => {
   try {
     const coords = await watchCoordinates();
     const updAsis = {
-      asi_fechasalida: currentFecha.value,
-      asi_horasalida: currentTiempo.value,
-      asi_fotosalida: 'ruta/foto_salida.jpg',
-      asi_estadosalida: 'Ausente',
+      fechaSalida: currentFecha.value,
+      horaSalida: currentTiempo.value,
+      fotoSalida: fileInput.value.files[0],
+      estadoSalida: 'Ausente',
       latitud: coords.latitude,
       longitud: coords.longitude
     };
     // const nuevoAsistenciaId = asisStore.asistencia.id;
     console.log("ACTUALIZAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
     await asisStore.PUT_ASISTENCIA(updAsis);
+    // window.location.href = '/resultado';
   } catch (error) {
     console.error("Error al enviar los datos de salida: ", error);
   }

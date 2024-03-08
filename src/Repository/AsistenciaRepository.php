@@ -56,4 +56,30 @@ public function findLastAsistenciaByUser($user): ?Asistencia
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findLastAsistenciaByUserEntrada($user): ?Asistencia
+    {
+        return $this->createQueryBuilder('a')
+        ->andWhere('a.asi_colaborador = :user')
+        ->setParameter('user', $user)
+        ->andWhere('a.asi_estadoentrada IS NOT NULL') // Filtrar por datos de entrada no nulos
+        ->andWhere('a.asi_estadosalida IS NULL') // Filtrar por datos de salida nulos
+        ->orderBy('a.id', 'DESC') // Ordenar por ID en orden descendente para obtener el último registro
+        ->setMaxResults(1) // Obtener solo un resultado (el último registro)
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
+
+    public function findLastAsistenciaByUserSalida($user): ?Asistencia
+    {
+        return $this->createQueryBuilder('a')
+        ->andWhere('a.asi_colaborador = :user')
+        ->setParameter('user', $user)
+        ->andWhere('a.asi_estadoentrada IS NOT NULL') // Filtrar por datos de entrada nulos
+        ->andWhere('a.asi_estadosalida IS NOT NULL') // Filtrar por datos de salida no nulos
+        ->orderBy('a.id', 'DESC') // Ordenar por ID en orden descendente para obtener el último registro
+        ->setMaxResults(1) // Obtener solo un resultado (el último registro)
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
 }

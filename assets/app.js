@@ -4,12 +4,18 @@ import './bootstrap.js';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from "../assets/vue/controllers/App.vue";
+// import Salida from "../assets/vue/controllers/Salida.vue"
+import Salida from "../assets/vue/controllers/resultado/Resultado.vue";
 
 const pinia = createPinia();
 const app = createApp(App);
+const salida = createApp(Salida);
 
 app.use(pinia);
 app.mount('#app');
+
+salida.use(pinia);
+salida.mount('#salida')
 /*
  * Welcome to your app's main JavaScript file!
  *

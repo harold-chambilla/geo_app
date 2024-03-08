@@ -3,6 +3,7 @@
 namespace App\Controller\EasyControl\Colaborador\Asistencia;
 
 use App\Entity\Asistencia;
+use App\Repository\AsistenciaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,20 +25,45 @@ class MarcadoController extends AbstractController
     {
         return $this->render('easy_control/colaborador/asistencia/marcado.html.twig');
     }
-    #[Route('/api/asistencia', name: 'api_asistencia_create', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    #[Route('/api/asistencia/entrada', name: 'api_asistencia_entrada', methods: ['POST'])]
+    public function entrada(Request $request, AsistenciaRepository $asistenciaRepository): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $user = $this->getUser();
 
-        // Crear una nueva instancia de la entidad Asistencia
+        if (!$user) {
+            return new JsonResponse(['message' => 'Usuario no autenticado'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $existingEntry = $asistenciaRepository->findOneBy([
+            'asi_colaborador' => $user,
+            'asi_fechaentrada' => new \DateTime($request->request->get('asi_fechaentrada')),
+            'asi_estadosalida' => null, // Buscar una entrada sin salida
+        ]);
+          
+        // Si se encuentra una entrada sin salida, retornar un error
+        if ($existingEntry) {
+            return new JsonResponse(['message' => 'Ya existe una entrada sin salida para este colaborador en esta fecha'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $archivo = $request->files->get('asi_fotoentrada');
+        if ($archivo !== null) {
+            // Si se ha adjuntado un archivo, moverlo al destino deseado
+            $destino = $this->getParameter('kernel.project_dir') . '/public/img';
+            $archivo->move($destino, $archivo->getClientOriginalName());
+            $nombreArchivo = $archivo->getClientOriginalName();
+        } else {
+            // Si no se ha adjuntado un archivo, establecer el nombre de archivo como nulo o un valor predeterminado
+            $nombreArchivo = null; // O establecer un nombre de archivo predeterminado
+        }
+
         $asistencia = new Asistencia();
-        $asistencia->setAsiFechaentrada(new \DateTime($data['asi_fechaentrada']));
-        $asistencia->setAsiHoraentrada(new \DateTime($data['asi_horaentrada']));
-        $asistencia->setAsiFotoentrada($data['asi_fotoentrada']);
-        $asistencia->setAsiEstadoentrada($data['asi_estadoentrada']);
-        $asistencia->setAsiUbicacionentrada([$data['latitud'], $data['longitud']]);
+        $asistencia->setAsiFechaentrada(new \DateTime($request->request->get('asi_fechaentrada')));
+        $asistencia->setAsiHoraentrada(new \DateTime($request->request->get('asi_horaentrada')));
+        $asistencia->setAsiFotoentrada($nombreArchivo);
+        $asistencia->setAsiEstadoentrada($request->request->get('asi_estadoentrada'));
+        $asistencia->setAsiUbicacionentrada([$request->request->get('latitud'), $request->request->get('longitud')]);
+        $asistencia->setAsiColaborador($user);
         $asistencia->setAsiEliminado(false);
-
 
         $this->entityManager->persist($asistencia);
         $this->entityManager->flush();
@@ -45,21 +71,48 @@ class MarcadoController extends AbstractController
         return $this->json($asistencia, Response::HTTP_CREATED);
     }
 
-    #[Route('/api/asistencia/{id}', name: 'api_asistencia_update', methods: ['PUT'])]
-    public function update(Asistencia $asistencia, Request $request): JsonResponse
+    #[Route('/api/asistencia/salida', name: 'api_asistencia_salida', methods: ['POST'])]
+    public function salida(Request $request, AsistenciaRepository $asistenciaRepository): JsonResponse
     {
-        // Actualizar los datos de la asistencia
-        $data = json_decode($request->getContent(), true);
+        $user = $this->getUser();
+        // Verificar si el usuario actual está autenticado
+        if (!$user) {
+            return new JsonResponse(['message' => 'Usuario no autenticado'], Response::HTTP_UNAUTHORIZED);
+        }
+        // Obtener el último registro de asistencia del usuario
+        $lastAsistencia = $asistenciaRepository->findLastAsistenciaByUser($user);
+        // Verificar si se encontró algún registro de asistencia para el usuario
+        if (!$lastAsistencia) {
+            return new JsonResponse(['message' => 'No se encontraron registros de asistencia para este usuario'], Response::HTTP_NOT_FOUND);
+        }
+        // Obtener el ID del último registro de asistencia del usuario
+        $lastAsistenciaId = $lastAsistencia->getId();
+        // Preparar la respuesta
+        $responseId = [
+            'id' => $lastAsistenciaId
+        ];
 
+        $asistencia = $asistenciaRepository->find($responseId);
         if (!$asistencia) {
             return new JsonResponse(['message' => 'No se encontró la asistencia'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $asistencia->setAsiFechasalida(new \DateTime($data['asi_fechasalida']));
-        $asistencia->setAsiHorasalida(new \DateTime($data['asi_horasalida']));
-        $asistencia->setAsiFotosalida($data['asi_fotosalida']);
-        $asistencia->setAsiEstadosalida($data['asi_estadosalida']);
-        $asistencia->setAsiUbicacionsalida([$data['latitud'], $data['longitud']]);
+        $archivo = $request->files->get('asi_fotoentrada');
+        if ($archivo !== null) {
+            // Si se ha adjuntado un archivo, moverlo al destino deseado
+            $destino = $this->getParameter('kernel.project_dir') . '/public/img';
+            $archivo->move($destino, $archivo->getClientOriginalName());
+            $nombreArchivo = $archivo->getClientOriginalName();
+        } else {
+            // Si no se ha adjuntado un archivo, establecer el nombre de archivo como nulo o un valor predeterminado
+            $nombreArchivo = null; // O establecer un nombre de archivo predeterminado
+        }
+
+        $asistencia->setAsiFechasalida(new \DateTime($request->request->get('asi_fechasalida')));
+        $asistencia->setAsiHorasalida(new \DateTime($request->request->get('asi_horasalida')));
+        $asistencia->setAsiFotosalida($nombreArchivo);
+        $asistencia->setAsiEstadosalida($request->request->get('asi_estadosalida'));
+        $asistencia->setAsiUbicacionsalida([$request->request->get('latitud'), $request->request->get('longitud')]);
 
         $this->entityManager->flush();
 
