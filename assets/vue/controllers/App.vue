@@ -14,9 +14,10 @@
             <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
             <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
             <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
-            <button @click="turnoEntrada" ref="">Entrada</button>
+            <button @click="turnoEntrada">Entrada</button>
             <button @click="turnoSalida">Salida</button>
             <input type="file" ref="fileInput" accept="image/*" capture="camera">
+            <p>Mensaje de error {{ errorMessage }}</p>
           </div>
         </div>
       </div>
@@ -32,11 +33,9 @@
 // Datos que se van a quedar en la misma vista (/)
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import { funcionesStore } from '../../store/funciones';
-import iconEmpresa from '../../img/icono_de_empresa.svg';
-import iconUsuario from '../../img/icono_de_usuario.svg';
 import { asistenciaStore } from '../../store/asistencia';
-import icono from '../../img/icon.svg';
-import human from '../../img/human.svg';
+import edificioImg from '../../img/edificio-svg.png';
+import hombreImg from '../../img/hombre-svg.png';
 
 // Variables de ubicación
 const latitude = ref(0);
@@ -57,7 +56,8 @@ const estadoEntrada = ref("");
 const functStore = funcionesStore();
 const asisStore = asistenciaStore();
 
-
+// Errores
+const errorMessage = computed(() => asisStore.errorMessage);
 //Tiempo y fecha
 onMounted(() => { //Utilizado para inicializar todo cuando ya esta cargado
   // Iniciar la actualización de la hora
@@ -95,12 +95,12 @@ const turnoEntrada = async () => {
       fechaEntrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
       horaEntrada: currentTiempo.value,
       fotoEntrada: fileInput.value.files[0],
-      estadoEntrada: 'Presente',
+      estadoEntrada: estadoEntrada.value,
       latitud: coords.latitude,
       longitud: coords.longitude
     };
     console.log("CREAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
-    await asisStore.POST_ASISTENCIA(newAsis);
+    await asisStore.POST_ENTRADA(newAsis);
     // window.location.href = '/resultado';
   } catch (error) {
     console.error("Error al enviar los datos de entrada: ", error);
@@ -114,13 +114,13 @@ const turnoSalida = async () => {
       fechaSalida: currentFecha.value,
       horaSalida: currentTiempo.value,
       fotoSalida: fileInput.value.files[0],
-      estadoSalida: 'Ausente',
+      estadoSalida: estadoEntrada.value,
       latitud: coords.latitude,
       longitud: coords.longitude
     };
     // const nuevoAsistenciaId = asisStore.asistencia.id;
     console.log("ACTUALIZAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
-    await asisStore.PUT_ASISTENCIA(updAsis);
+    await asisStore.POST_SALIDA(updAsis);
     // window.location.href = '/resultado';
   } catch (error) {
     console.error("Error al enviar los datos de salida: ", error);
@@ -150,41 +150,11 @@ onMounted(() => {
   }
 });
 
-// onMounted(() => {
-//   if ('geolocation' in navigator) {
-//     setTimeout(() => {
-//       watchId.value = navigator.geolocation.getCurrentPosition(
-//         async (position) => {
-//           latitude.value = position.coords.latitude;
-//           longitude.value = position.coords.longitude;
-//           exactitud.value = position.coords.accuracy;
-//           if (!mapInitialized.value) { // Función a aparecer al actualizar la web
-//             initMap(latitude.value, longitude.value, exactitud.value);
-//             // console.log("no creo: ", latitude.value);
-//           } else { // Funciones que pueden funcionar despues de la inicialización y cierre del mapa
-//             await updateAsistencia(latitude.value, longitude.value);
-//             // sendAsistencia(latitude.value, longitude.value)
-//             console.log("no creo: ", latitude.value);
-//           }
-//         },
-//         (error) => {
-//           errorMessage.value = `Error al obtener la ubicación: ${error.message}`;
-//           console.error('Geolocation error:', error);
-//         })
-//     }, 500);
-//   }
-// });
-
 // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
 const initMap = (latitud, longitud, exact) => {
   if (!mapInitialized.value) {
     const ubiActual = { lat: latitud, lng: longitud };
     const ubiDestino = { lat: -12.085184, lng: -76.976101 }; // Ubicación de la empresa
-
-    // const centerLocation = {
-    //   lat: (latitud + ubiDestino.lat) / 2,
-    //   lng: (longitud + ubiDestino.lng) / 2
-    // };
 
     const mapOptions = {
       // center: ubiDestino,
@@ -218,8 +188,8 @@ const initMap = (latitud, longitud, exact) => {
     })
 
     const marker = [
-      new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!", icon: { url: iconUsuario, scaledSize: new google.maps.Size(50, 50) } }),
-      new google.maps.Marker({ position: ubiDestino, map: map, title: "Mi empresa", icon: { url: iconEmpresa, scaledSize: new google.maps.Size(50, 50) } })
+      new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!", icon: { url: hombreImg, scaledSize: new google.maps.Size(50, 50) } }),
+      new google.maps.Marker({ position: ubiDestino, map: map, title: "Mi empresa", icon: { url: edificioImg, scaledSize: new google.maps.Size(50, 50) } })
     ];
 
     const bounds = new google.maps.LatLngBounds();
@@ -275,6 +245,8 @@ const initMap = (latitud, longitud, exact) => {
     } else {
       console.log('Esta fuera del radio');
     }
+
+    const estadoAsistencia = estadoEntrada.value;
 
     distancia.value = dist;
 

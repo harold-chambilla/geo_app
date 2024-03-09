@@ -7,6 +7,7 @@ export const asistenciaStore = defineStore('asistencia', {
         asistencia: '',
         entrada: null,
         salida: null,
+        errorMessage: null,
        }),
     getters: {
         ENTRADA(state) { return state.entrada },
@@ -14,7 +15,7 @@ export const asistenciaStore = defineStore('asistencia', {
         ASISTENCIA(state) { return state.asistencia }
     },
     actions: {
-        async POST_ASISTENCIA(data) {
+        async POST_ENTRADA(data) {
             try {
                 console.log('daratatatata: ', data);
                 let formData = new FormData();
@@ -26,11 +27,14 @@ export const asistenciaStore = defineStore('asistencia', {
                 formData.append('asi_fotoentrada', data.fotoEntrada);
                 const response = await axios.post('/marcado/api/asistencia/entrada', formData); 
                 // this.asistencia = response.data.asistencia;
+                window.location.href = '/resultado';
             } catch (error) {
+                this.errorMessage = error.response.data.message || 'Error desconocido';
                 console.log(error.response.data);
+                // alert(error);
             }
         },
-        async PUT_ASISTENCIA(data) {
+        async POST_SALIDA(data) {
             try {
                 let formData = new FormData();
                 formData.append('asi_fechasalida', data.fechaSalida);
@@ -40,35 +44,16 @@ export const asistenciaStore = defineStore('asistencia', {
                 formData.append('longitud', data.longitud);
                 formData.append('asi_fotosalida', data.fotoSalida);
                 const response = await axios.post(`/marcado/api/asistencia/salida`, formData);
-                this.asistencia = response.data.asistencia;
+                // this.asistencia = response.data.asistencia;
+                window.location.href = '/resultado';
             } catch (error) {
+                this.errorMessage = error.response.data.message || 'Error desconocido';
                 console.log(error.response.data);
             }
         },
-        async GET_ENTRADA() {
-            try {
-              const response = await axios.get('/resultado/api/asistencia/entrada'); // Ruta de la API de entrada
-            //   return response.data;
-              this.entrada = response.data;
-              
-            } catch (error) {
-              console.error('Error al obtener los datos de entrada:', error);
-            }
-          },
-        async GET_SALIDA() {
-            try {
-              console.log("2hla")
-              const response = await axios.get('/resultado/api/asistencia/salida'); // Ruta de la API de salida
-              this.salida = response.data;
-              console.log("Salida")
-            //   return response.data;
-            } catch (error) {
-              console.error('Error al obtener los datos de salida:', error);
-            }
-          },
         async GET_ASISTENCIA() {
             try {
-              const response = await axios.get('/resultado/api/asistencia/salida/prueba');
+              const response = await axios.get('/resultado/api/asistencia');
               this.entrada = response.data.entrada;
               this.salida = response.data.salida;
             } catch (error) {
