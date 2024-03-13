@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-<div id="app"></div>
+{# <div id="app"></div> #}
     {# Variables #}
     {% set contenido = {
         "remoto": false,
@@ -58,10 +58,12 @@
                             <p class="parrafo1">{{ contenido.seccion.remoto.texto_01 }}</p>      
                             <p class="parrafo2">{{ contenido.seccion.remoto.texto_02 }}</p>
                         {% else %}
-                            <iframe class="maps"  src="{{ contenido.seccion.presencial.relleno.tipo == 'local' ? asset(contenido.seccion.presencial.relleno.valor) : contenido.seccion.presencial.relleno.valor }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            {# <iframe class="maps"  src="{{ contenido.seccion.presencial.relleno.tipo == 'local' ? asset(contenido.seccion.presencial.relleno.valor) : contenido.seccion.presencial.relleno.valor }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe> #}
+                            <div id="mapa"></div>
                         {% endif %}
-                        <button class="B-Verde border-0">{{ contenido.seccion.botones.entrada.valor }}</button>
-                        <button class="B-ROJO  border-0">{{ contenido.seccion.botones.salida.valor }}</button>
+                        {# <button class="B-Verde border-0">{{ contenido.seccion.botones.entrada.valor }}</button>
+                        <button class="B-ROJO  border-0">{{ contenido.seccion.botones.salida.valor }}</button> #}
+                        <div id="marcado"></div>
                     </div>
                 </div>
             </div>

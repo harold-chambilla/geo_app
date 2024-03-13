@@ -1,9 +1,29 @@
 <template>
-  <div class="container mt-5 text-center">
+  <div class="container mt-5">
     <div class="row">
-      <div id="map" style="height: 400px;"></div>
-      <button class="B-Verde border-0" @click="turnoEntrada">Entrada</button>
-      <button class="B-ROJO  border-0" @click="turnoSalida">Salida</button>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Información de Ubicación</h5>
+            <p class="card-text">Latitude: {{ latitude }}(+)</p>
+            <p class="card-text">Longitude: {{ longitude }}(+)</p>
+            <p class="card-text">Exactitud: {{ exactitud }} | {{ exactitudRadio }}(+)</p>
+            <p class="card-text">Asistencia: {{ asistencia }}(*)</p>
+            <p class="card-text">Distancia: {{ distancia }}(+)</p>
+            <p class="card-text">Estado: {{ estadoEntrada }}(*)</p>
+            <p class="card-text">Hora: {{ currentTiempo }}(*)(/)</p>
+            <p class="card-text">Fecha: {{ currentFecha }}(*)</p>
+            <p class="card-text">Si deseas más información de tu posición selecciona tu muñeco en el mapa</p>
+            <button @click="turnoEntrada">Entrada</button>
+            <button @click="turnoSalida">Salida</button>
+            <input type="file" ref="fileInput" accept="image/*" capture="camera">
+            <p>Mensaje de error {{ errorMessage }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="map" style="height: 400px;"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,8 +55,6 @@ const estadoEntrada = ref("");
 // Llamado al Store
 const functStore = funcionesStore();
 const asisStore = asistenciaStore();
-
-const mapReady = ref(false);
 
 // Errores
 const errorMessage = computed(() => asisStore.errorMessage);
@@ -76,7 +94,7 @@ const turnoEntrada = async () => {
     const newAsis = {
       fechaEntrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
       horaEntrada: currentTiempo.value,
-      fotoEntrada: null,
+      fotoEntrada: fileInput.value.files[0],
       estadoEntrada: estadoEntrada.value,
       latitud: coords.latitude,
       longitud: coords.longitude
@@ -95,7 +113,7 @@ const turnoSalida = async () => {
     const updAsis = {
       fechaSalida: currentFecha.value,
       horaSalida: currentTiempo.value,
-      fotoSalida: null,
+      fotoSalida: fileInput.value.files[0],
       estadoSalida: estadoEntrada.value,
       latitud: coords.latitude,
       longitud: coords.longitude
@@ -120,7 +138,7 @@ onMounted(() => {
           longitude.value = coords.longitude;
           exactitud.value = coords.accuracy;
           if (!mapInitialized.value) { // Función a aparecer al actualizar la web
-            await initMap(latitude.value, longitude.value, exactitud.value);
+            initMap(latitude.value, longitude.value, exactitud.value);
             // console.log("no creo: ", latitude.value);
           }
         } catch (error) {
@@ -252,8 +270,5 @@ watch(exactitud, (newValue) => {
     exactitudRadio.value = 'Exactitud inaceptable. Por favor, actualiza la ubicación.';
   }
 });
-
-window.initMap = function () {
-  mapReady.value = true;
-};
+// window.initMap = initMap;
 </script>
