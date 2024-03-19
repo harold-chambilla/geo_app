@@ -33,6 +33,14 @@ class ResultadoController extends AbstractController
         $entrada = $ultimoRegistro->getAsiHoraentrada();
         $salida = $ultimoRegistro->getAsiHorasalida();
 
+        $empresa = $user->getColEmpresa();
+        $confAsis = $empresa->getEmpConfiguracionesAsistencia();
+        foreach ($confAsis as $conf) {
+            # code...
+            $modalidad = $conf->getCasModalidad();
+        }
+        // $conf_asistecia = $empresa->getCasEmpresa();
+
         $horariosTrabajo = $user->getColHorariostrabajo();
         // Iterar sobre los horarios de trabajo
         foreach ($horariosTrabajo as $horarioTrabajo) {
@@ -42,25 +50,27 @@ class ResultadoController extends AbstractController
             // Hacer algo con la hora de entrada...
         }
         $responseEntrada = [
-            'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos(),
+            'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos() ?? null,
             'dni' => $user->getColDninit(),
-            'horaEntrada' => $horaEntrada->format('H:i:s'),
-            'fecha' => $ultimoRegistro->getAsiFechaentrada()->format('d/m/Y'),
-            'hora' => $ultimoRegistro->getAsiHoraentrada()->format('H:i:s'),
-            'estado' => $ultimoRegistro->getAsiEstadoentrada(),
-            'ubicacion' => $ultimoRegistro->getAsiUbicacionentrada(),
+            'horaEntrada' => $horaEntrada->format('H:i:s') ?? null,
+            'fecha' => $ultimoRegistro->getAsiFechaentrada()->format('d/m/Y') ?? null,
+            'hora' => $ultimoRegistro->getAsiHoraentrada()->format('H:i:s') ?? null,
+            'modalidad' => $modalidad ?? null,
+            'estado' => $ultimoRegistro->getAsiEstadoentrada() ?? null,
+            // 'ubicacion' => $ultimoRegistro->getAsiUbicacionentrada(),      
         ];
 
         if($ultimoRegistro->getAsiHorasalida())
         {
             $responseSalida = [
-                'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos(),
-                'dni' => $user->getColDninit(),
-                'horaEntrada' => $horaSalida->format('H:i:s'),
-                'fecha' => $ultimoRegistro->getAsiFechasalida()->format('d/m/Y'),
-                'hora' => $ultimoRegistro->getAsiHorasalida()->format('H:i:s'),        
-                'estado' => $ultimoRegistro->getAsiEstadosalida(),
-                'ubicacion' => $ultimoRegistro->getAsiUbicacionsalida(),
+                'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos() ?? null,
+                'dni' => $user->getColDninit() ?? null,
+                'horaEntrada' => $horaSalida->format('H:i:s') ?? null,
+                'fecha' => $ultimoRegistro->getAsiFechasalida()->format('d/m/Y') ?? null,
+                'hora' => $ultimoRegistro->getAsiHorasalida()->format('H:i:s') ?? null,    
+                'modalidad' => $modalidad ?? null,    
+                'estado' => $ultimoRegistro->getAsiEstadosalida() ?? null,
+                // 'ubicacion' => $ultimoRegistro->getAsiUbicacionsalida(),
             ];
         }
         // Devuelve los datos como un JSON

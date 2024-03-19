@@ -1,8 +1,11 @@
 <template>
     <div>
       <h3>SALIDA</h3>
-      <p>Salida: {{ salida.hora }}</p>
       <p>Fecha: {{ salida.fecha }}</p>
+      <p>Hora: {{ salida.hora }}</p>    
+      <p>Usuario: {{ salida.usuario }}</p>
+      <p>DNI: {{ salida.dni }}</p>
+      <p>Modalidad: {{ salida.modalidad }}</p>
       <p>Estado: {{ salida.estado }}</p>
     </div>
   </template>

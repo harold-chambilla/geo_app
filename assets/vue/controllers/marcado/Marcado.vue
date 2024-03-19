@@ -61,6 +61,92 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
     });
   };
   
+  onMounted(() => {
+    if ('geolocation' in navigator) {
+      setTimeout(() => {    
+        const coordenadasInitMap = async () => {
+          try {
+            const coords = await watchCoordinates();
+            // coords es un objeto con latitude y longitude
+            latitude.value = coords.latitude;
+            longitude.value = coords.longitude;
+            exactitud.value = coords.accuracy;
+            if (!mapInitialized.value) { // Función a aparecer al actualizar la web
+              await initMap(latitude.value, longitude.value, exactitud.value);
+              // console.log("no creo: ", latitude.value);
+            }
+          } catch (error) {
+            console.error("Error al obtener coordenadas:", error);
+          }
+        };
+        coordenadasInitMap();
+      }, 500);
+    }
+  });
+
+  // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
+  const initMap = (latitud, longitud, exact) => {
+    if (!mapInitialized.value) {
+      const ubiActual = { lat: latitud, lng: longitud };
+      const ubiDestino = { lat: -12.085184, lng: -76.976101 }; // Ubicación de la empresa
+  
+      const radio = 800;
+
+      const dist = google.maps.geometry.spherical.computeDistanceBetween(ubiActual, ubiDestino);
+  
+      if (dist <= radio) {
+        const text = "Si esta en la empresa";
+        asistencia.value = text;
+      } else {
+        const text = "No esta en la empresa";
+        asistencia.value = text;
+      }
+
+      console.log('dissss: ', radio);
+  
+      const horaEntrada = '08:30:00'
+      if (currentTiempo.value >= horaEntrada && dist <= radio) {
+        // const text = "Tardanza y dentro de radio";
+        const text = "Tardanza";
+        estadoEntrada.value = text;
+      } else if (currentTiempo.value <= horaEntrada && dist <= radio) {
+        // const text = "Puntual y dentro de radio";
+        const text = "Puntual";
+        estadoEntrada.value = text;
+      } 
+      // else if (currentTiempo.value <= horaEntrada && dist >= radio) {
+      //   const text = "Puntual y fuera de radio";
+      //   estadoEntrada.value = text;
+      // } else if (currentTiempo.value <= horaEntrada && dist >= radio) {
+      //   const text = "Tardanza y fuera de radio";
+      //   estadoEntrada.value = text;
+      // } 
+      else {
+        console.log('Esta fuera del radio');
+        const text = "No se encuentra en la empresa";
+        estadoEntrada.value = text;
+      }
+      // const estadoAsistencia = estadoEntrada.value;
+      
+      distancia.value = dist;
+    }
+  };
+  
+  watch(exactitud, (newValue) => {
+    if (newValue >= 50 && newValue <= 200) {
+      exactitudRadio.value = 'Exactitud baja.';
+    } else if (newValue >= 1 && newValue <= 50) {
+      exactitudRadio.value = 'Exactitud alta.';
+    } else {
+      exactitudRadio.value = 'Exactitud inaceptable. Por favor, actualiza la ubicación.';
+    }
+  });
+
+  window.initMap = function () {
+    mapReady.value = true;
+  };
+  console.log('distanciaaa: ', distancia.value);
+
   const turnoEntrada = async () => {
     try {
       const coords = await watchCoordinates();
@@ -72,6 +158,10 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
         latitud: coords.latitude,
         longitud: coords.longitude
       };
+      // if (distancia.value > 800) {
+      //   console.log("Su solicitud ha sido denegada, no se encuentra dentro de la empresa.");
+      //   return; // Salir de la función sin enviar el POST_ENTRADA
+      // }
       console.log("CREAR: Latitude: " + coords.latitude + ", Longitude: " + coords.longitude);
       await asisStore.POST_ENTRADA(newAsis);
       // window.location.href = '/resultado';
@@ -98,62 +188,5 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
     } catch (error) {
       console.error("Error al enviar los datos de salida: ", error);
     }
-  };
-  
-  // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
-  const initMap = () => {
-    if (!mapInitialized.value) {
-    const coords = watchCoordinates();
-
-      const ubiActual = { lat: coords.latitude, lng: coords.longitude };
-      const ubiDestino = { lat: -12.085184, lng: -76.976101 }; // Ubicación de la empresa
-  
-      const radio = 800;
-
-      const dist = google.maps.geometry.spherical.computeDistanceBetween(ubiActual, ubiDestino);
-  
-      if (dist <= radio) {
-        const text = "Si esta en la empresa";
-        asistencia.value = text;
-      } else {
-        const text = "No esta en la empresa";
-        asistencia.value = text;
-      }
-  
-      const horaEntrada = '08:30:00'
-      if (currentTiempo.value >= horaEntrada && dist <= radio) {
-        const text = "Tardanza y dentro de radio";
-        estadoEntrada.value = text;
-      } else if (currentTiempo.value <= horaEntrada && dist <= radio) {
-        const text = "Puntual y dentro de radio";
-        estadoEntrada.value = text;
-      } else if (currentTiempo.value <= horaEntrada && dist >= radio) {
-        const text = "Puntual y fuera de radio";
-        estadoEntrada.value = text;
-      } else if (currentTiempo.value <= horaEntrada && dist >= radio) {
-        const text = "Tardanza y fuera de radio";
-        estadoEntrada.value = text;
-      } else {
-        console.log('Esta fuera del radio');
-      }
-  
-      const estadoAsistencia = estadoEntrada.value;
-  
-      distancia.value = dist;
-    }
-  };
-  
-  watch(exactitud, (newValue) => {
-    if (newValue >= 50 && newValue <= 200) {
-      exactitudRadio.value = 'Exactitud baja.';
-    } else if (newValue >= 1 && newValue <= 50) {
-      exactitudRadio.value = 'Exactitud alta.';
-    } else {
-      exactitudRadio.value = 'Exactitud inaceptable. Por favor, actualiza la ubicación.';
-    }
-  });
-  
-  window.initMap = function () {
-    mapReady.value = true;
   };
   </script>

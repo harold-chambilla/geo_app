@@ -5,7 +5,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from "../assets/vue/controllers/App.vue";
 // import Salida from "../assets/vue/controllers/Salida.vue"
-import Salida from "../assets/vue/controllers/resultado/Resultado.vue";
+import Resultado from "../assets/vue/controllers/resultado/Resultado.vue";
 import Marcado from "../assets/vue/controllers/marcado/Marcado.vue";
 import Map from "../assets/vue/controllers/marcado/Map.vue";
 const googleMapsApiKey = 'AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q';
@@ -21,14 +21,14 @@ document.body.appendChild(googleMapsScript);
 const pinia = createPinia();
 const marcado = createApp(Marcado);
 const app = createApp(App);
-const salida = createApp(Salida);
+const resultado = createApp(Resultado);
 const map = createApp(Map);
 
 app.use(pinia);
 app.mount('#app');
 
-salida.use(pinia);
-salida.mount('#salida');
+resultado.use(pinia);
+resultado.mount('#resultado');
 
 marcado.use(pinia);
 marcado.mount('#marcado');
