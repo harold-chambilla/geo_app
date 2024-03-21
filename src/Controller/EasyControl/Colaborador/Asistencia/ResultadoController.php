@@ -16,6 +16,7 @@ class ResultadoController extends AbstractController
     #[Route('/', name: 'verresultado')]
     public function verResultado(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         return $this->render('easy_control/colaborador/asistencia/resultado.html.twig');
     }
 

@@ -23,6 +23,7 @@ class MarcadoController extends AbstractController
     #[Route('/', name: 'marcarasistencia')]
     public function marcarAsistencia(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         return $this->render('easy_control/colaborador/asistencia/marcado.html.twig');
     }
     #[Route('/api/asistencia/entrada', name: 'api_asistencia_entrada', methods: ['POST'])]
