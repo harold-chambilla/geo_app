@@ -17,6 +17,7 @@ googleMapsScript.defer = true;
 // Agregar el script al final del cuerpo del documento
 document.body.appendChild(googleMapsScript);
 
+window.initMap = () => {}
 
 const pinia = createPinia();
 const marcado = createApp(Marcado);
