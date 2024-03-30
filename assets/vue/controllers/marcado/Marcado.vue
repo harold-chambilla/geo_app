@@ -1,7 +1,7 @@
 <template>
-    <button class="B-Verde border-0" @click="turnoEntrada">Entrada</button>
-    <button class="B-ROJO  border-0" @click="turnoSalida">Salida</button>
-  </template>
+    <button class="Verde E-boton border-0" @click="turnoEntrada">Entrada</button>
+    <button class="Rojo  E-boton border-0" @click="turnoSalida">Salida</button>
+</template>
   
   <script setup>
   // Dato a enviar a otro formulario se le pondra (*), los datos que no van a estar son estos (-), Datos que iran en infoWindows(+)

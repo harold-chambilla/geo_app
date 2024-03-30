@@ -1,6 +1,5 @@
 <template>
     <div>
-      <h2>Datos de Asistencia</h2>
       <Entrada v-if="entrada !== null && salida === null" />
       <Salida v-if="salida !== null && entrada !== null" />
     </div>

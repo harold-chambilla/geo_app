@@ -38,7 +38,7 @@
             "horario": {
                 "imagen": {
                     "tipo": "local",
-                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario.png"
+                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario2.png"
                 },
                 "valor": "HORARIO"
             }
@@ -51,27 +51,31 @@
                 <div class="time-box" id="current-time"></div>
             </div>
             <div class="container">
-                <div class="col-md-12 box">
+                <div class="col-md-12 box-2">
                     <div class="F-blanca">
                         {% if true == contenido.remoto %}
                             <img src="{{ contenido.seccion.remoto.relleno.tipo == 'local' ? asset(contenido.seccion.remoto.relleno.valor) : contenido.seccion.remoto.relleno.valor }}" class="img-central">
                             <p class="parrafo1">{{ contenido.seccion.remoto.texto_01 }}</p>      
                             <p class="parrafo2">{{ contenido.seccion.remoto.texto_02 }}</p>
                         {% else %}
+                            
+                            <div id="mapa">
                             {# <iframe class="maps"  src="{{ contenido.seccion.presencial.relleno.tipo == 'local' ? asset(contenido.seccion.presencial.relleno.valor) : contenido.seccion.presencial.relleno.valor }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe> #}
-                            <div id="mapa"></div>
+                            </div>
                         {% endif %}
-                        {# <button class="B-Verde border-0">{{ contenido.seccion.botones.entrada.valor }}</button>
-                        <button class="B-ROJO  border-0">{{ contenido.seccion.botones.salida.valor }}</button> #}
+                        {# <button class="Verde E-boton border-0">{{ contenido.seccion.botones.entrada.valor }}</button>
+                        <button class="Rojo  E-boton border-0">{{ contenido.seccion.botones.salida.valor }}</button> #}
                         <div id="marcado"></div>
                     </div>
                 </div>
             </div>
-            <footer class="A-blanca" >
+            <footer class="A-azul" >
+               <div class="A-blanca">
                 <button type="submit" class="boton">
-                    <img src="{{ contenido.seccion.horario.imagen.tipo == 'local' ? asset(contenido.seccion.horario.imagen.valor) : contenido.seccion.horario.imagen.valor }}" alt="Icono" class="custom-btn-icon" width="25" height="30">
+                    <img src="{{ contenido.seccion.horario.imagen.tipo == 'local' ? asset(contenido.seccion.horario.imagen.valor) : contenido.seccion.horario.imagen.valor }}" alt="Icono" class="custom-btn-icon" width="40" height="35s">
                     {{ contenido.seccion.horario.valor }}
                 </button>
+                </div>
             </footer>
         </div>
     </section>    
