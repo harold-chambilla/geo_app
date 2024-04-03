@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Asistencia;
+use App\Entity\Colaborador;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,7 +46,7 @@ class AsistenciaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-public function findLastAsistenciaByUser($user): ?Asistencia
+    public function findLastAsistenciaByUser($user): ?Asistencia
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.asi_colaborador = :user')
@@ -81,5 +82,18 @@ public function findLastAsistenciaByUser($user): ?Asistencia
         ->setMaxResults(1) // Obtener solo un resultado (el último registro)
         ->getQuery()
         ->getOneOrNullResult();
+    }
+
+    public function findAsistenciaByFecha(Colaborador $colaborador, string $fecha): ?Asistencia
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.asi_colaborador = :colaborador')
+            ->andWhere('a.asi_fechaentrada = :fecha')
+            ->setParameter('colaborador', $colaborador)
+            ->setParameter('fecha', $fecha)
+            ->orderBy('a.id', 'ASC') // Ordenar por el identificador de la asistencia
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
