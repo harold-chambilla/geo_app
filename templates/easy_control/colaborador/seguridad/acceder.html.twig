@@ -51,6 +51,7 @@
             }
         }
     } %}
+    <div class="container">
     <div class="login-container">
         <div class="col-md-12 logo"> 
             <img class="img-fluid" src="{{ asset('img/easy_control/general/ec_logo_del_software.png') }}" > 
@@ -89,4 +90,5 @@
             <p><a href="{{ contenido.footer.terminos.enlace.tipo == 'local' ? asset(contenido.footer.terminos.enlace.valor) : contenido.footer.terminos.enlace.valor }}">{{ contenido.footer.terminos.valor }}</a></p>
         </footer> 
     </div>
+<div>
 {% endblock %}

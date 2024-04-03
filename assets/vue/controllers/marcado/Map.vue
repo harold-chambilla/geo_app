@@ -1,5 +1,5 @@
 <template>
-    <div id="map" class="maps" style="height: 350px; width: 320px; border: 0;" loading="lazy"></div>
+    <div id="map" class="maps" loading="lazy"></div>
   </template>
   
   <script setup>
