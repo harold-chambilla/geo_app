@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\EasyControl\Administrador;
+namespace App\Controller\Administrador;
 
 use App\Repository\AsistenciaRepository;
 use App\Repository\ColaboradorRepository;
@@ -10,15 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/administrador', name: 'app_easycontrol_administrador')]
+#[Route('/administrador', name: 'app_administrador_')]
 class AdministradorController extends AbstractController
 {
-    #[Route('/easy/control/administrador/administrador', name: 'app_easy_control_administrador_administrador')]
+    #[Route('/', name: 'mostrar')]
     public function index(): Response
     {
-        return $this->render('easy_control/administrador/administrador/index.html.twig', [
-            'controller_name' => 'AdministradorController',
-        ]);
+        return $this->render('administrador/index.html.twig');
     }
 
     #[Route('/api/asistencia', name: 'api_adm_asistencia', methods: ['GET'])]

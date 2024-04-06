@@ -1,10 +1,10 @@
-{% extends 'easy_control/general/base.html.twig' %}
+{% extends 'colaborador/base.html.twig' %}
 
 {% block title %}Iniciar sesión - EasyControl!{% endblock %}
 
 {% block css %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/seguridad/acceder.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/colaborador/seguridad/acceder.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -15,13 +15,13 @@
         "empresa": {
             "icono": {
                 "tipo": "local",
-                "valor": "ico/easy_control/colaborador/seguridad/ico_empresa.png"
+                "valor": "ico/colaborador/seguridad/ico_empresa.png"
             }
         },
         "usuario": {
             "icono": {
                 "tipo": "local",
-                "valor": "ico/easy_control/colaborador/seguridad/ico_usuario.png"
+                "valor": "ico/colaborador/seguridad/ico_usuario.png"
             },
             "name": "_username",
             "valor": last_username
@@ -29,7 +29,7 @@
         "clave": {
             "icono": {
                 "tipo": "local",
-                "valor": "ico/easy_control/colaborador/seguridad/ico_contraseña.png"
+                "valor": "ico/colaborador/seguridad/ico_contraseña.png"
             },
             "name": "_password"
         }, 
@@ -54,7 +54,7 @@
     <div class="container">
     <div class="login-container">
         <div class="col-md-12 logo"> 
-            <img class="img-fluid" src="{{ asset('img/easy_control/general/ec_logo_del_software.png') }}" > 
+            <img class="img-fluid" src="{{ asset('img/ec_logo_del_software.png') }}" > 
         </div>
         <div class="col-md-12 center-text">
             <h1 class="text-login">{{ contenido.titulo.valor }}</h1>

@@ -17,13 +17,13 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_easycontrol_colaborador_seguridad_acceder
-                check_path: app_easycontrol_colaborador_seguridad_acceder
+                login_path: app_colaborador_seguridad_acceder
+                check_path: app_colaborador_seguridad_acceder
                 enable_csrf: true
             json_login:
-                check_path: app_easycontrol_colaborador_seguridad_api_acceder
+                check_path: app_colaborador_seguridad_api_acceder
             logout:
-                path: app_easycontrol_colaborador_seguridad_desconectarse
+                path: app_colaborador_seguridad_desconectarse
                 # where to redirect after logout
                 # target: app_any_route
 

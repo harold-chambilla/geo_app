@@ -1,10 +1,10 @@
-{% extends 'easy_control/general/base.html.twig' %}
+{% extends 'colaborador/base.html.twig' %}
 
 {% block title %}Marcar Asistencia - EasyControl!{% endblock %}
 
 {% block css %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/easy_control/colaborador/asistencia/marcado.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/colaborador/asistencia/marcado.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,7 @@
             "remoto": {
                 "relleno": {
                     "tipo": "local",
-                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_remoto.png"
+                    "valor": "ico/colaborador/asistencia/marcado/remoto/ico_remoto.png"
                 },
                 "texto_01": "¿Ya registraste tu entrada o salida?",
                 "texto_02": "En remoto, la puntualidad es la esencia del compromiso."
@@ -38,7 +38,7 @@
             "horario": {
                 "imagen": {
                     "tipo": "local",
-                    "valor": "ico/easy_control/colaborador/asistencia/marcado/remoto/ico_calendario2.png"
+                    "valor": "ico/colaborador/asistencia/marcado/remoto/ico_calendario2.png"
                 },
                 "valor": "HORARIO"
             }
@@ -83,5 +83,5 @@
 
 {% block js %}
     {# Se mantendra a futuro. (Se podria hacer con vue) #}
-    <script src="{{ asset('js/easy_control/colaborador/asistencia/js_hora.js') }}"></script>
+    <script src="{{ asset('js/colaborador/asistencia/js_hora.js') }}"></script>
 {% endblock %}

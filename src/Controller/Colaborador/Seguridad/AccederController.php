@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\EasyControl\Colaborador\Seguridad;
+namespace App\Controller\Colaborador\Seguridad;
 
 use App\Entity\Colaborador;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,25 +11,25 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class AccederController extends AbstractController
 {
-    #[Route(path: '/acceder', name: 'app_easycontrol_colaborador_seguridad_acceder')]
+    #[Route(path: '/acceder', name: 'app_colaborador_seguridad_acceder')]
     public function acceder(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('easy_control/colaborador/seguridad/acceder.html.twig', [
+        return $this->render('colaborador/seguridad/acceder.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
     }
 
-    #[Route(path: '/desconectarse', name: 'app_easycontrol_colaborador_seguridad_desconectarse')]
+    #[Route(path: '/desconectarse', name: 'app_colaborador_seguridad_desconectarse')]
     public function desconectarse(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/api/acceder', name: 'app_easycontrol_colaborador_seguridad_api_acceder', methods: ['POST'])]
+    #[Route('/api/acceder', name: 'app_colaborador_seguridad_api_acceder', methods: ['POST'])]
     public function accederApi(#[CurrentUser] ?Colaborador $user): Response
     {
         if(null === $user){

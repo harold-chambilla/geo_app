@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\EasyControl\Colaborador\Asistencia;
+namespace App\Controller\Colaborador\Asistencia;
 
 use App\Entity\Asistencia;
 use App\Repository\AsistenciaRepository;
@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/resultado', name: 'app_easycontrol_colaborador_asistencia_resultado_')]
+#[Route('/resultado', name: 'app_colaborador_asistencia_resultado_')]
 class ResultadoController extends AbstractController
 {
     #[Route('/', name: 'verresultado')]
     public function verResultado(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        return $this->render('easy_control/colaborador/asistencia/resultado.html.twig');
+        return $this->render('colaborador/asistencia/resultado.html.twig');
     }
 
     #[Route('/api/asistencia', name: 'api_asistencia', methods: ['GET'])]
