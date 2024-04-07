@@ -1,18 +1,17 @@
 <template>
-    
-     <!-- Encabezado con botón de retroceso -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="header d-flex justify-content-center align-items-center">
-                    <a href="#" class="back-link">
-                        <span class="back-arrow">&lt;</span>
-                    </a> 
-                    <span class="text-dark">{{ entrada.usuario }}</span>
-                </div>
+    <!-- Encabezado con botón de retroceso -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="header d-flex justify-content-center align-items-center">
+                <a href="#" class="back-link">
+                    <span class="back-arrow">&lt;</span>
+                </a> 
+                <span class="text-dark">{{ entrada.usuario }}</span>
             </div>
         </div>
+    </div>
 
-      <div class="container">
+    <div class="container">
         <!-- Sección principal con imagen y texto -->
         <div class="row">
             <div class="col-md-12">
@@ -73,16 +72,14 @@
             </div>
         </div>
     </div>   
-  </template>
-  
-  <script setup>
+</template>
+<script setup>
   import { computed } from 'vue';
   import { asistenciaStore } from '../../../store/asistencia.js';
   
   const store = asistenciaStore();
   const entrada = computed(() => store.ENTRADA);
-
-  </script>
+</script>
 
 
   

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Administrador;
+namespace App\Controller\Empresa;
 
 use App\Repository\AsistenciaRepository;
 use App\Repository\ColaboradorRepository;
@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/administrador', name: 'app_administrador_')]
-class AdministradorController extends AbstractController
+#[Route('/empresa', name: 'app_empresa_')]
+class EmpresaController extends AbstractController
 {
     #[Route('/', name: 'mostrar')]
     public function index(): Response
     {
-        return $this->render('administrador/index.html.twig');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        return $this->render('empresa/index.html.twig');
     }
 
     #[Route('/api/asistencia', name: 'api_adm_asistencia', methods: ['GET'])]

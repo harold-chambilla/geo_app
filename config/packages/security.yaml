@@ -13,7 +13,21 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
+        empresa:
+            pattern: ^/empresa/
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_empresa_seguridad_acceder
+                check_path: app_empresa_seguridad_acceder
+                enable_csrf: true
+            logout:
+                path: app_empresa_seguridad_desconectarse
+                target: app_empresa_mostrar
+            custom_authenticators:
+                - App\Security\Empresa\AuthenticatorEmpresa
+            entry_point: form_login
+        colaborador:
             lazy: true
             provider: app_user_provider
             form_login:
@@ -26,7 +40,6 @@ security:
                 path: app_colaborador_seguridad_desconectarse
                 # where to redirect after logout
                 # target: app_any_route
-
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
