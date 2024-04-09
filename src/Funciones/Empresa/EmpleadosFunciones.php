@@ -2,6 +2,7 @@
 
 namespace App\Funciones\Empresa;
 
+use App\Entity\Colaborador;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -75,7 +76,7 @@ class EmpleadosFunciones
                 }
             }
         } catch (Exception $e) {
-            // Si falla la lectura
+            // Si falla la lectura y extracción
         }
         return $data;
     }

@@ -49,6 +49,7 @@ class EmpleadosController extends AbstractController
         return $this->render('empresa/empleados/carga.html.twig', [
             'form' => $form,
             'employeesFile' => $employeesFile,
+            'datos' => $empleadosFunciones->extraer('formato-empleados-6615b08d03817.xlsx', $this->uploadDirectory)
         ]);
     }
 
