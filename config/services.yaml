@@ -4,8 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    employees_uploads_directory: '%kernel.project_dir%/public/uploads/empresa/empleados'
-    employees_downloads_directory: '%kernel.project_dir%/public/downloads/empresa/empleados'
 
 services:
     # default configuration for services in *this* file
@@ -26,14 +24,7 @@ services:
     App\Security\Empresa\AuthenticatorEmpresa:
         public: true
 
-    # Empresa - Servicios - Empleados - Carga de archivos
-    App\Service\Empresa\Empleados\CargadorArchivo:
-        arguments:
-            $targetDirectory: '%employees_uploads_directory%'
-
-    # Empresa - Servicios - Empleados - Descargador de archivos
-    App\Service\Empresa\Empleados\DescargadorArchivo:
-        arguments:
-            $targetDirectory: '%employees_downloads_directory%'
+    # Empresa - Funciones - Empleados
+    App\Funciones\Empresa\EmpleadosFunciones:
 
     
