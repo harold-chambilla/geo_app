@@ -42,6 +42,7 @@ class EmpleadosController extends AbstractController
 
             $datos = $empleadosFunciones->extraer($employeesFile['name'], $this->uploadDirectory);
 
+
             $this->addFlash('success', 'El archivo se cargó correctamente: ' . $employeesFile['name']);
             return $this->redirectToRoute('app_empresa_empleados_cargar');
         }
@@ -49,7 +50,8 @@ class EmpleadosController extends AbstractController
         return $this->render('empresa/empleados/carga.html.twig', [
             'form' => $form,
             'employeesFile' => $employeesFile,
-            'datos' => $empleadosFunciones->extraer('formato-empleados-6615b08d03817.xlsx', $this->uploadDirectory)
+            'datos' => $empleadosFunciones->extraer('formato-empleados-erroneo-6618724d82fa1.xlsx', $this->uploadDirectory),
+            'errores' => $empleadosFunciones->validar($empleadosFunciones->extraer('formato-empleados-erroneo-6618724d82fa1.xlsx', $this->uploadDirectory))
         ]);
     }
 

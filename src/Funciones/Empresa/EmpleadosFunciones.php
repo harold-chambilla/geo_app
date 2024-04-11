@@ -5,6 +5,7 @@ namespace App\Funciones\Empresa;
 use App\Entity\Colaborador;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpParser\Node\Stmt\Break_;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -13,6 +14,53 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class EmpleadosFunciones
 {
+    public array $traductor = [
+        'Nombres' => [
+            'traduccion' => 'col_nombres',
+            'obligatoria' => false
+        ],
+        'Apellidos' => [
+            'traduccion' => 'col_apellidos',
+            'obligatoria' => false
+        ],
+        'DNI' => [
+            'traduccion' => 'col_dninit',
+            'obligatoria' => false
+        ],
+        'Fecha de nacimiento' => [
+            'traduccion' => 'col_fechanacimiento',
+            'obligatoria' => false
+        ],
+        'Area' => [
+            'traduccion' => 'col_area',
+            'obligatoria' => false
+        ],
+        'Puesto' => [
+            'traduccion' => 'col_puesto',
+            'obligatoria' => false
+        ],
+        'Rol' => [
+            'traduccion' => 'roles',
+            'obligatoria' => true
+        ],
+        'Correo' => [
+            'traduccion' => 'col_correoelectronico',
+            'obligatoria' => false
+        ],
+        'Usuario' => [
+            'traduccion' => 'col_nombreusuario',
+            'obligatoria' => true
+        ],
+        'Contraseña' => [
+            'traduccion' => 'password',
+            'obligatoria' => true
+        ],
+        'Repetir contraseña' => [
+            'traduccion' => 'password',
+            'obligatoria' => true
+        ]
+    ];
+
     public function __construct(private SluggerInterface $slugger){ }
 
     # Cargar un archivo
@@ -84,5 +132,71 @@ class EmpleadosFunciones
     public function loadFile($filePath)
     {
         return IOFactory::load($filePath);
+    }
+
+    # Analizar y validar que el archivo este estructurado de forma correcta
+    public function validar(array $datos): array
+    {
+        $condiciones = [
+            'hoja' => 'Empleados',
+            'columnas' => [
+                'nombres' => 'columnNames',
+                'valores' => 'columnValues'
+            ]
+        ];
+
+        $reporte = [
+            'estado' => true,
+            'errores' => []
+        ]; 
+
+        foreach ($datos as $clave => $hoja) {
+            if ($condiciones['hoja'] === $clave){
+                foreach ($hoja as $llave => $bloque) {
+                    if($condiciones['columnas']['nombres'] === $llave){
+                        foreach ($bloque as $marca => $campo) {
+                            if (!array_key_exists($campo, $this->traductor)){
+                                array_push($reporte['errores'], [
+                                    'tipo' => 'columna_noreconocida',
+                                    'detalle' => [
+                                        'ubicacion' => [
+                                            'hoja' => $hoja,
+                                            'bloque' => $bloque
+                                        ],
+                                        'key' => $marca, 
+                                        'value' => $campo
+                                    ]
+                                ]);
+                            }
+                        }
+                    } elseif ($condiciones['columnas']['valores']  === $llave) {
+                        foreach ($bloque as $selector => $fila) {
+                            foreach ($fila as $marca => $campo) {
+                                # Evaluar los campos no nulos, evaluar el tipo de dato correcto
+                                if (array_key_exists($campo, $this->traductor)){
+                                    if ($this->traductor[$hoja[$condiciones['columnas']['nombres']][$marca]]['obligatoria']) {
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                array_push($reporte['errores'], [
+                    'tipo' => 'hoja_noreconocida',
+                    'detalle' => [
+                        'key' => $clave,
+                        'value' => $hoja
+                    ]
+                ]);
+            }
+        }
+
+        if (empty($reporte['errores'])){
+            $reporte['estado'] = false;
+        }
+
+        return $reporte;
     }
 }
