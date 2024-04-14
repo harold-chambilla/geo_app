@@ -3,9 +3,10 @@
 namespace App\Funciones\Empresa;
 
 use App\Entity\Colaborador;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use PDOException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpParser\Node\Stmt\Break_;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -41,7 +42,8 @@ class EmpleadosFunciones
         ],
         'Rol' => [
             'traduccion' => 'roles',
-            'obligatoria' => true
+            'obligatoria' => true,
+            'tipo' => 'array'
         ],
         'Correo' => [
             'traduccion' => 'col_correoelectronico',
@@ -49,19 +51,22 @@ class EmpleadosFunciones
         ],
         'Usuario' => [
             'traduccion' => 'col_nombreusuario',
-            'obligatoria' => true
+            'obligatoria' => true,
+            'tipo' => 'string'
         ],
         'Contraseña' => [
             'traduccion' => 'password',
-            'obligatoria' => true
+            'obligatoria' => true,
+            'tipo' => 'string'
         ],
         'Repetir contraseña' => [
             'traduccion' => 'password',
-            'obligatoria' => true
+            'obligatoria' => true,
+            'tipo' => 'string'
         ]
     ];
 
-    public function __construct(private SluggerInterface $slugger){ }
+    public function __construct(private SluggerInterface $slugger, private EntityManagerInterface $entityManagerInterface){ }
 
     # Cargar un archivo
     public function cargar(UploadedFile $file, string $uploadDirectory): string
@@ -173,9 +178,67 @@ class EmpleadosFunciones
                         foreach ($bloque as $selector => $fila) {
                             foreach ($fila as $marca => $campo) {
                                 # Evaluar los campos no nulos, evaluar el tipo de dato correcto
-                                if (array_key_exists($campo, $this->traductor)){
+                                if (array_key_exists($hoja[$condiciones['columnas']['nombres']][$marca], $this->traductor)){
                                     if ($this->traductor[$hoja[$condiciones['columnas']['nombres']][$marca]]['obligatoria']) {
-                                        
+                                        # Validemos tipo de dato
+                                        switch ($this->traductor[$hoja[$condiciones['columnas']['nombres']][$marca]]['tipo']) {
+                                            case 'array':
+                                                $json_string_cleaned = ($campo !== null) ? str_replace(['[', ']', '“', '”'], '', $campo) : null;
+                                                $campo_array = ($json_string_cleaned !== null) ? explode(', ', $json_string_cleaned) : null;
+                                                if ($this->traductor[$hoja[$condiciones['columnas']['nombres']][$marca]]['tipo'] !== gettype($campo_array)){
+                                                    array_push($reporte['errores'], [
+                                                        'tipo' => 'campo_tipodedatoerroneo',
+                                                        'detalle' => [
+                                                            'ubicacion' => [
+                                                                'hoja' => $hoja,
+                                                                'bloque' => $bloque,
+                                                                'fila' => $fila
+                                                            ],
+                                                            'key' => $marca, 
+                                                            'value' => $campo_array
+                                                        ]
+                                                    ]);
+                                                }
+                                                break;
+                                            default:
+                                                if ($this->traductor[$hoja[$condiciones['columnas']['nombres']][$marca]]['tipo'] !== gettype($campo)){
+                                                    array_push($reporte['errores'], [
+                                                        'tipo' => 'campo_tipodedatoerroneo',
+                                                        'detalle' => [
+                                                            'ubicacion' => [
+                                                                'hoja' => $hoja,
+                                                                'bloque' => $bloque,
+                                                                'fila' => $fila
+                                                            ],
+                                                            'key' => $marca, 
+                                                            'value' => $campo
+                                                        ]
+                                                    ]);
+                                                }
+                                                break;
+                                        }
+
+                                        # Validaciones especiales
+                                        switch ($hoja[$condiciones['columnas']['nombres']][$marca]) {
+                                            case 'Contraseña':
+                                                if($campo !== $fila[$marca + 1]){
+                                                    array_push($reporte['errores'], [
+                                                        'tipo' => 'campo_contrasenasnocoinciden',
+                                                        'detalle' => [
+                                                            'ubicacion' => [
+                                                                'hoja' => $hoja,
+                                                                'bloque' => $bloque,
+                                                                'fila' => $fila
+                                                            ],
+                                                            'key' => $marca, 
+                                                            'value' => $campo
+                                                        ]
+                                                    ]);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                     }
                                 }
                             }
@@ -193,10 +256,116 @@ class EmpleadosFunciones
             }
         }
 
-        if (empty($reporte['errores'])){
+        if (!empty($reporte['errores'])){
             $reporte['estado'] = false;
         }
 
         return $reporte;
+    }
+
+    public function numeroCamposObligatorios(): int
+    {
+        $obligatorios = 0;
+        foreach ($this->traductor as $valor) {
+            if($valor['obligatoria']){
+                $obligatorios++;
+            }
+        }
+        return $obligatorios;
+    }
+
+    # Registrar empleados (Empresa -> Empleados -> Registar)
+    public function registro(array $colorador): string
+    {
+        $estado = 'Ok';
+        $aux_colaborador = new Colaborador;
+        $aux_colaborador->setColNombres($colorador['col_nombres'] ?? null);
+        $aux_colaborador->setColApellidos($colorador['col_apellidos'] ?? null);
+        $aux_colaborador->setColDninit($colorador['col_dninit'] ?? null);
+        $aux_colaborador->setColFechanacimiento($colorador['col_fechanacimiento'] ?? null);
+        $aux_colaborador->setColPuesto($colorador['col_puesto'] ?? null);
+        $aux_colaborador->setColArea($colorador['col_area'] ?? null);
+        $aux_colaborador->setColCorreoelectronico($colorador['col_correoelectronico'] ?? null);
+        $aux_colaborador->setRoles($colorador['roles']);
+        $aux_colaborador->setColNombreusuario($colorador['col_nombreusuario']);
+        $aux_colaborador->setPassword($colorador['password']);
+        $aux_colaborador->setColEliminado($colorador['col_eliminado'] ?? null);
+        $aux_colaborador->setColEmpresa($colorador['col_empresa_id'] ?? null);
+        $aux_colaborador->setColGrupo($colorador['col_grupo_id'] ?? null);
+
+        try {
+            $this->entityManagerInterface->persist($aux_colaborador);
+            $this->entityManagerInterface->flush();
+        } catch (PDOException $e) {
+            $estado = 'Error: '. $e; 
+        }
+
+        return $estado;
+    }
+
+    # Registrar empleados array (Empresa -> Empleados -> Resgistro masivo)
+    public function registroMasivo(array $colaboradores): array
+    {
+        $estado = 'Ok';
+        $errores = [];
+
+        foreach ($colaboradores as $colaborador) {
+           array_push($errores, $this->registro($colaborador));
+        }
+
+        if(count($errores) > 0){
+            $estado = 'Errores encontrados: ' . count($errores);
+        }
+
+        return [
+            'estado' => $estado,
+            'errores' => $errores
+        ];
+    }
+
+    # Listado Colaboradores
+    public function listadoColaboradores(array $datos): array
+    {
+        $colaboradores = [];
+
+        $condiciones = [
+            'hoja' => 'Empleados',
+            'columnas' => [
+                'nombres' => 'columnNames',
+                'valores' => 'columnValues'
+            ]
+        ];
+
+        # Validemos que sea correcto
+        $validar_datos = $this->validar($datos);
+        if(!$validar_datos['estado']){
+            # Retornar array de datos modificado (Corregido).
+            return $validar_datos;
+        } else {
+            foreach ($datos[$condiciones['hoja']][$condiciones['columnas']['valores']] as $fila) {
+                $col = [];
+                foreach ($fila as $key => $campo) {
+                    # Por tipo de dato
+                    switch ($this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']) {
+                        case 'roles':
+                            $json_string_cleaned = ($campo !== null) ? str_replace(['[', ']', '“', '”'], '', $campo) : null;
+                            $campo_array = ($json_string_cleaned !== null) ? explode(', ', $json_string_cleaned) : null;
+                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $campo_array;
+                            break;
+
+                        case 'password':
+                            # Aplicar encriptacion
+                            break;
+                        
+                        default:
+                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $campo;
+                            break;
+                    }
+                    
+                }
+                array_push($colaboradores, $col);
+            }
+        }
+        return $colaboradores;
     }
 }

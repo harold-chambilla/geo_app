@@ -27,4 +27,7 @@ services:
     # Empresa - Funciones - Empleados
     App\Funciones\Empresa\EmpleadosFunciones:
 
+    # Empresa - Funciones - Horarios
+    App\Funciones\Empresa\HorariosFunciones:
+
     
