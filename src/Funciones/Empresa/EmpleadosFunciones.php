@@ -6,12 +6,14 @@ use App\Entity\Colaborador;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PDOException;
+use DateTime;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EmpleadosFunciones
 {
@@ -66,7 +68,7 @@ class EmpleadosFunciones
         ]
     ];
 
-    public function __construct(private SluggerInterface $slugger, private EntityManagerInterface $entityManagerInterface){ }
+    public function __construct(private SluggerInterface $slugger, private EntityManagerInterface $entityManagerInterface, private UserPasswordHasherInterface $userPasswordHasherInterface){ }
 
     # Cargar un archivo
     public function cargar(UploadedFile $file, string $uploadDirectory): string
@@ -288,10 +290,10 @@ class EmpleadosFunciones
         $aux_colaborador->setColCorreoelectronico($colorador['col_correoelectronico'] ?? null);
         $aux_colaborador->setRoles($colorador['roles']);
         $aux_colaborador->setColNombreusuario($colorador['col_nombreusuario']);
-        $aux_colaborador->setPassword($colorador['password']);
         $aux_colaborador->setColEliminado($colorador['col_eliminado'] ?? null);
         $aux_colaborador->setColEmpresa($colorador['col_empresa_id'] ?? null);
         $aux_colaborador->setColGrupo($colorador['col_grupo_id'] ?? null);
+        $aux_colaborador->setPassword($this->userPasswordHasherInterface->hashPassword($aux_colaborador, $colorador['password']));
 
         try {
             $this->entityManagerInterface->persist($aux_colaborador);
@@ -353,15 +355,15 @@ class EmpleadosFunciones
                             $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $campo_array;
                             break;
 
-                        case 'password':
-                            # Aplicar encriptacion
+                        case 'col_fechanacimiento':
+                            $fecha_dt = DateTime::createFromFormat('Y-m-d', $campo);
+                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $fecha_dt;
                             break;
                         
                         default:
                             $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $campo;
                             break;
                     }
-                    
                 }
                 array_push($colaboradores, $col);
             }
