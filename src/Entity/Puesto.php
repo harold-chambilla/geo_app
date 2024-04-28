@@ -23,6 +23,9 @@ class Puesto
     #[ORM\JoinColumn(nullable: false)]
     private ?Area $pst_area = null;
 
+    #[ORM\ManyToOne(inversedBy: 'puestos')]
+    private ?Colaborador $pst_colaborador = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Puesto
     public function setPstArea(?Area $pst_area): static
     {
         $this->pst_area = $pst_area;
+
+        return $this;
+    }
+
+    public function getPstColaborador(): ?Colaborador
+    {
+        return $this->pst_colaborador;
+    }
+
+    public function setPstColaborador(?Colaborador $pst_colaborador): static
+    {
+        $this->pst_colaborador = $pst_colaborador;
 
         return $this;
     }
