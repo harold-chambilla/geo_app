@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PuestoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PuestoRepository::class)]
@@ -23,8 +25,13 @@ class Puesto
     #[ORM\JoinColumn(nullable: false)]
     private ?Area $pst_area = null;
 
-    #[ORM\ManyToOne(inversedBy: 'puestos')]
-    private ?Colaborador $pst_colaborador = null;
+    #[ORM\OneToMany(targetEntity: Colaborador::class, mappedBy: 'col_puesto')]
+    private Collection $pst_colaboradores;
+
+    public function __construct()
+    {
+        $this->pst_colaboradores = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -67,14 +74,32 @@ class Puesto
         return $this;
     }
 
-    public function getPstColaborador(): ?Colaborador
+    /**
+     * @return Collection<int, Colaborador>
+     */
+    public function getPstColaboradores(): Collection
     {
-        return $this->pst_colaborador;
+        return $this->pst_colaboradores;
     }
 
-    public function setPstColaborador(?Colaborador $pst_colaborador): static
+    public function addPstColaboradore(Colaborador $pstColaboradore): static
     {
-        $this->pst_colaborador = $pst_colaborador;
+        if (!$this->pst_colaboradores->contains($pstColaboradore)) {
+            $this->pst_colaboradores->add($pstColaboradore);
+            $pstColaboradore->setColPuesto($this);
+        }
+
+        return $this;
+    }
+
+    public function removePstColaboradore(Colaborador $pstColaboradore): static
+    {
+        if ($this->pst_colaboradores->removeElement($pstColaboradore)) {
+            // set the owning side to null (unless already changed)
+            if ($pstColaboradore->getColPuesto() === $this) {
+                $pstColaboradore->setColPuesto(null);
+            }
+        }
 
         return $this;
     }

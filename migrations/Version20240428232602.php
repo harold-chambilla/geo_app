@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240428024444 extends AbstractMigration
+final class Version20240428232602 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -37,9 +37,8 @@ final class Version20240428024444 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_8C0E9BD39C9B4C10 ON grupo (grp_empresa_id)');
         $this->addSql('CREATE TABLE horario_trabajo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, hot_diasemana VARCHAR(255) DEFAULT NULL, hot_fecha DATE DEFAULT NULL, hot_horaentrada TIME DEFAULT NULL, hot_horasalida TIME DEFAULT NULL, hot_tipojornada VARCHAR(255) DEFAULT NULL, hot_eliminado BOOLEAN DEFAULT NULL, hot_colaborador_id INTEGER DEFAULT NULL, CONSTRAINT FK_DA85417D3D04A72 FOREIGN KEY (hot_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_DA85417D3D04A72 ON horario_trabajo (hot_colaborador_id)');
-        $this->addSql('CREATE TABLE puesto (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pst_nombre VARCHAR(255) NOT NULL, pst_eliminado BOOLEAN NOT NULL, pst_area_id INTEGER NOT NULL, pst_colaborador_id INTEGER DEFAULT NULL, CONSTRAINT FK_47C3D2DE89F131D5 FOREIGN KEY (pst_area_id) REFERENCES area (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_47C3D2DE686B494A FOREIGN KEY (pst_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE puesto (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pst_nombre VARCHAR(255) NOT NULL, pst_eliminado BOOLEAN NOT NULL, pst_area_id INTEGER NOT NULL, CONSTRAINT FK_47C3D2DE89F131D5 FOREIGN KEY (pst_area_id) REFERENCES area (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_47C3D2DE89F131D5 ON puesto (pst_area_id)');
-        $this->addSql('CREATE INDEX IDX_47C3D2DE686B494A ON puesto (pst_colaborador_id)');
         $this->addSql('CREATE TABLE registro_cambios (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, reg_tablaafectada VARCHAR(255) DEFAULT NULL, reg_campoafectado VARCHAR(255) DEFAULT NULL, reg_valoranterior VARCHAR(255) DEFAULT NULL, reg_valornuevo VARCHAR(255) DEFAULT NULL, reg_fecha DATETIME DEFAULT NULL)');
         $this->addSql('CREATE TABLE sede (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, sed_nombre VARCHAR(255) DEFAULT NULL, sed_pais VARCHAR(255) DEFAULT NULL, sed_direccion VARCHAR(255) DEFAULT NULL, sed_ubicacion CLOB DEFAULT NULL, sed_eliminado BOOLEAN DEFAULT NULL, sed_empresa_id INTEGER DEFAULT NULL, CONSTRAINT FK_2A9BE2D125EF8966 FOREIGN KEY (sed_empresa_id) REFERENCES empresa (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_2A9BE2D125EF8966 ON sede (sed_empresa_id)');

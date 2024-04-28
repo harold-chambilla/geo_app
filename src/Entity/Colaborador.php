@@ -63,17 +63,13 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'grp_colaboradores')]
     private ?Grupo $col_grupo = null;
 
-    /**
-     * @var Collection<int, Puesto>
-     */
-    #[ORM\OneToMany(targetEntity: Puesto::class, mappedBy: 'pst_colaborador')]
-    private Collection $puestos;
+    #[ORM\ManyToOne(inversedBy: 'pst_colaboradores')]
+    private ?Puesto $col_puesto = null;
 
     public function __construct()
     {
         $this->col_asistencias = new ArrayCollection();
         $this->col_horariostrabajo = new ArrayCollection();
-        $this->puestos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,32 +310,14 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Puesto>
-     */
-    public function getPuestos(): Collection
+    public function getColPuesto(): ?Puesto
     {
-        return $this->puestos;
+        return $this->col_puesto;
     }
 
-    public function addPuesto(Puesto $puesto): static
+    public function setColPuesto(?Puesto $col_puesto): static
     {
-        if (!$this->puestos->contains($puesto)) {
-            $this->puestos->add($puesto);
-            $puesto->setPstColaborador($this);
-        }
-
-        return $this;
-    }
-
-    public function removePuesto(Puesto $puesto): static
-    {
-        if ($this->puestos->removeElement($puesto)) {
-            // set the owning side to null (unless already changed)
-            if ($puesto->getPstColaborador() === $this) {
-                $puesto->setPstColaborador(null);
-            }
-        }
+        $this->col_puesto = $col_puesto;
 
         return $this;
     }
