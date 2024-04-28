@@ -8,6 +8,7 @@ import App from "../assets/vue/controllers/App.vue";
 import Resultado from "../assets/vue/controllers/resultado/Resultado.vue";
 import Marcado from "../assets/vue/controllers/marcado/Marcado.vue";
 import Map from "../assets/vue/controllers/marcado/Map.vue";
+import Administracion from "../assets/vue/controllers/administracion/Administracion.vue";
 const googleMapsApiKey = 'AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q';
 const googleMapsScript = document.createElement('script');
 googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=geometry&callback=initMap`;
@@ -24,6 +25,7 @@ const marcado = createApp(Marcado);
 const app = createApp(App);
 const resultado = createApp(Resultado);
 const map = createApp(Map);
+const administracion = createApp(Administracion);
 
 app.use(pinia);
 app.mount('#app');
@@ -35,7 +37,10 @@ marcado.use(pinia);
 marcado.mount('#marcado');
 
 map.use(pinia);
-map.mount('#mapa')
+map.mount('#mapa');
+
+administracion.use(pinia);
+administracion.mount('#administracion');
 /*
  * Welcome to your app's main JavaScript file!
  *
