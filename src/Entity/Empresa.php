@@ -45,12 +45,16 @@ class Empresa
     #[ORM\OneToMany(targetEntity: Colaborador::class, mappedBy: 'col_empresa')]
     private Collection $emp_colaboradores;
 
+    #[ORM\OneToMany(targetEntity: Area::class, mappedBy: 'ara_empresa')]
+    private Collection $emp_areas;
+
     public function __construct()
     {
         $this->emp_sedes = new ArrayCollection();
         $this->emp_grupos = new ArrayCollection();
         $this->emp_configuracionesAsistencia = new ArrayCollection();
         $this->emp_colaboradores = new ArrayCollection();
+        $this->emp_areas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +248,36 @@ class Empresa
             // set the owning side to null (unless already changed)
             if ($empColaboradore->getColEmpresa() === $this) {
                 $empColaboradore->setColEmpresa(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Area>
+     */
+    public function getEmpAreas(): Collection
+    {
+        return $this->emp_areas;
+    }
+
+    public function addEmpArea(Area $empArea): static
+    {
+        if (!$this->emp_areas->contains($empArea)) {
+            $this->emp_areas->add($empArea);
+            $empArea->setAraEmpresa($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmpArea(Area $empArea): static
+    {
+        if ($this->emp_areas->removeElement($empArea)) {
+            // set the owning side to null (unless already changed)
+            if ($empArea->getAraEmpresa() === $this) {
+                $empArea->setAraEmpresa(null);
             }
         }
 
