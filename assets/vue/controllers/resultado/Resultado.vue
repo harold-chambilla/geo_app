@@ -3,9 +3,8 @@
       <Entrada v-if="entrada !== null && salida === null" />
       <Salida v-if="salida !== null && entrada !== null" />
     </div>
-  </template>
-  
-  <script setup>
+</template>
+<script setup>
   import Entrada from './Entrada.vue';
   import Salida from './Salida.vue';
   import { onMounted, computed } from 'vue';
@@ -18,5 +17,5 @@
   onMounted(() => {
     store.GET_ASISTENCIA();
   });
-  </script>
+</script>
   

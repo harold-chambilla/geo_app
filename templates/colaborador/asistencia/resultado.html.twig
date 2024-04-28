@@ -1,0 +1,69 @@
+{% extends 'colaborador/base.html.twig' %}
+
+{% block title %}Resultado - EasyControl!{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/colaborador/asistencia/resultado.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set contenido = {
+        "usuario": {
+            "nombre": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_usuario.png"
+                },
+                "valor": "last_username"
+            },
+            "dni": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_DNI.png"
+                },
+                "valor": "71401017"
+            }
+        },
+        "resultado": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/asistencia/resultado/ico_puntualidad.png"
+            },
+            "estado": {
+                "valor": "Puntual"
+            },
+            "fecha": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_calendario.png"
+                },
+                "valor": "entrada.fecha"
+            },
+            "hora": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_h_marcacion.png"
+                },
+                "valor": "Hora"
+            },
+            "ubicacion": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_puntualidad_02.png"
+                },
+                "valor": "Ubicacion"
+            },
+            "modalidad": {
+                "icono": {
+                    "tipo": "local",
+                    "valor": "ico/colaborador/asistencia/resultado/ico_presencial.png"
+                },
+                "valor": "Presencial"
+            }
+        }
+    } %}
+    <div class="container">
+      <div id="resultado"></div>
+    </div>
+{% endblock %}

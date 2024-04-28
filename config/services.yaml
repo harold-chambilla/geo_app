@@ -20,5 +20,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Empresa - Security - Autenticador personalizado  
+    App\Security\Empresa\AuthenticatorEmpresa:
+        public: true
+
+    # Empresa - Funciones - Empleados
+    App\Funciones\Empresa\EmpleadosFunciones:
+
+    # Empresa - Funciones - Horarios
+    App\Funciones\Empresa\HorariosFunciones:
+
+    

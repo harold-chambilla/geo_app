@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carga de archivo (Empleados) - EasilyControl!{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        {% for flash_message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        
+        <h1 class="mb-4">Descargar Archivo</h1>
+        
+        <a href="{{ path('app_empresa_empleados_descargar', {'archivo': 'formato_empleados.xlsx'}) }}" class="btn btn-primary">Descargar archivo</a>
+
+        <h2 class="mt-5">Cargar Archivo</h2>
+
+        {{ form_start(form, {'attr': {'class': 'mt-3'}}) }}
+            <div class="mb-3">
+                {{ form_label(form.archivo, 'Subir Excel', {'attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.archivo, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.archivo) }}
+            </div>
+            {{ form_row(form.cargar, {'attr': {'class': 'btn btn-primary'}}) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
