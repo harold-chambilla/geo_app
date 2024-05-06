@@ -118,7 +118,7 @@ class AppFixtures extends Fixture
         $superadmin->setColArea($puesto_superadmin->getPstArea()->getAraNombre());
         $superadmin->setColCorreoelectronico('juan.ornelas@tumbaserver.com');
         $superadmin->setRoles(["ROLE_SUPERADMIN"]);
-        $superadmin->setColNombreusuario('juan.ornelas');
+        $superadmin->setColNombreusuario($empresa->getEmpRuc() . '|juan.ornelas');
         $superadmin->setPassword($this->userPasswordHasher->hashPassword($col, '6d589f20'));
         $superadmin->setColEmpresa($empresa);
         $superadmin->setColGrupo($grupopredeterminado);

@@ -3,11 +3,14 @@
 namespace App\Funciones\Empresa;
 
 use App\Entity\Colaborador;
+use App\Repository\ColaboradorRepository;
+use App\Repository\PuestoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PDOException;
 use DateTime;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -39,7 +42,7 @@ class EmpleadosFunciones
             'obligatoria' => false
         ],
         'Puesto' => [
-            'traduccion' => 'col_puesto',
+            'traduccion' => 'col_puesto_id',
             'obligatoria' => false
         ],
         'Rol' => [
@@ -68,7 +71,14 @@ class EmpleadosFunciones
         ]
     ];
 
-    public function __construct(private SluggerInterface $slugger, private EntityManagerInterface $entityManagerInterface, private UserPasswordHasherInterface $userPasswordHasherInterface){ }
+    public function __construct(
+        private SluggerInterface $slugger, 
+        private EntityManagerInterface $entityManagerInterface, 
+        private UserPasswordHasherInterface $userPasswordHasherInterface, 
+        private PuestoRepository $puestoRepository,
+        private ColaboradorRepository $colaboradorRepository,
+        private Security $security
+    ){ }
 
     # Cargar un archivo
     public function cargar(UploadedFile $file, string $uploadDirectory): string
@@ -280,19 +290,26 @@ class EmpleadosFunciones
     public function registro(array $colorador): string
     {
         $estado = 'Ok';
+
+        $colaborador = $this->colaboradorRepository->findOneBy([
+            'col_nombreusuario' => $this->security->getUser()->getUserIdentifier()
+	]);
+
+	$grupo = $colaborador->getColGrupo();
+
         $aux_colaborador = new Colaborador;
         $aux_colaborador->setColNombres($colorador['col_nombres'] ?? null);
         $aux_colaborador->setColApellidos($colorador['col_apellidos'] ?? null);
         $aux_colaborador->setColDninit($colorador['col_dninit'] ?? null);
         $aux_colaborador->setColFechanacimiento($colorador['col_fechanacimiento'] ?? null);
-        $aux_colaborador->setColPuesto($colorador['col_puesto'] ?? null);
+        $aux_colaborador->setColPuesto($this->puestoRepository->findOneBy(['id' => $colorador['col_puesto_id']]));
         $aux_colaborador->setColArea($colorador['col_area'] ?? null);
         $aux_colaborador->setColCorreoelectronico($colorador['col_correoelectronico'] ?? null);
         $aux_colaborador->setRoles($colorador['roles']);
-        $aux_colaborador->setColNombreusuario($colorador['col_nombreusuario']);
-        $aux_colaborador->setColEliminado($colorador['col_eliminado'] ?? null);
-        $aux_colaborador->setColEmpresa($colorador['col_empresa_id'] ?? null);
-        $aux_colaborador->setColGrupo($colorador['col_grupo_id'] ?? null);
+        $aux_colaborador->setColNombreusuario($colaborador->getColEmpresa()->getEmpRuc() . '|' . $colorador['col_nombreusuario']);
+        $aux_colaborador->setColEliminado(0);
+        $aux_colaborador->setColEmpresa($colaborador->getColEmpresa() ?? null);
+        $aux_colaborador->setColGrupo($grupo);
         $aux_colaborador->setPassword($this->userPasswordHasherInterface->hashPassword($aux_colaborador, $colorador['password']));
 
         try {
@@ -350,9 +367,36 @@ class EmpleadosFunciones
                     # Por tipo de dato
                     switch ($this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']) {
                         case 'roles':
-                            $json_string_cleaned = ($campo !== null) ? str_replace(['[', ']', '“', '”'], '', $campo) : null;
+                            $json_string_cleaned = ($campo !== null) ? str_replace(['[', ']', '"', '"'], '', $campo) : null;
                             $campo_array = ($json_string_cleaned !== null) ? explode(', ', $json_string_cleaned) : null;
-                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $campo_array;
+                            $roles = [];
+                            if ($campo_array !== null) {
+                                foreach ($campo_array as $rol) {
+                                    switch (trim($rol)) {
+                                        case 'Administrador':
+                                            $roles[] = 'ROLE_ADMIN';
+                                            break;
+                                        case 'Supervisor':
+                                            $roles[] = 'ROLE_SUPERVISOR';
+                                            break;
+                                        case 'Colaborador':
+                                            $roles[] = 'ROLE_COLABORADOR';
+                                            break;
+                                        default:
+                                            // Manejar casos no esperados o roles desconocidos
+                                            break;
+                                    }
+                                }
+                            }
+                            
+                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $roles;
+                            break;
+
+                        case 'col_puesto_id':
+                            $puesto_temp = $this->puestoRepository->findOneBy([
+                                'pst_nombre' => $campo
+                            ]);
+                            $col[$this->traductor[$datos[$condiciones['hoja']][$condiciones['columnas']['nombres']][$key]]['traduccion']] = $puesto_temp ? $puesto_temp->getId() : null;
                             break;
 
                         case 'col_fechanacimiento':
