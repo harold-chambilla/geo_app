@@ -8,8 +8,13 @@
     {% endif %}
 
     <form action="{{ path('app_empresa_seguridad_acceder') }}" method="post">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
+        <label for="ruc">RUC:</label>
+        <input type="text" id="ruc" name="_ruc">
+
+    	<label for="username">Usuario:</label>
+        <input type="text" id="username" name="_username_visible" value="{{ last_username }}">
+
+		<input type="hidden" id="_username" name="_username">
 
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="_password">
@@ -19,4 +24,21 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <button type="submit">Iniciar sesión</button>
     </form>
+{% endblock %}
+
+{% block js %}
+	<script>
+    	const usernameInput = document.getElementById('username');
+    	const rucInput = document.getElementById('ruc');
+		const hiddenUsernameInput = document.getElementById('_username');
+
+    	const handleSubmit = (event) => {
+        	const username = usernameInput.value;
+        	const ruc = rucInput.value;
+        	hiddenUsernameInput.value = `${ruc}|${username}`;
+    	};
+
+    	const form = document.querySelector('form');
+    	form.addEventListener('submit', handleSubmit);
+	</script>
 {% endblock %}

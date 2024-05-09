@@ -4,6 +4,7 @@ namespace App\Controller\Empresa\Seguridad;
 
 use App\Entity\Colaborador;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -13,14 +14,14 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class AccederController extends AbstractController
 {
     #[Route(path: '/acceder', name: 'acceder')]
-    public function acceder(AuthenticationUtils $authenticationUtils): Response
+    public function acceder(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('empresa/seguridad/acceder.html.twig', [
+	return $this->render('empresa/seguridad/acceder.html.twig', [
             'last_username' => $lastUsername,
-            'error' => $error,
+            'error' => $error
         ]);
     }
 
