@@ -293,9 +293,9 @@ class EmpleadosFunciones
 
         $colaborador = $this->colaboradorRepository->findOneBy([
             'col_nombreusuario' => $this->security->getUser()->getUserIdentifier()
-	]);
+		]);
 
-	$grupo = $colaborador->getColGrupo();
+		$grupo = $colaborador->getColGrupo();
 
         $aux_colaborador = new Colaborador;
         $aux_colaborador->setColNombres($colorador['col_nombres'] ?? null);
