@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Puesto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,15 @@ class PuestoRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Puesto::class);
     }
+
+	public function buscarPuestosPorAreaId($areaId)
+	{
+		return $this->createQueryBuilder('p')
+			->leftJoin('p.pst_area', 'a')
+			->where('a.id = :areaId')
+			->setParameter('areaId', $areaId)	
+		;
+	}
 
     //    /**
     //     * @return Puesto[] Returns an array of Puesto objects

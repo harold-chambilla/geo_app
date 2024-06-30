@@ -1,0 +1,54 @@
+{% extends 'empresa/base.html.twig' %}
+
+{% block title %}Acceder{% endblock %}
+
+{% block body_full %}
+	<div class="container d-flex justify-content-center align-items-center min-vh-100">
+		<div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%; font-family: 'Courier New', Courier, monospace;">
+			<div class="card-body">
+				{% if error %}
+					<div class="alert alert-danger" role="alert">
+						{{ error.messageKey|trans(error.messageData, 'security') }}
+					</div>
+				{% endif %}
+				<h5 class="card-title text-center mb-4"><strong>Iniciar Sesión</strong></h5>
+				<form action="{{ path('app_empresa_seguridad_acceder') }}" method="post">
+					<div class="mb-3">
+						<label for="ruc" class="form-label"><strong>RUC</strong></label>
+						<input type="text" class="form-control" id="ruc" name="_ruc">
+					</div>
+					<div class="mb-3">
+						<label for="username" class="form-label"><strong>Usuario</strong></label>
+						<input type="text" class="form-control" id="username" name="_username_visible" value="{{ last_username }}">
+						<input type="hidden" id="_username" name="_username">
+					</div>
+					<div class="mb-3">
+						<label for="password" class="form-label"><strong>Contraseña</strong></label>
+						<input type="password" class="form-control" id="password" name="_password">
+					</div>
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+					<div class="d-grid gap-2">
+						<button class="btn btn-outline-dark btn-lg" type="submit"><strong>Iniciar Sesión</strong></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script>
+    	const usernameInput = document.getElementById('username');
+    	const rucInput = document.getElementById('ruc');
+		const hiddenUsernameInput = document.getElementById('_username');
+
+    	const handleSubmit = (event) => {
+        	const username = usernameInput.value;
+        	const ruc = rucInput.value;
+        	hiddenUsernameInput.value = `${ruc}|${username}`;
+    	};
+
+    	const form = document.querySelector('form');
+    	form.addEventListener('submit', handleSubmit);
+	</script>
+{% endblock %}

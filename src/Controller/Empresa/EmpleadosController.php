@@ -2,13 +2,17 @@
 
 namespace App\Controller\Empresa;
 
+use App\Entity\Colaborador;
 use App\Form\CargadorArchivoType;
+use App\Form\ColaboradorType;
 use App\Funciones\Empresa\EmpleadosFunciones;
+use App\Repository\ColaboradorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/empresa/empleados', name: 'app_empresa_empleados_')]
 class EmpleadosController extends AbstractController
@@ -16,11 +20,22 @@ class EmpleadosController extends AbstractController
     private string $uploadDirectory = 'uploads/empresa/empleados';
     private string $downloadDirectory = 'downloads/empresa/empleados';
 
+	public function __construct(
+		private ColaboradorRepository $colaboradorRepository
+	){}
+
     # Formulario de registro simple
     #[Route('/', name: 'mostrar')]
-    public function index(): Response
-    {
-        return $this->render('empresa/empleados/index.html.twig');
+    public function index(Request $request): Response
+	{
+		$colaborador = $this->colaboradorRepository->findOneBy([
+			'col_nombreusuario' => $this->getUser()->getUserIdentifier(),
+		]);
+		$visible =  explode(' ', $colaborador->getColNombres())[0] . ' ' . explode(' ', $colaborador->getColApellidos())[0];
+
+		return $this->render('empresa/empleados/index.html.twig', [
+			'usuario' => $visible
+		]);
     }
 
     # Carga masiva de datos
@@ -59,4 +74,16 @@ class EmpleadosController extends AbstractController
     {
         return $empleadosFunciones->descargar($archivo, $this->downloadDirectory);
     }
+
+    //Crear empleado
+	#[Route('/api/empleado/crear', name: 'crear_empleado', methods: ['POST'])]
+	public function crearEmpleado(Request $request): JsonResponse
+	{	
+		$datos = json_decode($request->getContent(), true);
+		if($datos['empleado']){
+			//Crear empleado
+			return $this->json(['message' => 'El empleado se ha creado correctamente.'], JsonResponse::HTTP_OK);
+		}
+		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
+	}
 }

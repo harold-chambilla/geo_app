@@ -1,26 +1,34 @@
 import { registerVueControllerComponents } from '@symfony/ux-vue';
 import './bootstrap.js';
+import './styles/app.scss';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import App from "../assets/vue/controllers/App.vue";
-// import Salida from "../assets/vue/controllers/Salida.vue"
-import Resultado from "../assets/vue/controllers/resultado/Resultado.vue";
-import Marcado from "../assets/vue/controllers/marcado/Marcado.vue";
-import Map from "../assets/vue/controllers/marcado/Map.vue";
-import Administracion from "../assets/vue/controllers/administracion/Administracion.vue";
+
+const $ = require('jquery');
+require('bootstrap');
+
+registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));
+
+const pinia = createPinia();
+
 const googleMapsApiKey = 'AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q';
 const googleMapsScript = document.createElement('script');
 googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=geometry&callback=initMap`;
 googleMapsScript.async = true;
 googleMapsScript.defer = true;
 
-// Agregar el script al final del cuerpo del documento
 document.body.appendChild(googleMapsScript);
-
 window.initMap = () => {}
 
-const pinia = createPinia();
+// Importamos nuestras secciones y componentes
+
+import App from "../assets/vue/controllers/test/App.vue";
+import Resultado from "../assets/vue/controllers/colaborador/asistencia/resultado/Resultado.vue";
+import Marcado from "../assets/vue/controllers/colaborador/asistencia/marcado/Marcado.vue";
+import Map from "../assets/vue/controllers/colaborador/asistencia/marcado/Map.vue";
+import Administracion from "../assets/vue/controllers/empresa/Administracion.vue";
+
 const marcado = createApp(Marcado);
 const app = createApp(App);
 const resultado = createApp(Resultado);
@@ -41,19 +49,6 @@ map.mount('#mapa');
 
 administracion.use(pinia);
 administracion.mount('#administracion');
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
 
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.scss';
 
-const $ = require('jquery');
-// this "modifies" the jquery module: adding behavior to it
-// the bootstrap module doesn't export/return anything
-require('bootstrap');
 
-registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));

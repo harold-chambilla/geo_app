@@ -1,0 +1,94 @@
+{% extends 'colaborador/base.html.twig' %}
+
+{% block title %}Iniciar sesión - EasyControl!{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/colaborador/acceder.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set contenido = {
+        "titulo": {
+            "valor": "¡Bienvenidos. Puntualidad hoy, logros mañana!"
+        },
+        "empresa": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_empresa.png"
+            }
+        },
+        "usuario": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_usuario.png"
+            },
+            "name": "_username",
+            "valor": last_username
+        }, 
+        "clave": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_contraseña.png"
+            },
+            "name": "_password"
+        }, 
+        "token": {
+            "name": "_csrf_token",
+            "valor": csrf_token('authenticate')
+        },
+        "boton": {
+            "valor": "INGRESAR"
+        }, 
+        "footer": {
+            "version": "V. 1.2 - Creación de EASY CONTROL",
+            "terminos": {
+                "valor": "Terms of Service",
+                "enlace": {
+                    "tipo": "local",
+                    "valor": "#"
+                }
+            }
+        }
+    } %}
+    <div class="container">
+    <div class="login-container">
+        <div class="col-md-12 logo"> 
+            <img class="img-fluid" src="{{ asset('img/ec_logo_del_software.png') }}" > 
+        </div>
+        <div class="col-md-12 center-text">
+            <h1 class="text-login">{{ contenido.titulo.valor }}</h1>
+        </div> 
+        <form class="col-md-12 text-center" method="post">
+            {# No es parte del diseño origianl #}
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <div class="form-group"  >
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ contenido.empresa.icono.tipo == 'local' ? asset(contenido.empresa.icono.valor) : contenido.empresa.icono.valor }}"  width="20" height="20">
+                    <input type="text" class="custom-input" id="ID" placeholder="ID de empresa">
+                </span>
+            </div>
+            <div class="form-group">
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ contenido.usuario.icono.tipo == 'local' ? asset(contenido.usuario.icono.valor) : contenido.usuario.icono.valor }}"  width="20" height="20">
+                    <input type="text" value="{{ contenido.usuario.valor }}" class="custom-input" id="usuario" name="{{ contenido.usuario.name }}" placeholder="Usuario" required autofocus>
+                </span>
+            </div>
+            <div class="form-group">
+                <span class="custom-ico input-group-prepend ">
+                    <img src="{{ contenido.clave.icono.tipo == 'local' ? asset(contenido.clave.icono.valor) : contenido.clave.icono.valor }}"  width="20" height="20">
+                    <input type="text" class="custom-input" id="Contraseña" name="{{ contenido.clave.name }}" placeholder="Contraseña" required>
+                </span>
+            </div>
+            <input type="hidden" name="{{ contenido.token.name }}" value="{{ contenido.token.valor }}">
+            <button type="submit" class="boton">{{ contenido.boton.valor }}</button>
+        </form>
+        <footer>
+            <p>{{ contenido.footer.version }}</p>
+            <p><a href="{{ contenido.footer.terminos.enlace.tipo == 'local' ? asset(contenido.footer.terminos.enlace.valor) : contenido.footer.terminos.enlace.valor }}">{{ contenido.footer.terminos.valor }}</a></p>
+        </footer> 
+    </div>
+<div>
+{% endblock %}

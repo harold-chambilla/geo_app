@@ -19,7 +19,16 @@ class AreaRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Area::class);
-    }
+	}
+
+	public function buscarAreasPorIdEmpresa($empresaId)
+	{
+		return $this->createQueryBuilder('a')
+			->leftJoin('a.ara_empresa', 'e')
+			->where('e.id = :empresaId')
+  			->setParameter('empresaId', $empresaId)	
+		;
+	}
 
     //    /**
     //     * @return Area[] Returns an array of Area objects
