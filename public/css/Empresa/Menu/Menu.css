@@ -1,0 +1,110 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+body{
+    background-color: #dfe9f5;
+}
+nav{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: #0074D9;
+    width: 70px;
+    overflow: hidden;
+    transition: width 0.5s ease;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+}
+/*---------------icono-logo-----------------*/
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.ico-ubi{
+        width: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+.ico-logo{
+    position: relative;
+    width: 100px;
+    text-align: center;
+    margin: auto;
+    padding: 25px;
+    padding-bottom: 35px;
+    padding-top: 35px;
+
+}
+
+/*----------------sesiones de la pagina --------------*/
+.ico-ubi-sesion{
+    display:flex; 
+    flex-direction: column;
+    justify-content: center;
+    height: 60vh;
+}
+.session{
+    display: flex; 
+    color: #f9fafc;
+    font-size: 18px;
+    display: table;
+    width: 300px;
+    text-decoration: none;
+    padding: 10px 0px;
+}
+.fas{
+    position: relative;
+    width: 70px;
+    height: 40px;
+    top:14px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.nav-item{
+    position: relative;
+    top: 12px;
+    margin-left: 10px;
+}
+.session:hover{
+    background: #f9fafc;
+    color: #030303;
+}
+nav:hover{
+    width: 280px;
+    transition: all 0.5s ease;
+}
+.logout{
+    position: absolute;
+    bottom: 0;
+    height: 120px;
+    text-decoration: none;
+}
+a.logout:hover{
+    background: none;
+}
+
+@media (min-width: 992px) {
+    .ico-logo{
+        width: 90px;  
+    }
+}
+
+
+.container {
+    margin-left: 110px; /* Ajuste para el estado contraído */
+    transition: margin-left 0.5s ease;
+    padding: 20px; /* Añade algo de relleno para el contenido */
+}

@@ -1,0 +1,395 @@
+*{
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0;
+    margin: 0;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+ body {
+    box-sizing: border-box;
+    background-color: white;
+    font-family: "Source Sans Pro", sans-serif; 
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0;
+    margin: 0;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    background-color: #0074d933;
+    color: #514F4F;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+/*-----------------------------Cabecera-----------------------------------*/
+.box_cabecera{
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: #514F4F;
+    
+}
+.Titulo1 {
+    font-size: 14px;
+    width: 95px;
+    font-weight: bold;
+}
+.User_info{
+    font-size: 12px;
+    width: 200px;
+}
+.Img_perfil {
+    width: 30px;
+    height: auto;
+    margin-left: 10px;
+    border-radius: 50%;
+}
+
+/*-----------------------------Estructura de tabs-----------------------------------*/
+
+ /**------ Tabs Container ---------------------*/
+  
+ .tabs-container {
+     padding-left: 2rem;
+     padding-right: 2rem;
+ }
+ 
+ /** ----------------- Tabs Block ------------*/
+  
+ .tabs-block {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+ 
+ /**------------- Tabs-----------------------*/
+  
+ .tabs {
+     display: flex;
+     flex-wrap: wrap;
+     width: 100%;
+ }
+
+
+
+ label{
+    margin: 0;
+ }
+
+ .tabs label {
+     width: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0.5rem 4.1rem;
+     margin-right: 0.0625rem;
+     cursor: pointer;
+     background-color: #0074d933;
+     color: #fff;
+     font-family: Roboto, sans-serif;
+     font-size: 1.2rem;
+     font-weight: 700;
+     transition: background-color ease 0.3s;
+ }
+ 
+ .tabs label .material-icons {
+     margin-right: 0.3rem;
+ }
+ 
+ .tabs .tab {
+     flex-grow: 1;
+     width: 100%;
+     height: 100%;
+     display: none;
+     padding: 1rem 0.8rem;
+     color: #000;
+     background-color: #fff;
+     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+     
+ }
+ 
+ .tabs .tab > *:not(:last-child) {
+     margin-bottom: 0.8rem;
+ }
+ 
+ .tabs [type=radio] {
+     display: none;
+ }
+ 
+ .tabs [type=radio]:checked + label {
+     background-color: #fff;
+     color: #0067b8;
+     border-top: 4px solid #0067b8;
+     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+ }
+ 
+ .tabs [type=radio]:checked + label + .tab {
+     display: block;
+ }
+
+ /*-----------------------formulario-----------------------*/
+
+h2{
+    font-size: 1.2rem;
+}
+
+.linea-azul {
+    height: 2px;
+    background-color: #0074D9;
+    margin-bottom:1rem ;
+}
+
+
+.signupFrm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 105%;
+    border: 1px solid #DADCE0;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 0 5px;
+    outline: none;
+    background: none;
+    z-index: 1;
+}
+ 
+::placeholder {
+    color: transparent;
+}
+
+.label {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    padding: 0 4px;
+    background-color: white;
+    color: #DADCE0;
+    font-size: 16px;
+    transition: 0.5s;
+    z-index: 0;
+}
+
+
+
+.submitBtn:hover {
+    background-color: #1565D8;
+    transform: translateY(-2px);
+}
+
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label {
+    top: -15px;
+    left: 3px;
+    z-index: 10;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1565D8;
+}
+
+.inputContainer {
+    position: relative;
+    height: 40px;
+    width: 96%;
+    margin-bottom: 17px;
+}
+
+.input:focus {
+    border: 2px solid #1565D8;
+}
+
+.input:not(:placeholder-shown) + .label {
+    top: -15px;
+    left: 3px;
+    z-index: 10;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Ajustes de estilo personalizados */
+
+.inputContainer {
+    margin-bottom: 20px; /* Espacio entre los campos de entrada */
+}
+
+.label {
+    margin-top: 5px; /* Ajuste para separar la etiqueta del campo de entrada */
+}
+
+.checkboxInput {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .checkboxLabel {
+    font-size: 16px;
+    color: #555;
+  }
+
+
+ /*---------------------------------Form-------------------------*/
+ 
+  a,
+  a:visited {
+      background-color: transparent;
+      color: #0067b8;
+      text-decoration: none;
+      border-bottom: 1px dotted;
+  }
+  
+  a:hover,
+  a:active {
+      border-bottom: none;
+      outline: 0;
+  }
+  
+  a:focus {
+      border-bottom: none;
+      outline: thin dotted;
+  }
+  
+  a img {
+      border: 0;
+  }
+  
+  footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem;
+  }
+  
+  footer .credits {
+      font-size: 1rem;
+  }
+
+  *::before,
+  *::after {
+      box-sizing: border-box;
+  }
+  
+
+  .submitBtn {
+    display: block;
+    margin-left: auto;
+    padding: 10px 45px;
+    border: none;
+    background-color: #1565D8;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .submitBtn:hover {
+    background-color: #1565D8;
+    transform: translateY(-2px);
+  }
+
+
+/** ----------Responsive de registro individual-----------*/
+ @media (min-width: 788px) {
+    
+
+ 
+     body {
+         font-size: 1.125rem;
+     }
+ /*-----------------------------Cabecera-----------------------------------*/
+
+     .Titulo1 {
+        font-size: 24px;
+        width: 395px;
+    }
+    .User_info {
+        padding-top:10px ;
+        font-size: 16px;
+        width: 100%;
+    }
+
+/*-----------------------------tabla-----------------------------------*/
+     .tabs-container {
+         padding: 4rem 4rem;
+     }
+ 
+     .tabs label {
+         order: 1;
+         width: auto;
+     }
+ 
+     .tabs .tab {
+         order: 9;
+     }
+ 
+     .tabs [type=radio]:checked + label {
+         border-bottom: none;
+     }
+
+     .tabs label {
+        font-size: 12px;
+    }
+    .tabs {
+        width: 650px;
+    }
+
+    .input {
+        font-size: 14px;
+        width: 97%;
+    }
+    .tabs-container {
+        padding: 2rem;
+    }
+
+    .checkboxLabel {
+        position: relative;
+        top: -4px;
+    }
+
+ }
+ @media (min-width: 992px) {
+
+     .tabs {
+         width: 800px;
+     }
+     .tabs label {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        font-size: 19.4px;
+    }
+
+    .Titulo1 {
+        font-size: 26px;
+    }
+    .User_info {
+        font-size: 20px;
+    }
+
+    .Img_perfil {
+        width: 50px;
+    }
+    
+ }
+
+ 
+  
+ 
+  

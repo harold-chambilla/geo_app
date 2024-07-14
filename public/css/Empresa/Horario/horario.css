@@ -1,0 +1,282 @@
+
+* {
+    margin: 0;
+    font-family: 'Open Sans Condensed', sans-serif;
+  }
+body {
+    font-family: 'Open Sans', sans-serif;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+  }
+
+.CTN-principal {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.calendar-header {
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/*---- boton blanco ---*/
+.button-blanco {
+    background-color: #f4f4f4;
+    color: #8692A6;
+    border: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button-blanco:hover {
+    background-color: #f0f0f0;
+}
+
+/*---- mes del año ---*/
+.mes{
+    color: #111111;
+    font-size: 16px;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
+/*----- sub menu ----*/
+
+.container-submenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+.dropdown select {
+    padding: 5px 25px;
+    border: 1px solid #ccd1d9;
+    border-radius: 15px;
+    background-color: #f5f7fa;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    margin: 10px;
+    font-weight: bold;
+}
+.dropdown:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: #ccd1d9;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+/*---- calendar body ---*/
+
+.calendar-body {
+    padding: 10px;
+}
+
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.calendar-table th, .calendar-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+.calendar-table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+.calendar-table td {
+    background-color: #fff;
+}
+td.semana {
+    background-color:#007bff;
+    border: 1px solid #007bff;
+}
+
+.prev-month {
+        color: #999; /* Color gris para los días del mes anterior */
+        font-style: italic; /* Estilo italic opcional */
+}
+
+/******evalualr ***/
+
+.CTN-principal {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.container-submenu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.container-submenu .dropdown {
+    flex: 1;
+    min-width: 100px;
+}
+
+.container-submenu input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+}
+
+.calendar-body {
+    margin-top: 20px;
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+    box-sizing: border-box; 
+}
+
+
+.calendar-table {
+ 
+    table-layout: auto; 
+    border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.calendar-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+
+    .container-submenu .dropdown,
+    .container-submenu input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+        padding: 5px;
+        font-size: 12px;
+    }
+    .mes{
+        color: #111111;
+        font-size: 14px;
+        padding: 5px 10px;
+        font-weight: bold;
+    }
+}
+
+
+/***   evlkuar  **/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .modal-header {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .modal-subheader {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+
+  .modal-buttons {
+    margin-top: 20px;
+  }
+
+  .btn-cancel,
+  .btn-accept {
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .btn-cancel {
+    background-color: #f44336;
+    color: white;
+  }
+
+  .btn-accept {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .modal-buttons input[type="radio"] {
+    margin: 0 10px;
+  }
+  #currentMonth {
+  cursor: pointer;
+}

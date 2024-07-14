@@ -1,42 +1,207 @@
-{% extends 'empresa/base.html.twig' %}
+{# templates/calendario.html.twig #}
 
-{% block title %}Empleados{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Responsivo</title>
+    {% block css %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+			<link rel="stylesheet" href="{{ asset('css/Empresa/Horario/Horario.css') }}">
+		{% endblock %}
 
-{% block body_sidebar %}
-	<div class="container mt-4">
-		<div class="card p-4 shadow-sm" style="font-family: 'Courier New', Courier, monospace;">
-			<div class="card-body d-flex justify-content-between align-items-center">
-				<!-- Texto "Registro de Empleados" a la izquierda -->
-				<h5 class="card-title mb-0">Registro de Empleados</h5>
-				<!-- Nombre de usuario a la derecha -->
-				<h5 class="card-title mb-0">{{ usuario }}</h5>
-			</div>
-			<!-- Pestañas -->
-			<ul class="nav nav-tabs" id="myTabs" role="tablist">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="registro-individual-tab" data-bs-toggle="tab" data-bs-target="#registro-individual" type="button" role="tab" aria-controls="registro-individual" aria-selected="true">Registro Individual</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="registro-masivo-tab" data-bs-toggle="tab" data-bs-target="#registro-masivo" type="button" role="tab" aria-controls="registro-masivo" aria-selected="false">Registro Masivo</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial" type="button" role="tab" aria-controls="historial" aria-selected="false">Historial</button>
-				</li>
-			</ul>
-			<!-- Contenido de las pestañas -->
-			<div class="tab-content mt-4" id="myTabsContent">
-				<div class="tab-pane fade show active" id="registro-individual" role="tabpanel" aria-labelledby="registro-individual-tab">
-					<p>Contenido de Registro Individual aquí...</p>
-				</div>
-				<div class="tab-pane fade" id="registro-masivo" role="tabpanel" aria-labelledby="registro-masivo-tab">
-					<!-- Contenido para Registro Masivo -->
-					<p>Contenido de Registro Masivo aquí...</p>
-				</div>
-				<div class="tab-pane fade" id="historial" role="tabpanel" aria-labelledby="historial-tab">
-					<!-- Contenido para Historial -->
-					<p>Contenido de Historial aquí...</p>
-				</div>
-			</div>
-		</div>
-	</div>
-{% endblock %}
+        
+   
+</head>
+<body>
+    <div class="CTN-principal">
+        <div class="calendar-header">
+            <button class="button-blanco" id="prevMonth">Anterior</button>
+            <span class="mes" id="currentMonth"></span>
+            <button class="button-blanco" id="nextMonth">Siguiente</button>
+        </div>
+
+        <div class="container-submenu">
+            <div class="dropdown">
+                <select>
+                    <option value="area">Area</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <div class="dropdown">
+                <select>
+                    <option value="puesto">Puesto</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <input type="text" id="nombreInput" placeholder="Nombre de la semana">
+            <button id="addNombre">Agregar Nombre</button>
+        </div>
+
+        <div class="calendar-body">
+            <div class="table-container">
+                <!-- Aquí empiezan las tablas -->
+            <table class="calendar-table">
+                <tbody>
+                    <tr>
+                        <td class="semana" colspan="2"></td>
+                        <td class="semana domingo">Dom</td>
+                        <td class="semana lunes">Lun</td>
+                        <td class="semana martes">Mar</td>
+                        <td class="semana miercoles">Mié</td>
+                        <td class="semana jueves">Jue</td>
+                        <td class="semana viernes">Vie</td>
+                        <td class="semana sabado">Sáb</td>
+                    </tr>
+                    <tr class="personal">
+                        <td colspan="2" id="personal1" class="personal">Semana 1</td>
+                        <td class="domingo" id="semana1_dom"></td>
+                        <td class="lunes" id="semana1_lun"></td>
+                        <td class="martes" id="semana1_mar"></td>
+                        <td class="miercoles" id="semana1_mie"></td>
+                        <td class="jueves" id="semana1_jue"></td>
+                        <td class="viernes" id="semana1_vie"></td>
+                        <td class="sabado" id="semana1_sab"></td>
+                    </tr>
+                </tbody>
+            </table>
+    <table class="calendar-table">
+      <tbody>
+          <tr>
+              <td class="semana" colspan="2"></td>
+              <td class="semana domingo">Dom</td>
+              <td class="semana lunes">Lun</td>
+              <td class="semana martes">Mar</td>
+              <td class="semana miercoles">Mié</td>
+              <td class="semana jueves">Jue</td>
+              <td class="semana viernes">Vie</td>
+              <td class="semana sabado">Sáb</td>
+          </tr>
+          <tr class="personal">
+              <td colspan="2" id="personal1" class="personal">Semana 2</td>
+              <td class="domingo" id="semana1_dom"></td>
+              <td class="lunes" id="semana1_lun"></td>
+              <td class="martes" id="semana1_mar"></td>
+              <td class="miercoles" id="semana1_mie"></td>
+              <td class="jueves" id="semana1_jue"></td>
+              <td class="viernes" id="semana1_vie"></td>
+              <td class="sabado" id="semana1_sab"></td>
+          </tr>
+      </tbody>
+  </table>
+  <table class="calendar-table">
+    <tbody>
+        <tr>
+            <td class="semana" colspan="2"></td>
+            <td class="semana domingo">Dom</td>
+            <td class="semana lunes">Lun</td>
+            <td class="semana martes">Mar</td>
+            <td class="semana miercoles">Mié</td>
+            <td class="semana jueves">Jue</td>
+            <td class="semana viernes">Vie</td>
+            <td class="semana sabado">Sáb</td>
+        </tr>
+        <tr class="personal">
+            <td colspan="2" id="personal1" class="personal">Semana 3</td>
+            <td class="domingo" id="semana1_dom"></td>
+            <td class="lunes" id="semana1_lun"></td>
+            <td class="martes" id="semana1_mar"></td>
+            <td class="miercoles" id="semana1_mie"></td>
+            <td class="jueves" id="semana1_jue"></td>
+            <td class="viernes" id="semana1_vie"></td>
+            <td class="sabado" id="semana1_sab"></td>
+        </tr>
+    </tbody>
+</table>
+<table class="calendar-table">
+  <tbody>
+      <tr>
+          <td class="semana" colspan="2"></td>
+          <td class="semana domingo">Dom</td>
+          <td class="semana lunes">Lun</td>
+          <td class="semana martes">Mar</td>
+          <td class="semana miercoles">Mié</td>
+          <td class="semana jueves">Jue</td>
+          <td class="semana viernes">Vie</td>
+          <td class="semana sabado">Sáb</td>
+      </tr>
+      <tr class="personal">
+          <td colspan="2" id="personal1" class="personal">Semana 4</td>
+          <td class="domingo" id="semana1_dom"></td>
+          <td class="lunes" id="semana1_lun"></td>
+          <td class="martes" id="semana1_mar"></td>
+          <td class="miercoles" id="semana1_mie"></td>
+          <td class="jueves" id="semana1_jue"></td>
+          <td class="viernes" id="semana1_vie"></td>
+          <td class="sabado" id="semana1_sab"></td>
+      </tr>
+  </tbody>
+</table>
+<table class="calendar-table">
+  <tbody>
+      <tr>
+          <td class="semana" colspan="2"></td>
+          <td class="semana domingo">Dom</td>
+          <td class="semana lunes">Lun</td>
+          <td class="semana martes">Mar</td>
+          <td class="semana miercoles">Mié</td>
+          <td class="semana jueves">Jue</td>
+          <td class="semana viernes">Vie</td>
+          <td class="semana sabado">Sáb</td>
+      </tr>
+      <tr class="personal">
+          <td colspan="2" id="personal1" class="personal">Semana 5</td>
+          <td class="domingo" id="semana1_dom"></td>
+          <td class="lunes" id="semana1_lun"></td>
+          <td class="martes" id="semana1_mar"></td>
+          <td class="miercoles" id="semana1_mie"></td>
+          <td class="jueves" id="semana1_jue"></td>
+          <td class="viernes" id="semana1_vie"></td>
+          <td class="sabado" id="semana1_sab"></td>
+      </tr>
+  </tbody>
+</table>
+</div>
+</table>
+           
+    </div>
+        <!-- Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalHeader"></h2>
+                <h3 id="modalSubheader"></h3>
+                <div>
+                    <label for="ingreso">Hora de Ingreso:</label>
+                    <input type="time" id="ingreso">
+                </div>
+                <div>
+                    <label for="salida">Hora de Salida:</label>
+                    <input type="time" id="salida">
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="modalidad" id="presencial"> Presencial
+                    </label>
+                    <label>
+                        <input type="radio" name="modalidad" id="remoto"> Remoto
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="checkbox" id="aplicarATodo"> Aplicar a todo el personal
+                    </label>
+                </div>
+                <div>
+                    <button class="btn-cancel">Cancelar</button>
+                    <button class="btn-accept">Aceptar</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ asset('js/calendario/calendario.js') }}"></script>
+    </body>
+    </html>

@@ -8,28 +8,69 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
+		{% block css %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+			<link rel="stylesheet" href="{{ asset('css/Empresa/menu/Menu.css') }}">
+		{% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {# <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q"></script> #}
-        {# <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q&libraries=geometry&callback=initMap"></script> #}
-        
-        {% endblock %}
     </head>
     <body>
-		<div class="container-fluid">
-			<div class="row">
+<nav>
+        
 				{% if app.user %}
 					<!-- Barra lateral -->
-					<div class="col-md-2 bg-light text-dark p-4" style="font-family: 'Courier New', Courier, monospace; height: 100vh;">
-						<h5 class="mb-3"><strong>Menú</strong></h5>
-						<ul class="list-unstyled">
-							<li><a href="{{ path('app_empresa_mostrar') }}" class="text-decoration-none text-dark">Inicio</a></li>
-							<li><a href="{{ path('app_empresa_empleados_mostrar') }}" class="text-decoration-none text-dark">Empleados</a></li>
-							<li><a href="{{ path('app_empresa_opciones_mostrar') }}" class="text-decoration-none text-dark">Opciones</a></li>
-							<li><a href="{{ path('app_empresa_seguridad_desconectarse') }}" class="text-decoration-none text-dark">Salir</a></li>
-						</ul>
-					</div>
+		<ul>
+            <li>
+                <i alt="" class="ico-ubi">
+                    <img src="{{ asset('icono_menu.png') }}" alt="" class="ico-logo">
+                </i>
+            </li>
+            <div class="ico-ubi-sesion">
+                <li><a class="session" href="{{ path('app_empresa_mostrar') }}">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-item">Home</span>
+                </a></li>
+                <li><a class="session" href="">
+                    <i class="fas fa-user" alt="30px"></i>
+                    <span class="nav-item">Asistencias</span>
+                </a></li>
+                <li><a class="session" href="">
+                    <i class="fas fa-wallet" alt="30px"></i>
+                    <span class="nav-item">Permisos</span>
+                </a></li>
+                <li><a class="session" href="{{ path('app_empresa_empleados_mostrar') }}">
+                    <i class="fas fa-chart-bar" alt="30px"></i>
+                    <span class="nav-item">Empleados</span>
+                </a></li>
+                <li><a class="session" href="">
+                    <i class="fas fa-tasks" alt="30px"></i>
+                    <span class="nav-item">Vacaciones</span>
+                </a></li>
+				<li><a class="session" href="">
+                    <i class="fas fa-cog" alt="30px"></i>
+                    <span class="nav-item">Horario</span>
+                </a></li>
+                <li><a class="session" href="">
+                    <i class="fas fa-cog" alt="30px"></i>
+                    <span class="nav-item">Reportes</span>
+                </a></li>
+				<li><a class="session" href="{{ path('app_empresa_seguridad_desconectarse') }}">
+                    <i class="fas fa-cog" alt="30px"></i>
+                    <span class="nav-item">Salir</span>
+                </a></li>
+            </div>
+            <li>
+                <a class="logout ico-ubi" href="{{ path('app_empresa_opciones_mostrar') }}">
+                            <i alt="" class="ico-ubi">
+                                <img src="{{ asset('ico/colaborador/Menu/ico_opciones.png') }}" alt="" class="ico-logo">
+                            </i>
+                        </a></li>
+        </ul>
+    </nav>
+	<div class="container">
+        {% block body %}{% endblock %}
+    </div>
+					
 					<!-- Contenido principal -->
 					<div class="col-md-10">
 						{% block body_sidebar %}{% endblock %}
@@ -40,8 +81,8 @@
 						{% block body_full %}{% endblock %}
 					</div>
 				{% endif %}
-			</div>
-		</div>
+		
 		{% block js %}{% endblock %}
+
     </body>
 </html>
