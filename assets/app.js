@@ -28,12 +28,14 @@ import Resultado from "../assets/vue/controllers/colaborador/asistencia/resultad
 import Marcado from "../assets/vue/controllers/colaborador/asistencia/marcado/Marcado.vue";
 import Map from "../assets/vue/controllers/colaborador/asistencia/marcado/Map.vue";
 import Administracion from "../assets/vue/controllers/empresa/Administracion.vue";
+import Horario from "../assets/vue/controllers/empresa/horario/secciones/Horario.vue";
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
 const resultado = createApp(Resultado);
 const map = createApp(Map);
 const administracion = createApp(Administracion);
+const horario = createApp(Horario);
 
 app.use(pinia);
 app.mount('#app');
@@ -50,5 +52,5 @@ map.mount('#mapa');
 administracion.use(pinia);
 administracion.mount('#administracion');
 
-
+horario.mount('#horario');
 
