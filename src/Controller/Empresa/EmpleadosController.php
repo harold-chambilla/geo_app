@@ -2,9 +2,7 @@
 
 namespace App\Controller\Empresa;
 
-use App\Entity\Colaborador;
-use App\Form\CargadorArchivoType;
-use App\Form\ColaboradorType;
+use App\Form\Empresa\CargadorArchivoType;
 use App\Funciones\Empresa\EmpleadosFunciones;
 use App\Repository\ColaboradorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,12 +75,12 @@ class EmpleadosController extends AbstractController
 
     //Crear empleado
 	#[Route('/api/empleado/crear', name: 'crear_empleado', methods: ['POST'])]
-	public function crearEmpleado(Request $request): JsonResponse
+	public function crearEmpleado(Request $request, EmpleadosFunciones $empleadosFunciones): JsonResponse
 	{	
 		$datos = json_decode($request->getContent(), true);
 		if($datos['empleado']){
-			//Crear empleado
-			return $this->json(['message' => 'El empleado se ha creado correctamente.'], JsonResponse::HTTP_OK);
+			$registro = $empleadosFunciones->registro($datos['empleado']);
+			return $this->json(['message' => $registro], JsonResponse::HTTP_OK);
 		}
 		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
 	}
