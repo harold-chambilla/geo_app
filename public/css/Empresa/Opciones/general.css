@@ -1,0 +1,118 @@
+/* Estilos generales */
+ 
+* {
+    margin: 0;
+    font-family: 'Open Sans Condensed', sans-serif;
+  }
+body {
+    font-family: 'Open Sans', sans-serif;
+    justify-content: center;
+    align-items: center;
+  } 
+/*---------Color ---------*/
+.plomo{
+    color: rgba(0, 0, 0, 0.5); 
+}
+.Azul-prin{
+    color: #1565D8;
+}
+/*-------- Titulo --------*/
+.Ttl1{
+    font-size: 30px;
+    font-family: inherit;
+    padding: 0px 10px;
+    font-weight: bold;
+    color: #1565D8;
+}
+/*-------- Estilos de leta --------*/
+.Plbra1{
+    font-size: 14px;
+    display: flex;
+    width: 150px;
+}
+
+.Plbra2{
+  font-size: 16px;
+  width: 100px;
+  color: #000000b7;
+  padding-right: 10px;
+  font-weight: bold;
+  
+}
+
+
+
+
+/*------------- Imput ------------------*/
+.input-linea {
+    border: none;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+    margin-right: 10px;
+    padding-right: 30px; 
+    color: #696F79;
+    width: 100px;
+    display:block;
+  }
+
+  .input-linea:focus{
+    outline: none;
+  }
+
+  .input-linea2 {
+    border: none;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+    margin-right: 10px;
+    padding-right: 30px; 
+    color: #696F79;
+    width: 150px;
+    display:block;
+  }
+
+  .input-linea2:focus{
+    outline: none;
+  }
+
+/*------------- Boton ------------------*/
+.Btn1 {
+  display: block;
+  margin: 20px auto;
+  background-color: rgba(0, 116, 217, 0.33);
+  color: #ffffff;
+  width: 70%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+.Btn1:hover {
+  background-color: #0056b3;
+}
+
+.Btn2 {
+  display: block;
+  margin: 10px auto;
+  background-color: #00a2ffb4;
+  color: #ffffff;
+  width: 150px;
+  height: 36px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+.Btn2:hover {
+  background-color: #00A3FF;
+}
+
+

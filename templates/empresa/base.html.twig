@@ -15,10 +15,11 @@
 
     </head>
     <body>
+    {% if app.user %}
+					<!-- Barra lateral -->
 <nav>
         
-				{% if app.user %}
-					<!-- Barra lateral -->
+			
 		<ul>
             <li>
                 <i alt="" class="ico-ubi">
@@ -46,7 +47,7 @@
                     <i class="fas fa-tasks" alt="30px"></i>
                     <span class="nav-item">Vacaciones</span>
                 </a></li>
-				<li><a class="session" href="">
+				<li><a class="session" href="{{ path('app_empresa_Horario_mostrar') }}">
                     <i class="fas fa-cog" alt="30px"></i>
                     <span class="nav-item">Horario</span>
                 </a></li>
@@ -54,19 +55,18 @@
                     <i class="fas fa-cog" alt="30px"></i>
                     <span class="nav-item">Reportes</span>
                 </a></li>
+                <li><a class="session" href="{{ path('app_empresa_opciones_mostrar') }}">
+                    <i class="fas fa-cog" alt="30px"></i>
+                    <span class="nav-item">Opciones</span>
+                </a></li>
 				<li><a class="session" href="{{ path('app_empresa_seguridad_desconectarse') }}">
                     <i class="fas fa-cog" alt="30px"></i>
                     <span class="nav-item">Salir</span>
                 </a></li>
             </div>
-            <li>
-                <a class="logout ico-ubi" href="{{ path('app_empresa_opciones_mostrar') }}">
-                            <i alt="" class="ico-ubi">
-                                <img src="{{ asset('ico/colaborador/Menu/ico_opciones.png') }}" alt="" class="ico-logo">
-                            </i>
-                        </a></li>
+
         </ul>
-    </nav>
+    </nav>	
 	<div class="container">
         {% block body %}{% endblock %}
     </div>

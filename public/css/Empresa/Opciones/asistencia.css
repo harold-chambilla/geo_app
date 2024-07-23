@@ -1,0 +1,20 @@
+
+div.Plbra2.Plbra_xtr{ 
+    width: 300px;
+    padding-left: 25px;
+    display: flex;
+}
+
+.input_xtr{
+    margin-left: 5px;
+    width: 70px;
+    height: 20px;
+    
+}
+.p_str{
+    width: 150px;
+}
+
+select.input_xtr{
+    width: 100px;
+}

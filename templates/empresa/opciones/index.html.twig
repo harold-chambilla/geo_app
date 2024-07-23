@@ -2,6 +2,268 @@
 
 {% block title %}Opciones{% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('css/Empresa/menu/Menu.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+	<link rel="stylesheet" href="{{ asset('css/Empresa/Horario/Horario.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/Empresa/Empleados/Empleados-masivo.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Empresa/Empleados/Empleados-individual.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Empresa/Opciones/asistencia.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Empresa/Opciones/general.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Empresa/Opciones/Opciones.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Empresa/Opciones/sistemas.css') }}">
+{% endblock %}
+
 {% block body_sidebar %}
-	
+    <!---Empresa -->
+    <section class="tabs-wrapper">
+        <div class="tabs-container">
+            <div class="tabs-block">
+                <div class="tabs">
+                    <input type="radio" name="tabs" id="tab1" checked="checked" />
+                    <label for="tab1"> Empresa </label>
+                    <div class="tab">
+                        <div class="empresa-container">
+                            <img class="Img_empresa col-md-6" src="{{ asset('images.jpg') }}" >
+                            <div class="nombre-empresa">
+                                <span class="Plbra1">RUC :</span>
+                                <input type="text" class="input-linea" value="Videojuego" readonly>
+                                <button class="editar-icono">
+                                    <img src="{{ asset('editar.png') }}" alt="Editar">
+                                </button>
+                                <span class="Plbra1">Razon social :</span>
+                                <input type="text" class="input-linea" value="Videojuego" readonly>
+                                <button class="editar-icono">
+                                    <img src="{{ asset('editar.png') }}" alt="Editar">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="Ttl1"> SUCURSALES</div>
+                        <div class="linea-azul"></div >
+                        <!-- Tabla donde se mostrarán las sedes guardadas -->
+                        <div class="container_direc">
+                            <table id="tablaSedes">
+                                <thead>
+                                    <tr>
+                                        <th class="Azul-prin">Sede</th>
+                                        <th class="plomo">Dirección</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodySedes">
+                                </tbody>
+                            </table>
+                            <!-- Botón para abrir la ventana emergente -->
+                            <button class="Btn1" onclick="mostrarPopup()">+ AGREGAR</button>
+                        </div>
+
+                        <!-- Ventana emergente y superposición -->
+                        <div class="overlay" id="overlay"></div>
+                        <div class="popup" id="popup">
+                            <button class="close" onclick="cerrarPopup()"> x </button>
+                            <div id="direccionDiv">
+                                <div class="Nom_Direccion" for="direccionInput">UBICACION:</div>
+                                <input type="text" id="direccionInput" placeholder="Dirección" class="input-linea">
+                                <img class="icono" src="{{ asset('lupa.png') }}" alt="Buscar" style="cursor: pointer;" onclick="buscarDireccion()">
+                            </div>
+                            <div id="mapa"></div>
+                            <div class="linea_separadora"></div>
+                            <div style="float: left;" id="Nom_Empresa">
+                                <div for="nombreEmpresa" class="Nomb_Empresa">Nombre de la Empresa:</div>
+                                <input type="text" id="nombreEmpresa" placeholder="Nombre de la Empresa" class="input-linea">
+                                <button class="Btn1" onclick="guardarSede()">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="radio" name="tabs" id="tab2" checked="checked" />
+                    <label for="tab2"> Personal </label>
+                    <div class="tab">
+                        <div class="contenedor">
+                            <div class="area">
+                                <div class="Ttl1">AREA Y PUESTO</div>
+                                <div class="linea-azul"></div>
+                                <div class="row Cont-formulario">
+                                    <div class="col-md-6">
+                                        <div class="conten">
+                                            <div class="Plbra2" for="direccionInput">Area </div>
+                                            <input type="text" id="textoArea" placeholder="Dirección" class="input-linea2">
+                                        </div>
+                                        <button id="agregarBoton" class="Btn2">Agregar</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="div-container" id="textoGuardado"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row Cont-formulario">
+                                <div class="col-md-6">
+                                    <div class="conten">
+                                        <div class="Plbra2" for="direccionInput">Area </div>
+                                        <select id="selectOpciones">
+                                            <option value="">Selecciona una opción</option>
+                                        </select>
+                                    </div>
+                                    <div class="conten">
+                                        <div class="Plbra2" for="direccionInput">Puesto </div>
+                                        <input class="input-linea2" type="text" id="inputPuesto" placeholder="Escribe el puesto...">
+                                    </div>
+                                    <button class="Btn2" id="guardarPuesto">Agregar</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="div-container" id="puestosGuardados"></div>
+                                </div>
+                            </div>
+                            <button class="Btn2" id="guardarPuesto">Guardar</button>
+                            <div class="Ttl1"> PERMISOS</div>
+                            <div class="linea-azul"></div >
+                            <div class="row Cont-formulario">
+                                <div class="col-md-6">
+                                    <div class="div-container" id="nuevoTextoGuardado"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="conten">
+                                        <div class="Plbra2" for="direccionInput">Area </div>
+                                        <input type="text" id="textoArea1" placeholder="Dirección" class="input-linea2">
+                                    </div>
+                                    <button id="nuevoBoton" class="Btn2">Agregar</button>
+                                </div>
+                            </div>
+                            <div class="Ttl1"> ASISTENCIA </div>
+                            <div class="linea-azul"></div>
+                            <div class="row Cont-formulario">
+                                <div class="col-md-6">
+                                    <div class="conten-asis">
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Tiempo para considerar falta</p>
+                                            <input type="number" class="input_xtr" min="1" max="8"> horas
+                                        </div>
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Tolerancia de ingreso</p>
+                                            <input class="input_xtr" type="number" min="10" max="120"> min.
+                                        </div>
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Permitir foto colaborador</p>
+                                            <input type="checkbox" class="input_xtr"> si
+                                            <input type="checkbox" class="input_xtr"> si
+                                            <input type="checkbox" class="input_xtr"> no
+                                        </div>
+                                    </div>
+                                    <button id="nuevoBoton" class="Btn2">Agregar</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="conten">
+                                        <div class="Plbra2 Horas_ext"> Permitir horas extra</div>
+                                        <select id="selectOpciones" class="input_xtr">
+                                            <option value="">Selecciona una opción</option>
+                                        </select>
+                                    </div>
+                                    <div class="conten-asis">
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Tiempo para considerar falta</p>
+                                            <input type="number" class="input_xtr" min="1" max="8"> horas
+                                        </div>
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Tolerancia de ingreso</p>
+                                            <input class="input_xtr" type="number" min="10" max="120"> min.
+                                        </div>
+                                        <div class="Plbra2 Plbra_xtr">
+                                            <p class="p_str">Permitir foto colaborador</p>
+                                            <input type="checkbox" class="input_xtr"> si
+                                            <input type="checkbox" class="input_xtr"> si
+                                            <input type="checkbox" class="input_xtr"> no
+                                        </div>
+                                    </div>
+                                    <button id="nuevoBoton" class="Btn2">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="radio" name="tabs" id="tab3" checked="checked" />
+                    <label for="tab3"> Otros </label>
+                    <div class="tab">
+                        <p>Contenido de la pestaña Otros...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>	
+       
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // Función para mostrar el modal
+        function mostrarPopup() {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup").style.display = "block";
+            
+            // Inicializar el mapa
+            var mapa = new google.maps.Map(document.getElementById('mapa'), {
+                center: {lat: -34.397, lng: 150.644}, // Coordenadas de ejemplo (Sydney, Australia)
+                zoom: 8
+            });
+        }
+
+        // Función para cerrar el modal y borrar los datos
+        function cerrarPopup() {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("nombreEmpresa").value = ""; // Restablecer el valor del campo de nombre de empresa
+        }
+
+        // Función para buscar la dirección en el mapa
+        function buscarDireccion() {
+            // Aquí puedes agregar la lógica para buscar la dirección en el mapa
+            console.log("Buscar dirección en el mapa");
+        }
+
+        // Función para guardar la sede en la tabla
+        function guardarSede() {
+            var sede = document.getElementById("nombreEmpresa").value;
+            var tablaSedes = document.getElementById("tablaSedes");
+            var tbodySedes = document.getElementById("tbodySedes");
+
+            // Obtener la dirección del campo oculto
+            var direccion = document.getElementById("direccionInput").value;
+
+            // Crear una nueva fila en la tabla
+            var nuevaFila = document.createElement("tr");
+
+            // Crear y agregar las celdas de la fila
+            var sedeCell = document.createElement("td");
+            sedeCell.textContent = sede;
+            sedeCell.classList.add("sede"); // Agregar la clase para el color
+            nuevaFila.appendChild(sedeCell);
+
+            var direccionCell = document.createElement("td");
+            direccionCell.textContent = direccion;
+            direccionCell.classList.add("direccion"); // Agregar la clase para el color
+            nuevaFila.appendChild(direccionCell);
+
+            var opcionesCell = document.createElement("td");
+            opcionesCell.classList.add("opciones"); // Agregar la clase para el espacio entre opciones
+
+            var editarIcono = document.createElement("img");
+            editarIcono.src = "editar.png";
+            editarIcono.alt = "Editar";
+            editarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
+            opcionesCell.appendChild(editarIcono);
+
+            var guardarIcono = document.createElement("img");
+            guardarIcono.src = "guardar.png";
+            guardarIcono.alt = "Guardar";
+            guardarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
+            opcionesCell.appendChild(guardarIcono);
+
+            nuevaFila.appendChild(opcionesCell);
+
+            // Agregar la fila al cuerpo de la tabla
+            tbodySedes.appendChild(nuevaFila);
+
+            // Cerrar la ventana emergente y borrar los datos
+            cerrarPopup();
+        }
+    </script>
 {% endblock %}

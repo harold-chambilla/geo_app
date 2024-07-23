@@ -1,0 +1,207 @@
+.empresa-container {
+    display: flex;
+    align-items: center;
+    color: #696F79;
+  }
+  
+  .Img_empresa{
+    width: 120px;
+    height: auto;
+    margin-left: 10px;
+    border-radius: 50%;
+  }
+.nombre-empresa {
+    padding-left: 15px;
+    display: table-column;
+    align-items: center;
+  } 
+
+
+
+
+  .editar-icono {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .editar-icono img {
+    width: 20px;
+    height: 20px;
+  }
+
+/* -----------------------------------------------------------------------------------*/
+/* Estilos del modal */
+.overlay {
+  display: none; /* Por defecto, oculto */
+  position: fixed; /* Se superpone al contenido */
+  z-index: 1; /* Ubicado en la parte superior */
+  left: 0;
+  top: 0;
+  width: 100%; /* Cobertura total del viewport */
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semi-transparente */
+}
+
+.popup {
+  display: none;
+  position: absolute;
+  background-color: #fefefe;
+  border: 1px solid #888;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  z-index: 2;
+}
+
+/* Botón para cerrar el modal */
+.close {
+  width: 30px;
+  height: 30px;
+  color: #000;
+  background-color: #0056b3;
+  padding: 5px 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.close:hover {
+  background-color: #0056b3;
+}
+#direccionDiv {
+  border: 3px solid yellow;
+  padding: 10px;
+  margin-bottom: 10px;
+  float: left;
+  width: 100%; /* Ocupa todo el ancho */
+  border-radius: 15px;
+  
+}
+
+#direccionDiv .nombre-input{
+  width: 180px;
+}
+#Nom_Empresa .nombre-input{
+  width: 180px;
+}
+
+#mapa {
+  width: 250px;
+  height: 200px;
+  float: left;
+}
+
+
+.container_direc{
+  width: 90%;
+  margin: 0 auto;
+}
+.icono{
+  width: 30px;
+  height: 30px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: none;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: transparent;
+}
+
+.sede {
+  color: #1565D8;
+}
+
+
+.opciones {
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.icono {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+.linea_separadora {
+  border-right: 1px solid #ccc;
+  height: 100%;
+  float: left;
+  margin: 0 20px;
+}/*--------------------------------------------------------------*/
+.conten{
+  display: inline-flex;
+  width: 90%;
+  padding-left: 25px;
+}
+.div-container{
+  width: 80%;
+  height: 100px;
+  border: 1px solid #000000b9;
+  border-radius: 15px;
+  
+}
+.Cont-formulario{
+  padding: 10px;
+}
+/*--------------------------------------------------------------*/
+.notificaciones {
+  width: 85%;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.notificaciones h2 {
+  margin-top: 0;
+}
+
+.notificaciones .opcion {
+  display: flex;
+  justify-content: space-between; /* Para separar el texto del checkbox */
+  align-items: center;
+}
+
+.notificaciones input[type="checkbox"] {
+  order: 2; /* Reordenar el checkbox a la derecha */
+}
+
+.notificaciones input[type="checkbox"]:checked {
+  background-color: blue; /* Establecer el fondo azul para el checkbox */
+}
+
+.notificaciones label {
+  order: 1; /* Reordenar el texto a la izquierda */
+}
+
+.notificaciones button {
+  display: block;
+  margin-top: 20px;
+  background-color: #0056b3;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.notificaciones button:hover {
+  background-color: #004080;
+}
+

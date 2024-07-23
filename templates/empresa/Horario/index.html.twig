@@ -1,14 +1,15 @@
-{# templates/calendario.html.twig #}
+{% extends 'empresa/base.html.twig' %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario Responsivo</title>
-    <link rel="stylesheet" href="{{ asset('css/style-calendario.css') }}" type="text/css" media="all" />
-</head>
-<body>
+{% block title %}Horario{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('css/Empresa/menu/Menu.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+	<link rel="stylesheet" href="{{ asset('css/Empresa/Horario/Horario.css') }}">
+{% endblock %}
+
+{% block body_sidebar %}   
+
     <div class="CTN-principal">
         <div class="calendar-header">
             <button class="button-blanco" id="prevMonth">Anterior</button>
@@ -38,34 +39,130 @@
         <div class="calendar-body">
             <div class="table-container">
                 <!-- Aquí empiezan las tablas -->
-                <table class="calendar-table">
-                    <tbody>
-                        <tr>
-                            <td class="semana" colspan="2"></td>
-                            <td class="semana domingo">Dom</td>
-                            <td class="semana lunes">Lun</td>
-                            <td class="semana martes">Mar</td>
-                            <td class="semana miercoles">Mié</td>
-                            <td class="semana jueves">Jue</td>
-                            <td class="semana viernes">Vie</td>
-                            <td class="semana sabado">Sáb</td>
-                        </tr>
-                        <tr class="personal">
-                            <td colspan="2" id="personal1" class="personal">Semana 1</td>
-                            <td class="domingo" id="semana1_dom"></td>
-                            <td class="lunes" id="semana1_lun"></td>
-                            <td class="martes" id="semana1_mar"></td>
-                            <td class="miercoles" id="semana1_mie"></td>
-                            <td class="jueves" id="semana1_jue"></td>
-                            <td class="viernes" id="semana1_vie"></td>
-                            <td class="sabado" id="semana1_sab"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Aquí puedes añadir más tablas para más semanas -->
-            </div>
-        </div>
-
+            <table class="calendar-table">
+                <tbody>
+                    <tr>
+                        <td class="semana" colspan="2"></td>
+                        <td class="semana domingo">Dom</td>
+                        <td class="semana lunes">Lun</td>
+                        <td class="semana martes">Mar</td>
+                        <td class="semana miercoles">Mié</td>
+                        <td class="semana jueves">Jue</td>
+                        <td class="semana viernes">Vie</td>
+                        <td class="semana sabado">Sáb</td>
+                    </tr>
+                    <tr class="personal">
+                        <td colspan="2" id="personal1" class="personal">Semana 1</td>
+                        <td class="domingo" id="semana1_dom"></td>
+                        <td class="lunes" id="semana1_lun"></td>
+                        <td class="martes" id="semana1_mar"></td>
+                        <td class="miercoles" id="semana1_mie"></td>
+                        <td class="jueves" id="semana1_jue"></td>
+                        <td class="viernes" id="semana1_vie"></td>
+                        <td class="sabado" id="semana1_sab"></td>
+                    </tr>
+                </tbody>
+            </table>
+    <table class="calendar-table">
+      <tbody>
+          <tr>
+              <td class="semana" colspan="2"></td>
+              <td class="semana domingo">Dom</td>
+              <td class="semana lunes">Lun</td>
+              <td class="semana martes">Mar</td>
+              <td class="semana miercoles">Mié</td>
+              <td class="semana jueves">Jue</td>
+              <td class="semana viernes">Vie</td>
+              <td class="semana sabado">Sáb</td>
+          </tr>
+          <tr class="personal">
+              <td colspan="2" id="personal1" class="personal">Semana 2</td>
+              <td class="domingo" id="semana1_dom"></td>
+              <td class="lunes" id="semana1_lun"></td>
+              <td class="martes" id="semana1_mar"></td>
+              <td class="miercoles" id="semana1_mie"></td>
+              <td class="jueves" id="semana1_jue"></td>
+              <td class="viernes" id="semana1_vie"></td>
+              <td class="sabado" id="semana1_sab"></td>
+          </tr>
+      </tbody>
+  </table>
+  <table class="calendar-table">
+    <tbody>
+        <tr>
+            <td class="semana" colspan="2"></td>
+            <td class="semana domingo">Dom</td>
+            <td class="semana lunes">Lun</td>
+            <td class="semana martes">Mar</td>
+            <td class="semana miercoles">Mié</td>
+            <td class="semana jueves">Jue</td>
+            <td class="semana viernes">Vie</td>
+            <td class="semana sabado">Sáb</td>
+        </tr>
+        <tr class="personal">
+            <td colspan="2" id="personal1" class="personal">Semana 3</td>
+            <td class="domingo" id="semana1_dom"></td>
+            <td class="lunes" id="semana1_lun"></td>
+            <td class="martes" id="semana1_mar"></td>
+            <td class="miercoles" id="semana1_mie"></td>
+            <td class="jueves" id="semana1_jue"></td>
+            <td class="viernes" id="semana1_vie"></td>
+            <td class="sabado" id="semana1_sab"></td>
+        </tr>
+    </tbody>
+</table>
+<table class="calendar-table">
+  <tbody>
+      <tr>
+          <td class="semana" colspan="2"></td>
+          <td class="semana domingo">Dom</td>
+          <td class="semana lunes">Lun</td>
+          <td class="semana martes">Mar</td>
+          <td class="semana miercoles">Mié</td>
+          <td class="semana jueves">Jue</td>
+          <td class="semana viernes">Vie</td>
+          <td class="semana sabado">Sáb</td>
+      </tr>
+      <tr class="personal">
+          <td colspan="2" id="personal1" class="personal">Semana 4</td>
+          <td class="domingo" id="semana1_dom"></td>
+          <td class="lunes" id="semana1_lun"></td>
+          <td class="martes" id="semana1_mar"></td>
+          <td class="miercoles" id="semana1_mie"></td>
+          <td class="jueves" id="semana1_jue"></td>
+          <td class="viernes" id="semana1_vie"></td>
+          <td class="sabado" id="semana1_sab"></td>
+      </tr>
+  </tbody>
+</table>
+<table class="calendar-table">
+  <tbody>
+      <tr>
+          <td class="semana" colspan="2"></td>
+          <td class="semana domingo">Dom</td>
+          <td class="semana lunes">Lun</td>
+          <td class="semana martes">Mar</td>
+          <td class="semana miercoles">Mié</td>
+          <td class="semana jueves">Jue</td>
+          <td class="semana viernes">Vie</td>
+          <td class="semana sabado">Sáb</td>
+      </tr>
+      <tr class="personal">
+          <td colspan="2" id="personal1" class="personal">Semana 5</td>
+          <td class="domingo" id="semana1_dom"></td>
+          <td class="lunes" id="semana1_lun"></td>
+          <td class="martes" id="semana1_mar"></td>
+          <td class="miercoles" id="semana1_mie"></td>
+          <td class="jueves" id="semana1_jue"></td>
+          <td class="viernes" id="semana1_vie"></td>
+          <td class="sabado" id="semana1_sab"></td>
+      </tr>
+  </tbody>
+</table>
+</div>
+</table>
+           
+    </div>
         <!-- Modal -->
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -100,6 +197,5 @@
             </div>
         </div>
 
-        <script src="{{ asset('js/script.js') }}"></script>
-    </body>
-    </html>
+        <script src="{{ asset('js/calendario/calendario.js') }}"></script>
+{% endblock %}
