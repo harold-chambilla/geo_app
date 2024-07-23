@@ -5,84 +5,105 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>{% block title %}{% endblock %} - EasilyControl!</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-		{% block css %}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-			<link rel="stylesheet" href="{{ asset('css/Empresa/menu/Menu.css') }}">
-		{% endblock %}
 
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+        
+		{% block css %}
+	        {# Aqui va el contenido que se reemplazara en cada visrta, dejar vacio en base a no ser que solo sirva para el base. #}
+		{% endblock %}
     </head>
     <body>
-    {% if app.user %}
-					<!-- Barra lateral -->
-<nav>
-        
-			
-		<ul>
-            <li>
-                <i alt="" class="ico-ubi">
-                    <img src="{{ asset('icono_menu.png') }}" alt="" class="ico-logo">
-                </i>
-            </li>
-            <div class="ico-ubi-sesion">
-                <li><a class="session" href="{{ path('app_empresa_mostrar') }}">
-                    <i class="fas fa-home"></i>
-                    <span class="nav-item">Home</span>
-                </a></li>
-                <li><a class="session" href="">
-                    <i class="fas fa-user" alt="30px"></i>
-                    <span class="nav-item">Asistencias</span>
-                </a></li>
-                <li><a class="session" href="">
-                    <i class="fas fa-wallet" alt="30px"></i>
-                    <span class="nav-item">Permisos</span>
-                </a></li>
-                <li><a class="session" href="{{ path('app_empresa_empleados_mostrar') }}">
-                    <i class="fas fa-chart-bar" alt="30px"></i>
-                    <span class="nav-item">Empleados</span>
-                </a></li>
-                <li><a class="session" href="">
-                    <i class="fas fa-tasks" alt="30px"></i>
-                    <span class="nav-item">Vacaciones</span>
-                </a></li>
-				<li><a class="session" href="{{ path('app_empresa_Horario_mostrar') }}">
-                    <i class="fas fa-cog" alt="30px"></i>
-                    <span class="nav-item">Horario</span>
-                </a></li>
-                <li><a class="session" href="">
-                    <i class="fas fa-cog" alt="30px"></i>
-                    <span class="nav-item">Reportes</span>
-                </a></li>
-                <li><a class="session" href="{{ path('app_empresa_opciones_mostrar') }}">
-                    <i class="fas fa-cog" alt="30px"></i>
-                    <span class="nav-item">Opciones</span>
-                </a></li>
-				<li><a class="session" href="{{ path('app_empresa_seguridad_desconectarse') }}">
-                    <i class="fas fa-cog" alt="30px"></i>
-                    <span class="nav-item">Salir</span>
-                </a></li>
-            </div>
+		{% if app.user %}
+            <nav>
+                <!-- Barra lateral -->
+                <ul>
+                    <li>
+                        <i alt="" class="ico-ubi">
+                            <img src="{{ asset('icono_menu.png') }}" alt="" class="ico-logo">
+                        </i>
+                    </li>
+                    <div class="ico-ubi-sesion">
+                        <li>
+                            <a class="session" href="{{ path('app_empresa_mostrar') }}">
+                                <i class="fas fa-home"></i>
+                                <span class="nav-item">Inicio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="">
+                                <i class="fas fa-check" alt="30px"></i>
+                                <span class="nav-item">Asistencias</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="">
+                                <i class="fas fa-paperclip" alt="30px"></i>
+                                <span class="nav-item">Permisos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="{{ path('app_empresa_empleados_mostrar') }}">
+                                <i class="fas fa-users" alt="30px"></i>
+                                <span class="nav-item">Empleados</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="">
+                                <i class="fas fa-tasks" alt="30px"></i>
+                                <span class="nav-item">Vacaciones</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="{{ path('app_empresa_horario_mostrar') }}">
+                                <i class="fas fa-calendar" alt="30px"></i>
+                                <span class="nav-item">Horario</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="">
+                                <i class="fas fa-paper-plane" alt="30px"></i>
+                                <span class="nav-item">Reportes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="session" href="{{ path('app_empresa_seguridad_desconectarse') }}">
+                                <i class="fas fa-times" alt="30px"></i>
+                                <span class="nav-item">Salir</span>
+                            </a>
+                        </li>
+                    </div>
+                    <li>
+                        <a class="logout ico-ubi" href="{{ path('app_empresa_opciones_mostrar') }}">
+                            <i alt="" class="ico-ubi">
+                                <img src="{{ asset('ico/colaborador/Menu/ico_opciones.png') }}" alt="" class="ico-logo">
+                            </i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
 
-        </ul>
-    </nav>	
-	<div class="container">
-        {% block body %}{% endblock %}
-    </div>
-					
-					<!-- Contenido principal -->
-					<div class="col-md-10">
-						{% block body_sidebar %}{% endblock %}
-					</div>
-				{% else %}
-					<!-- Contenido principal sin barra lateral -->
-					<div class="col-md-12">
-						{% block body_full %}{% endblock %}
-					</div>
-				{% endif %}
+        
+        <div class="container">
+            {% if app.user %}
+                <!-- Contenido principal -->
+                <div class="col-md-10">
+                    {% block body_sidebar %}{% endblock %}
+                </div>
+            {% else  %}
+                <!-- Contenido principal sin barra lateral -->
+                <div class="col-md-12">
+                    {% block body_full %}{% endblock %}
+                </div>
+            {% endif %}
+        </div>
 		
 		{% block js %}{% endblock %}
-
     </body>
 </html>

@@ -29,6 +29,7 @@ import Marcado from "../assets/vue/controllers/colaborador/asistencia/marcado/Ma
 import Map from "../assets/vue/controllers/colaborador/asistencia/marcado/Map.vue";
 import Administracion from "../assets/vue/controllers/empresa/Administracion.vue";
 import Horario from "../assets/vue/controllers/empresa/horario/secciones/Horario.vue";
+import APITester from "../assets/vue/controllers/empresa/APITester.vue";
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -36,6 +37,7 @@ const resultado = createApp(Resultado);
 const map = createApp(Map);
 const administracion = createApp(Administracion);
 const horario = createApp(Horario);
+const api_tester = createApp(APITester);
 
 app.use(pinia);
 app.mount('#app');
@@ -53,4 +55,7 @@ administracion.use(pinia);
 administracion.mount('#administracion');
 
 horario.mount('#horario');
+
+api_tester.use(pinia);
+api_tester.mount('#api_tester');
 

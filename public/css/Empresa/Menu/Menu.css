@@ -5,9 +5,11 @@
     text-decoration: none;
     font-family: 'Open Sans Condensed', sans-serif;
 }
+
 body{
     background-color: #dfe9f5;
 }
+
 nav{
     position: fixed;
     top: 0;
@@ -23,6 +25,7 @@ nav{
     align-items: center;
     z-index: 1000;
 }
+
 /*---------------icono-logo-----------------*/
 nav ul {
     list-style: none;
@@ -101,7 +104,6 @@ a.logout:hover{
         width: 90px;  
     }
 }
-
 
 .container {
     margin-left: 110px; /* Ajuste para el estado contraído */
