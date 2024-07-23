@@ -84,4 +84,10 @@ class EmpleadosController extends AbstractController
 		}
 		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
 	}
+
+    #[Route('/api/empleado/test', name: 'test', methods: ['GET'])]
+	public function tester(Request $request): JsonResponse
+	{	
+        return $this->json(['message' => "Funciona!"], JsonResponse::HTTP_OK);
+	}
 }

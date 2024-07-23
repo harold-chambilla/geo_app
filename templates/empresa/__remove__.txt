@@ -1,0 +1,2 @@
+# En el index se retiro la siguiente linea
+<link rel="stylesheet" href="{{ asset('css/empresa/menu/menu.css') }}">
