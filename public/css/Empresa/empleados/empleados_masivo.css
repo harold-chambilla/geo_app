@@ -1,16 +1,20 @@
-.box_masivo{
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    height: 60vh; /* Altura del viewport */
-}
+
+
 .form {
     width: 300px;
     height: 350px;
     border-radius: 8px;
     padding: 20px;
   }
-/*-----------------------------Descargar -----------------*/
+
+.box_masivo{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 60vh; 
+}
+
+/*----------------------------Descargar --------------*/
 .downloadLink{
     display: flex;
 }
@@ -29,7 +33,7 @@
     color: #514F4F;
     font-size: 16px;
 }
-/*-----------------------------Carga -----------------*/
+/*-----------------------------Carga ----------------*/
 .Carga_excel{
     display: flex;
 }
@@ -39,10 +43,10 @@
      padding: 5px 7px;
     margin-bottom: 20px;
     border-radius: 10px;
-    color: #fff; /* Color del texto */
-    border: 1px solid transparent; /* Borde del botón */
-    border-radius: 10px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    color: #fff; 
+    border: 1px solid transparent; 
+    border-radius: 10px; 
+    cursor: pointer; 
     border: 2px solid #1565D8;
     font-size: 16px;
     width: 175px;

@@ -71,6 +71,12 @@
                                 <span class="nav-item">Reportes</span>
                             </a>
                         </li>
+                         <li>
+                            <a class="session" href="{{ path('app_empresa_opciones_mostrar') }}">
+                                <i class="fas fa-times" alt="30px"></i>
+                                <span class="nav-item">Opciones</span>
+                            </a>
+                        </li>
                         <li>
                             <a class="session" href="{{ path('app_empresa_seguridad_desconectarse') }}">
                                 <i class="fas fa-times" alt="30px"></i>
@@ -78,24 +84,17 @@
                             </a>
                         </li>
                     </div>
-                    <li>
-                        <a class="logout ico-ubi" href="{{ path('app_empresa_opciones_mostrar') }}">
-                            <i alt="" class="ico-ubi">
-                                <img src="{{ asset('ico/colaborador/Menu/ico_opciones.png') }}" alt="" class="ico-logo">
-                            </i>
-                        </a>
-                    </li>
                 </ul>
             </nav>
         {% endif %}
 
         
-        <div class="container">
+        <div class="container-xxl" style="display: flex; justify-content: center; align-items: center;">
             {% if app.user %}
                 <!-- Contenido principal -->
-                <div class="col-md-10">
+    
                     {% block body_sidebar %}{% endblock %}
-                </div>
+                
             {% else  %}
                 <!-- Contenido principal sin barra lateral -->
                 <div class="col-md-12">
