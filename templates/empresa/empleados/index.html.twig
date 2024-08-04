@@ -15,125 +15,124 @@
     <div class="tabs-container">
         <div class="tabs-block">
            <div class="tabs">
-    <input type="radio" name="tabs" id="tab1" checked="checked" />
-    <label for="tab1">Registro individual</label>
-    <div class="tab">
-        <h2>Datos del personal</h2>
-        <form class="Cont-Form">
-            <div class="form-row">
-                <div class="inputContainer">
-                    <input type="text" class="input1" placeholder="Nombre">
-                    <p class="label">Nombre</p>
-                </div>
-                <div class="inputContainer">
-                    <input type="text" class="input1" placeholder="Apellido">
-                    <p class="label">Apellido</p>
-                </div>
-                <div class="inputContainer">
-                    <input type="text" class="input1" placeholder="DNI">
-                    <p class="label">DNI</p>
-                </div>
+            <input type="radio" name="tabs" id="tab1" checked="checked" />
+            <label for="tab1">Registro individual</label>
+            <div class="tab tab-content">
+                <h2>Datos del personal</h2>
+                <form class="Cont-Form">
+                    <div class="form-row">
+                        <div class="inputContainer">
+                            <input type="text" class="input1" placeholder="Nombre">
+                            <p class="label">Nombre</p>
+                        </div>
+                        <div class="inputContainer">
+                            <input type="text" class="input1" placeholder="Apellido">
+                            <p class="label">Apellido</p>
+                        </div>
+                        <div class="inputContainer">
+                            <input type="text" class="input1" placeholder="DNI">
+                            <p class="label">DNI</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="inputContainer">
+                            <input type="email" class="input3 input1" placeholder="Correo electrónico" >
+                            <p class="label">Correo electrónico</p>
+                        </div>
+                        <div class="inputContainer" >
+                            <input type="date" class="input2 input1" >
+                            <p class="label2 label" >Fecha de nacimiento</p>
+                        </div>
+                        <div class="inputContainer">
+                            <select class="input1">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label">Área</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="inputContainer">
+                            <select class="input1">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label">Puesto</p>
+                        </div>
+                        <div class="inputContainer ">
+                            <select class="input1">
+                                <option value="" disabled selected hidden></option>
+                                <option>Super-Admin</option>
+                                <option>Administrador</option>
+                                <option>Coordinador</option>
+                                <option>Supervisor</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label">ROL</p>
+                        </div>
+                        <div class="inputContainer ">
+                            <select class="input1">
+                                <option value="" disabled selected hidden></option>
+                                <option>Miraflores</option>
+                                <option>ATE</option>
+                                <option>La Molina</option>
+                            </select>
+                            <p class="label">Sede</p>
+                        </div>
+                    </div>
+                    <div class="linea-azul"></div>
+                    <div class="form-row">
+                        <div class="inputContainer">
+                            <input type="text" class="input1" placeholder="USUARIO">
+                            <p class="label">Usuario</p>
+                        </div>
+                        <div class="inputContainer ">
+                            <input type="password" class="input1" placeholder="Contraseña">
+                            <p class="label">Contraseña</p>
+                        </div>
+                        <div class="inputContainer ">
+                            <input type="password" class="input1" placeholder="Repetir Contraseña">
+                            <p class="label">Repetir Contraseña</p>
+                        </div>
+                    </div>
+                    <div class="inputContainer">
+                        <span class="checkboxLabel"><input type="checkbox" id="terms" class="checkboxInput">
+                        Acepto los términos y condiciones</span>
+                    </div>
+                    <button type="submit" class="submitBtnA">Registrar</button>
+                </form>
             </div>
-            <div class="form-row">
-                <div class="inputContainer">
-                    <input type="email" class="input3 input1" placeholder="Correo electrónico" >
-                    <p class="label">Correo electrónico</p>
-                </div>
-                <div class="inputContainer" >
-                    <input type="date" class="input2 input1" >
-                    <p class="label2 label" >Fecha de nacimiento</p>
-                </div>
-                <div class="inputContainer">
-                    <select class="input1">
-                        <option value="" disabled selected hidden></option>
-                        <option>Administrador</option>
-                        <option>Colaborador</option>
-                    </select>
-                    <p class="label">Área</p>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="inputContainer">
-                    <select class="input1">
-                        <option value="" disabled selected hidden></option>
-                        <option>Administrador</option>
-                        <option>Colaborador</option>
-                    </select>
-                    <p class="label">Puesto</p>
-                </div>
-                <div class="inputContainer ">
-                    <select class="input1">
-                        <option value="" disabled selected hidden></option>
-                        <option>Super-Admin</option>
-                        <option>Administrador</option>
-                        <option>Coordinador</option>
-                        <option>Supervisor</option>
-                        <option>Colaborador</option>
-                    </select>
-                    <p class="label">ROL</p>
-                </div>
-                <div class="inputContainer ">
-                    <select class="input1">
-                        <option value="" disabled selected hidden></option>
-                        <option>Miraflores</option>
-                        <option>ATE</option>
-                        <option>La Molina</option>
-                    </select>
-                    <p class="label">Sede</p>
-                </div>
-            </div>
-            <div class="linea-azul"></div>
-            <div class="form-row">
-                <div class="inputContainer">
-                    <input type="text" class="input1" placeholder="USUARIO">
-                    <p class="label">Usuario</p>
-                </div>
-                <div class="inputContainer ">
-                    <input type="password" class="input1" placeholder="Contraseña">
-                    <p class="label">Contraseña</p>
-                </div>
-                <div class="inputContainer ">
-                    <input type="password" class="input1" placeholder="Repetir Contraseña">
-                    <p class="label">Repetir Contraseña</p>
-                </div>
-            </div>
-            <div class="inputContainer">
-                <span class="checkboxLabel"><input type="checkbox" id="terms" class="checkboxInput">
-                Acepto los términos y condiciones</span>
-            </div>
-            <button type="submit" class="submitBtnA">Registrar</button>
-        </form>
-    </div>
 
 
 
-    <input type="radio" name="tabs" id="tab2" />
-    <label for="tab2">Registro masivo</label>
-    <div class="tab">
-        <h2>Descargar Formato</h2>
-        <form class="form">
-            <div class="downloadLink">
-                <a class="input_xl" href="{{ asset('archivo.xlsx') }}" download>Formato_masivo.xlsx</a>
+            <input type="radio" name="tabs" id="tab2" />
+            <label for="tab2">Registro masivo</label>
+            <div class="tab tab-content">
+                <h2>Descargar Formato</h2>
+                <form class="form">
+                    <div class="downloadLink">
+                        <a class="input_xl" href="{{ asset('archivo.xlsx') }}" download>Formato_masivo.xlsx</a>
+                    </div>
+                    <div class="Carga_excel">
+                        <p class="label1">Subir Excel</p>
+                        <input type="file" id="excelFile" class="fileInput">
+                    </div>
+                    <div class="inputContainer">
+                        <input type="checkbox" id="terms2" class="checkboxInput">
+                        <span class="checkboxLabel">Acepto los términos y condiciones</span>
+                    </div>
+                    <button type="submit" class="submitBtnA">Enviar</button>
+                </form>
             </div>
-            <div class="Carga_excel">
-                <p class="label1">Subir Excel</p>
-                <input type="file" id="excelFile" class="fileInput">
+            <input type="radio" name="tabs" id="tab3" />
+            <label for="tab3">Historial</label>
+            <div class="tab tab-content">
+                <h2>Vue</h2>
+                <p>Though developed in the year 2016, this <a href="https://vuejs.org/">JavaScript framework</a> has already made its way into the market and has proven its worth by offering various features. Its dual integration mode is one of the most attractive features for creating high-end SPA or Single Page Application. It is a much reliable platform for developing cross-platform.</p>
             </div>
-            <div class="inputContainer">
-                <input type="checkbox" id="terms2" class="checkboxInput">
-                <span class="checkboxLabel">Acepto los términos y condiciones</span>
-            </div>
-            <button type="submit" class="submitBtnA">Enviar</button>
-        </form>
-    </div>
-    <input type="radio" name="tabs" id="tab3" />
-    <label for="tab3">Historial</label>
-    <div class="tab">
-        <h2>Vue</h2>
-        <p>Though developed in the year 2016, this <a href="https://vuejs.org/">JavaScript framework</a> has already made its way into the market and has proven its worth by offering various features. Its dual integration mode is one of the most attractive features for creating high-end SPA or Single Page Application. It is a much reliable platform for developing cross-platform.</p>
-    </div>
-</div>
- 
+        </div>
     </div>
 </section>
 {% endblock %}

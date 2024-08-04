@@ -36,6 +36,7 @@ html {
 
 
 
+
 /*-----------------------------Estructura de tabs-----------------------------------*/
 .tabs-wrapper {
   margin: 40px 100px;
@@ -54,12 +55,12 @@ html {
   justify-content: center;
 }
 
-/*------------- Tabs----------------------*/
+/*------------- Tabs---------------------*/
 .tabs {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 1000px;
+  max-width: 850px;
 } 
 
 
@@ -67,7 +68,7 @@ label {
   order: 1;
   margin: 0;
   width: 33%;
- /* max-width: 332px;*/
+
 }
 
 .tabs label {
@@ -98,6 +99,7 @@ label {
   color: #000;
   background-color: #fff;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+  position: relative;
 }
 
 .tabs .tab > *:not(:last-child) {
@@ -119,7 +121,7 @@ label {
   display: block;
 }
 
-/*---------Input Styles-------*/
+/*---------Input Styles--------*/
 .input1 {
   position: absolute;
   top: 0;
@@ -365,6 +367,4 @@ label {
 .Btn2:hover {
   background-color: #00A3FF;
 }
-
-
 
