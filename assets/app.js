@@ -30,6 +30,7 @@ import Map from "../assets/vue/controllers/colaborador/asistencia/marcado/Map.vu
 import Administracion from "../assets/vue/controllers/empresa/Administracion.vue";
 import Horario from "../assets/vue/controllers/empresa/horario/secciones/Horario.vue";
 import APITester from "../assets/vue/controllers/empresa/APITester.vue";
+import CrearEmpleado from './vue/controllers/empresa/empleados/CrearEmpleado.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -38,6 +39,7 @@ const map = createApp(Map);
 const administracion = createApp(Administracion);
 const horario = createApp(Horario);
 const api_tester = createApp(APITester);
+const crearEmpleado = createApp(CrearEmpleado);
 
 app.use(pinia);
 app.mount('#app');
@@ -53,6 +55,9 @@ map.mount('#mapa');
 
 administracion.use(pinia);
 administracion.mount('#administracion');
+
+crearEmpleado.use(pinia);
+crearEmpleado.mount('#crear-empleado');
 
 horario.mount('#horario');
 

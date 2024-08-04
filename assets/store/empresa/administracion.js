@@ -72,5 +72,29 @@ export const administracionStore = defineStore('administracion', {
               this.error = error.message; // O puedes manejar el error de otra manera
             } 
           },
+          async createUser(userData) {
+            try {
+              let formData = new FormData();
+              console.log('pinia nombre: ', userData.col_nombres)
+              formData.append('nombre', userData.col_nombres);
+              formData.append('apellidos', userData.col_apellidos);
+              formData.append('dni', userData.col_dninit);
+              formData.append('fecha_nacimiento', userData.col_fechanacimiento);
+              formData.append('correo_electronico', userData.col_correoelectronico);
+              formData.append('nombre_usuario', userData.col_nombreusuario);
+              formData.append('password', userData.password);
+
+              console.log('pinia store: ', formData)
+              // Consumir la API para crear el usuario
+              const response = await axios.post('/empresa/api/admin/create-user', formData);
+              console.log('api mandanda');
+              this.user = response.data;
+              this.error = null;
+            } catch (error) {
+              console.log('error: ', error.response.data)
+              this.error = error.response?.data?.message || 'Error al crear el usuario';
+              this.user = null;
+            }
+          },
     }
 })
