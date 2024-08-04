@@ -2,13 +2,17 @@
 
 namespace App\Controller\Empresa;
 
+use App\Entity\Colaborador;
 use App\Repository\AsistenciaRepository;
 use App\Repository\ColaboradorRepository;
+use App\Repository\EmpresaRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/empresa', name: 'app_empresa_')]
@@ -288,6 +292,62 @@ class EmpresaController extends AbstractController
         return $this->json($datosColaborador, Response::HTTP_OK);
     }
 
+    #[Route('/api/admin/create-user', name: 'api_create_user', methods: ['POST'])]
+    public function createUser(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+        ColaboradorRepository $colaboradorRepository,
+        EmpresaRepository $empresaRepository,
+    ): JsonResponse {
+        $admin = $this->getUser();
+        
+        if (!$admin) {
+            return new JsonResponse(['error' => 'Acceso denegado'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!in_array('ROLE_SUPERADMIN', $admin->getRoles())) {
+            return new JsonResponse(['error' => 'No tienes permisos para realizar esta acción'], Response::HTTP_FORBIDDEN);
+        }
+
+        $nombre = $request->request->get('nombre');
+        $apellidos = $request->request->get('apellidos');
+        $dni = $request->request->get('dni');
+        $fechaNacimiento = $request->request->get('fecha_nacimiento');
+        $area = $request->request->get('area');
+        $correoElectronico = $request->request->get('correo_electronico');
+        $nombreUsuario = $request->request->get('nombre_usuario');
+        $password = $request->request->get('password');
+
+        if (empty($nombre) || empty($apellidos) || empty($dni) || empty($correoElectronico) || empty($nombreUsuario) || empty($password)) {
+            return new JsonResponse(['error' => 'Todos los campos son obligatorios'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($colaboradorRepository->findOneBy(['col_nombreusuario' => $nombreUsuario])) {
+            return new JsonResponse(['error' => 'El nombre de usuario ya existe'], Response::HTTP_CONFLICT);
+        }
+
+        if ($colaboradorRepository->findOneBy(['col_correoelectronico' => $correoElectronico])) {
+            return new JsonResponse(['error' => 'El correo electrónico ya está en uso'], Response::HTTP_CONFLICT);
+        }
+
+        $nuevoColaborador = new Colaborador();
+        $nuevoColaborador->setColNombres($nombre);
+        $nuevoColaborador->setColApellidos($apellidos);
+        $nuevoColaborador->setColDninit($dni);
+        $nuevoColaborador->setColFechanacimiento(new \DateTime($fechaNacimiento));
+        $nuevoColaborador->setColArea($area);
+        $nuevoColaborador->setColCorreoelectronico($correoElectronico);
+        $nuevoColaborador->setColNombreusuario($nombreUsuario);
+        $nuevoColaborador->setPassword($passwordHasher->hashPassword($nuevoColaborador, $password));
+        $nuevoColaborador->setRoles(['ROLE_EMPLEADO']);
+        $nuevoColaborador->setColEmpresa($admin->getColEmpresa());
+        
+        $entityManager->persist($nuevoColaborador);
+        $entityManager->flush();
+
+        return $this->json(['success' => 'Usuario creado exitosamente'], Response::HTTP_CREATED);
+    }
 
     private function matchesSearchCriteria($colaborador, $asistencia, $search)
     {

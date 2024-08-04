@@ -79,8 +79,8 @@ class EmpleadosController extends AbstractController
 	{	
 		$datos = json_decode($request->getContent(), true);
 		if($datos['empleado']){
-			$registro = $empleadosFunciones->registro($datos['empleado']);
-			return $this->json(['message' => $registro], JsonResponse::HTTP_OK);
+			//$registro = $empleadosFunciones->registro($datos['empleado']);
+			return $this->json(['message' => "Test de API"], JsonResponse::HTTP_OK);
 		}
 		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
 	}
