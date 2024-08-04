@@ -5,40 +5,49 @@
 {% block css %}
 	<link rel="stylesheet" href="{{ asset('css/empresa/menu/menu.css') }}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-	<link rel="stylesheet" href="{{ asset('css/empresa/empleados/Empleados-masivo.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/empleados/Empleados-individual.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/asistencia.css') }}">
     <link rel="stylesheet" href="{{ asset('css/empresa/opciones/general.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/opciones.css') }}">
     <link rel="stylesheet" href="{{ asset('css/empresa/opciones/sistemas.css') }}">
 {% endblock %}
 
 {% block body_sidebar %}
 
-    <!---Empresa -->
-   <section class="tabs-wrapper">
-        <div class="tabs-container">
-            <div class="tabs-block">
-                <div class="tabs">
-                    <input type="radio" name="tabs" id="tab1" checked="checked" />
-                    <label for="tab1">Empresa</label>
-                    <div class="tab">
-                    <div class="empresa-container">
-                        <img class="Img_empresa col-md-6" src="{{ asset('images.jpg') }}">
-                        <div class="nombre-empresa">
-                        <span class="Plbra1">RUC :</span>
-                        <input type="text" class="input-linea" value="Videojuego" readonly>
-                        <button class="editar-icono">
-                            <img src="{{ asset('editar.png') }}" alt="Editar">
-                        </button>
-                        <span class="Plbra1">Razon social :</span>
-                        <input type="text" class="input-linea" value="Videojuego" readonly>
-                        <button class="editar-icono">
-                            <img src="{{ asset('editar.png') }}" alt="Editar">
-                        </button>
-                        </div>
+<section class="tabs-wrapper">
+    <div class="tabs-container">
+        <div class="tabs-block">
+           <div class="tabs">
+            <input type="radio" name="tabs" id="tab1" checked="checked" />
+            <label for="tab1"> Empresa </label>
+            <div class="tab">
+                    <div class="row">
+                    <div class="imagen-empresa col-md-4">
+                        <img class="Img_empresa" src="{{ asset('images.jpg') }}">
                     </div>
-                    <div class="Ttl1">SUCURSALES</div>
+                    <div class="nombre-empresa col-md-8">
+                    <div class="container">
+                       <div class="box_contenido">
+                            <p class="cont_label">RUC :</p>
+                            <input type="text" class="input2 input-linea2" value="Videojuegos" readonly>
+                            <button class="editar-icono">
+                                <img src="{{ asset('editar.png') }}" alt="Editar">
+                            </button>
+                        </div>
+                        
+                        <br>
+                        <div class="box_contenido">
+                            <p class="cont_label">Razon social :</p>
+                            <input type="text" class="input2 input-linea2" value="Videojuegos" readonly>
+                            <button class="editar-icono">
+                                <img src="{{ asset('editar.png') }}" alt="Editar">
+                            </button>
+                        </div>
+ 
+                    </div>
+                    
+                    </div>
+                </div>
+
+
+                <div class="Ttl1">SUCURSALES</div>
                     <div class="linea-azul"></div>
                     <div class="container_direc">
                         <table id="tablaSedes">
@@ -70,12 +79,16 @@
                         <button class="Btn1" onclick="guardarSede()">Guardar</button>
                         </div>
                     </div>
-                    </div>
+                    
+            </div>
 
-                    <input type="radio" name="tabs" id="tab2" />
-                    <label for="tab2">Personal</label>
-                    <div class="tab">
-                    <div class="contenedor">
+
+
+            <input type="radio" name="tabs" id="tab2" />
+            <label for="tab2">Personal</label>
+            <div class="tab">
+                
+                <div class="contenedor">
                         <div class="area">
                         <div class="Ttl1">AREA Y PUESTO</div>
                         <div class="linea-azul"></div>
@@ -142,7 +155,6 @@
                             <div class="Plbra2 Plbra_xtr">
                                 <p class="p_str">Permitir foto colaborador</p>
                                 <input type="checkbox" class="input_xtr"> si
-                                <input type="checkbox" class="input_xtr"> si
                                 <input type="checkbox" class="input_xtr"> no
                             </div>
                             </div>
@@ -167,7 +179,6 @@
                             <div class="Plbra2 Plbra_xtr">
                                 <p class="p_str">Permitir foto colaborador</p>
                                 <input type="checkbox" class="input_xtr"> si
-                                <input type="checkbox" class="input_xtr"> si
                                 <input type="checkbox" class="input_xtr"> no
                             </div>
                             </div>
@@ -175,18 +186,17 @@
                         </div>
                         </div>
                     </div>
-                    </div>
+            </div>
 
-                    <input type="radio" name="tabs" id="tab3" />
-                    <label for="tab3">Otros</label>
-                    <div class="tab">
-                    <p>Contenido de la pestaña Otros...</p>
-                    </div>
-                    
-                </div>
+            <input type="radio" name="tabs" id="tab3" />
+            <label for="tab3">Historial</label>
+            <div class="tab ">
+                <p>Contenido de la pestaña Otros...</p>
+
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 {% endblock %}
 

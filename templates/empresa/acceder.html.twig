@@ -2,36 +2,102 @@
 
 {% block title %}Acceder{% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/colaborador/acceder.css') }}">
+{% endblock %}
+
 {% block body_full %}
+
+   {% set contenido = {
+        "empresa": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_empresa.png"
+            }
+        },
+        "usuario": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_usuario.png"
+            },
+            "name": "_username",
+            "valor": last_username
+        }, 
+        "clave": {
+            "icono": {
+                "tipo": "local",
+                "valor": "ico/colaborador/seguridad/ico_contraseña.png"
+            },
+            "name": "_password"
+        }, 
+        "token": {
+            "name": "_csrf_token",
+            "valor": csrf_token('authenticate')
+        },
+        "boton": {
+            "valor": "INGRESAR"
+        }, 
+        "footer": {
+            "version": "V. 1.2 - Creación de EASY CONTROL",
+            "terminos": {
+                "valor": "Terms of Service",
+                "enlace": {
+                    "tipo": "local",
+                    "valor": "#"
+                }
+            }
+        }
+    } %}
 	<div class="container d-flex justify-content-center align-items-center min-vh-100">
+		<div class="login-container">
 		<div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%; font-family: 'Courier New', Courier, monospace;">
 			<div class="card-body">
-				{% if error %}
+				
+				  <!----------LOGO  ------------>
+				<div class="col-md-12 logo"> 
+                <img class="img-fluid" src="{{ asset('./img/ec_logo_del_software.png') }}" > 
+            	</div>
+				  <!--------------------> 
+
+				  {% if error %}
 					<div class="alert alert-danger" role="alert">
 						{{ error.messageKey|trans(error.messageData, 'security') }}
 					</div>
 				{% endif %}
-				<h5 class="card-title text-center mb-4"><strong>Iniciar Sesión</strong></h5>
+
+
 				<form action="{{ path('app_empresa_seguridad_acceder') }}" method="post">
-					<div class="mb-3">
-						<label for="ruc" class="form-label"><strong>RUC</strong></label>
-						<input type="text" class="form-control" id="ruc" name="_ruc">
+					<div class="form-group" >
+						<span class=" custom-ico input-group-prepend ">
+							<img for="ruc" src="{{ contenido.empresa.icono.tipo == 'local' ? asset(contenido.empresa.icono.valor) : contenido.empresa.icono.valor }}" width="20" height="20" style="margin-right: 10px;">
+							<input type="text" class="form-control" id="ruc" name="_ruc">
+						</span>
 					</div>
-					<div class="mb-3">
-						<label for="username" class="form-label"><strong>Usuario</strong></label>
-						<input type="text" class="form-control" id="username" name="_username_visible" value="{{ last_username }}">
-						<input type="hidden" id="_username" name="_username">
+					<div class="form-group" >
+						<span class="custom-ico input-group-prepend ">
+							<img for="username" src="{{ contenido.usuario.icono.tipo == 'local' ? asset(contenido.usuario.icono.valor) : contenido.usuario.icono.valor }}"  width="20" height="20" style="margin-right: 10px;">
+							<input type="text" class="form-control" id="username" name="_username_visible" value="{{ last_username }}">
+							<input type="hidden" id="_username" name="_username">
+						</span>
 					</div>
-					<div class="mb-3">
-						<label for="password" class="form-label"><strong>Contraseña</strong></label>
+					<div class="form-group" >
+					<span class="custom-ico input-group-prepend ">
+						<img for="password" src="{{ contenido.clave.icono.tipo == 'local' ? asset(contenido.clave.icono.valor) : contenido.clave.icono.valor }}"  width="20" height="20" style="margin-right: 10px;">
 						<input type="password" class="form-control" id="password" name="_password">
+					</span>
 					</div>
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 					<div class="d-grid gap-2">
-						<button class="btn btn-outline-dark btn-lg" type="submit"><strong>Iniciar Sesión</strong></button>
+						<button class="boton" type="submit"><strong>Iniciar Sesión</strong></button>
 					</div>
 				</form>
+				<footer>
+					<p>{{ contenido.footer.version }}</p>
+					<p><a href="{{ contenido.footer.terminos.enlace.tipo == 'local' ? asset(contenido.footer.terminos.enlace.valor) : contenido.footer.terminos.enlace.valor }}">{{ contenido.footer.terminos.valor }}</a></p>
+				</footer> 
 			</div>
+		</div>
 		</div>
 	</div>
 {% endblock %}

@@ -4,13 +4,6 @@
     margin: 0;
   }
 /*---------------------------Container----------------------------------*/
-  .container{
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    height: 100vh; /* Alto del 100% de la ventana */
-  }
-
   .login-container {
     max-width: 400px;
     margin: 50px auto;
@@ -59,7 +52,7 @@
   margin-left: 2px; 
   border: 0px solid #ced4da;
   display: block;
-  width: 90%;
+  width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.545rem 1rem;
   font-size: 1rem;
@@ -85,7 +78,6 @@
       padding-top: 5px;
       padding-bottom: 5px;
       margin: 10px 0px;
-      border: 1px solid black; 
       border-radius: 10px; 
       margin-bottom: 4px;
 }
@@ -104,10 +96,10 @@
   text-align: center;
 }
 .login-container form .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .login-container footer {
-  margin-top: 30px;
+  margin-top: 10px;
   text-align: center;
 }
 /*-------------------------------boton------------------------------*/

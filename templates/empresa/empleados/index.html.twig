@@ -1,11 +1,11 @@
 {% extends 'empresa/base.html.twig' %}
 
-{% block title %}Empleados{% endblock %}
+{% block title %}Carga de archivo (Empleados) - EasilyControl!{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" href="{{ asset('css/empresa/opciones/general.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/empresa/empleados/empleados_individual.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/empresa/empleados/empleados_masivo.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/Empresa/empleados/empleados_masivo.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
     
 {% endblock %}
@@ -17,9 +17,10 @@
            <div class="tabs">
             <input type="radio" name="tabs" id="tab1" checked="checked" />
             <label for="tab1">Registro individual</label>
-            <div class="tab tab-content">
+            <div class="tab tab-content ">
                 <h2>Datos del personal</h2>
-                <form class="Cont-Form">
+                <div class="d-flex justify-content-center align-items-center min-vh-30">               
+                <form class="Cont-Form ">
                     <div class="form-row">
                         <div class="inputContainer">
                             <input type="text" class="input1" placeholder="Nombre">
@@ -34,6 +35,7 @@
                             <p class="label">DNI</p>
                         </div>
                     </div>
+                
                     <div class="form-row">
                         <div class="inputContainer">
                             <input type="email" class="input3 input1" placeholder="Correo electrónico" >
@@ -102,6 +104,7 @@
                         Acepto los términos y condiciones</span>
                     </div>
                     <button type="submit" class="submitBtnA">Registrar</button>
+                </div> 
                 </form>
             </div>
 
@@ -109,23 +112,34 @@
 
             <input type="radio" name="tabs" id="tab2" />
             <label for="tab2">Registro masivo</label>
-            <div class="tab tab-content">
-                <h2>Descargar Formato</h2>
-                <form class="form">
-                    <div class="downloadLink">
-                        <a class="input_xl" href="{{ asset('archivo.xlsx') }}" download>Formato_masivo.xlsx</a>
+            <div class="tab tab-content ">
+                <div class="d-flex justify-content-center align-items-center min-vh-40">
+                <form class="form ">
+                    <div class="form-row" style="margin: 25px 10px; ">
+                        <p class="text1">Descargar Formato</p>
+                        <a class="input_xl" href="{{ asset('archivo.xlsx') }}" download
+                            style="padding: 5px 10px;  border-radius: 10px; font-size: 18px; white-space: nowrap; width: 200px; display: inline-block; text-align: center; line-height: 30px; color: #696F79; border: 2px solid #1565D8; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                            Formato_masivo.xlsx
+                        </a>
+                        <img  style="margin: 5px 10px; " src="https://cdn-icons-png.flaticon.com/512/1682/1682612.png" alt="Download icon" width="30">
                     </div>
-                    <div class="Carga_excel">
-                        <p class="label1">Subir Excel</p>
-                        <input type="file" id="excelFile" class="fileInput">
+                    <div class="form-row" style="margin: 25px 10px; ">
+                        <p  class="text1" style="text-align: right;">Subir excel</p>
+                        <div class="fileInputWrapper">
+                            <input type="file" id="excelFile" class="fileInput">
+                            <label for="excelFile" class="fileInputLabel"></label>
+                        </div>
                     </div>
+
                     <div class="inputContainer">
-                        <input type="checkbox" id="terms2" class="checkboxInput">
-                        <span class="checkboxLabel">Acepto los términos y condiciones</span>
+                        
+                        <span class="checkboxLabel"><input type="checkbox" id="terms2" class="checkboxInput">Acepto los términos y condiciones</span>
                     </div>
-                    <button type="submit" class="submitBtnA">Enviar</button>
+                    <button type="submit" class="submitBtnA"  style="margin-bottom: 40px; " >Enviar</button>
                 </form>
+                </div>
             </div>
+
             <input type="radio" name="tabs" id="tab3" />
             <label for="tab3">Historial</label>
             <div class="tab tab-content">

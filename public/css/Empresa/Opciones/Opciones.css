@@ -1,4 +1,4 @@
-/*.empresa-container {
+.empresa-container {
     display: flex;
     align-items: center;
     color: #696F79;
@@ -34,7 +34,7 @@
 
 /* -----------------------------------------------------------------------------------*/
 /* Estilos del modal */
-/*.overlay {
+.overlay {
   display: none; 
   position: fixed; 
   z-index: 1; 
@@ -144,7 +144,7 @@ th {
   height: 100%;
   float: left;
   margin: 0 20px;
-}/*------------------------------------------------------------
+}/*--------------------------------------------------------------*/
 .conten{
   display: inline-flex;
   width: 90%;
@@ -159,8 +159,8 @@ th {
 }
 .Cont-formulario{
   padding: 10px;
-}--*/
-/*--------------------------------------------------------
+}
+/*--------------------------------------------------------*/
 .notificaciones {
   width: 85%;
   margin: 20px auto;
@@ -184,7 +184,7 @@ th {
 
 .notificaciones input[type="checkbox"]:checked {
   background-color: blue; 
-
+}
 .notificaciones label {
   order: 1; 
 }
