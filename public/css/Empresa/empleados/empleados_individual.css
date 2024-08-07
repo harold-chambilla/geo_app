@@ -42,13 +42,13 @@ h2{
        
       }
       /* Ajustes para las filas de formulario */
-/*.form-row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin-bottom: 1rem;
-  }
-  */
+    .form-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 1rem;
+    }
+  
   .inputContainer {
     display: flex;
     flex-direction: column;
