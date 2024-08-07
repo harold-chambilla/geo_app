@@ -1,0 +1,28 @@
+.div-container {
+    width: 80%;
+    height: 100px;
+    border: 1px solid #000000b9;
+    border-radius: 15px;
+}
+.conten {
+    display: inline-flex;
+    width: 90%;
+    padding-left: 25px;
+}
+div.Plbra2.Plbra_xtr{ 
+    width: 300px;
+    display: flex;
+}
+
+.input_xtr{
+    width: 70px;
+    height: 20px;
+    
+}
+.p_str{
+    width: 150px;
+}
+
+select.input_xtr{
+    width: 100px;
+}

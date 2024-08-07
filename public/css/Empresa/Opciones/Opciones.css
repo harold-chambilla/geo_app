@@ -1,36 +1,28 @@
-.empresa-container {
-    display: flex;
-    align-items: center;
-    color: #696F79;
-  }
-  
-  .Img_empresa{
-    width: 120px;
-    height: auto;
-    margin-left: 10px;
-    border-radius: 50%;
-  }
-.nombre-empresa {
-    padding-left: 15px;
-    display: table-column;
-    align-items: center;
-  } 
+.conte1 {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px; 
+}
 
+.Img_empresa{
+  width: 120px;
+  height: auto;
+  margin-left: 10px;
+  border-radius: 50%;
+}
 
+.img_ico{
+  width: 50px;
+  height: 50px;
+}
 
-
-
-  .editar-icono {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  .editar-icono img {
-    width: 20px;
-    height: 20px;
-  }
+.linea-azul{
+  width: 100%; 
+  height: 2px; 
+  border: 1px solid #1565D8; 
+  box-sizing: border-box; 
+}
 
 /* -----------------------------------------------------------------------------------*/
 /* Estilos del modal */
@@ -58,31 +50,30 @@
   z-index: 2;
 }
 
-
+/* Botón para cerrar el modal */
 .close {
+  position:absolute;
+  right: 20px;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  font-size: 20px; 
+  border: none; 
+  border-radius: 20%; 
+  cursor: pointer; 
+  outline: none; 
   width: 30px;
   height: 30px;
   color: #000;
   background-color: #0056b3;
-  padding: 5px 10px;
-  font-size: 18px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
+  padding:10px;
 }
 
 .close:hover {
   background-color: #0056b3;
 }
-#direccionDiv {
-  border: 3px solid yellow;
-  padding: 10px;
-  margin-bottom: 10px;
-  float: left;
-  width: 100%; 
-  border-radius: 15px;
-  
-}
+
+
 
 #direccionDiv .nombre-input{
   width: 180px;
@@ -95,6 +86,13 @@
   width: 250px;
   height: 200px;
   float: left;
+}
+
+.linea_separadora {
+  border-right: 1px solid #ccc;
+  height: 100%;
+  float: left;
+  margin: 0 20px;
 }
 
 
@@ -135,73 +133,5 @@ th {
 .icono {
   width: 20px;
   height: 20px;
-}
-
-
-
-.linea_separadora {
-  border-right: 1px solid #ccc;
-  height: 100%;
-  float: left;
-  margin: 0 20px;
-}/*--------------------------------------------------------------*/
-.conten{
-  display: inline-flex;
-  width: 90%;
-  padding-left: 25px;
-}
-.div-container{
-  width: 80%;
-  height: 100px;
-  border: 1px solid #000000b9;
-  border-radius: 15px;
-  
-}
-.Cont-formulario{
-  padding: 10px;
-}
-/*--------------------------------------------------------*/
-.notificaciones {
-  width: 85%;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-.notificaciones h2 {
-  margin-top: 0;
-}
-
-.notificaciones .opcion {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-}
-
-.notificaciones input[type="checkbox"] {
-  order: 2; 
-}
-
-.notificaciones input[type="checkbox"]:checked {
-  background-color: blue; 
-}
-.notificaciones label {
-  order: 1; 
-}
-
-.notificaciones button {
-  display: block;
-  margin-top: 20px;
-  background-color: #0056b3;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 15px;
-  width: 100%;
-  cursor: pointer;
-}
-
-.notificaciones button:hover {
-  background-color: #004080;
 }
 

@@ -62,7 +62,17 @@ html {
   max-width: 900px;
 } 
 
-
+.label {
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  padding: 0 4px;
+  background-color: white;
+  color: #DADCE0;
+  font-size: 16px;
+  transition: 0.5s;
+  z-index: 0;
+}
 label {
   order: 1;
   margin: 0;
@@ -139,24 +149,11 @@ label {
   color: transparent;
 }
 
-.label {
-  position: absolute;
-  top: 5px;
-  left: 15px;
-  padding: 0 4px;
-  background-color: white;
-  color: #DADCE0;
-  font-size: 16px;
-  transition: 0.5s;
-  z-index: 0;
-}
 
 /*-----------------------------Tabla-----------------------------------*/
 .tabs-container {
   padding: 4rem 4rem;
 }
-
-
 
 .tabs .tab {
   order: 9;
@@ -165,10 +162,6 @@ label {
 .tabs [type=radio]:checked + label {
   border-bottom: none;
 }
-
-
-
-
 
 .input {
   font-size: 14px;
@@ -191,12 +184,19 @@ label {
   transform: translateY(-2px);
 }
 
-.inputContainer {
-  display: flex;
-  flex-direction: column;
+.input2 {
   position: relative;
+  height: 2.5rem;
+  width: 100%;
+  border: 1px solid #DADCE0;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 0 5px;
+  outline: none;
+  background: none;
+  z-index: 1;
+  padding-right: 5px;
 }
-
 .input1 {
   position: relative;
   height: 2.5rem;
@@ -221,14 +221,6 @@ label {
   color: #1565D8;
 }
 
-.inputContainer {
-  position: relative;
-  height: 40px;
-  width: 95%;
-  padding: 0 4px;
-  margin-bottom: 17px;
-}
-
 .input1:focus {
   border: 2px solid #1565D8;
 }
@@ -240,7 +232,26 @@ label {
   font-size: 14px;
   font-weight: 600;
 }
+.inputContainer {
+  
+  position: relative;
+  height: 40px;
+  width: 70%;
+  padding: 0 4px;
+  margin: 1px 10px;
+  border: none; 
+}
 
+.inputContainer1 {
+  
+  position: relative;
+  height: 40px;
+  width: 70%;
+  padding: 0 4px;
+  margin: 1px 10px;
+  border: none; 
+  border-bottom: 2px solid #696F79;
+}
 /*-------------------Boton--------*/
 /*----AZUL----*/
 .submitBtnA {
@@ -288,9 +299,18 @@ label {
   color: #000000b7;
   padding-right: 10px;
   font-weight: bold;
-  
 }
 
+.Plbra3{
+  position: relative;
+  font-size: 18px;
+  display: flex;
+  width: 150px;
+  height: 40px; 
+  color: #696F79;
+  padding: 6px 4px;
+  margin: 1px 10px;
+}
 
 
 
@@ -323,6 +343,20 @@ label {
 
   .input-linea2:focus{
     outline: none;
+  }
+  .input-amarillo{
+    align-items: center; 
+    border: 1px solid #FFC107; 
+    padding: 5px 20px; 
+    width: 80%;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+
   }
 
 /*------------- Boton ----------------*/
