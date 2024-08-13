@@ -1,0 +1,99 @@
+{% extends 'empresa/base.html.twig' %}
+
+{% block title %}Opciones{% endblock %}
+
+{% block css %}
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/permisos/Permisos-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
+
+{% endblock %}
+
+{% block body_sidebar %}
+ <section class="d-flex justify-content-center align-items-center full-height">
+        <div class="container">
+            <div class="row justify-content-center align-items-center" style="padding-bottom:50px;">
+                <div class="col-12 col-md-3 d-flex justify-content-center">
+                    <button class="btn-form Cl-boton1">Registrar</button>
+                </div>
+                <div class="col-12 col-md-3 d-flex justify-content-center">
+                    <button class="btn-form Cl-boton2">Historial</button>
+                </div>
+                <div class="col-12 col-md-6 d-flex justify-content-end">
+                    
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center margin-busc" style="    border: 2px solid #0057A4;">
+                <form class="container" style="padding:50px;">
+                    <div class="row justify-content-center align-items-center" >
+                        <div class="col-12 col-md-8 d-flex align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-2">USUARIO</p>
+                            <input type="text" class="input-form mg-input2 col-md-9 backgd-azul" style="height: 40px; margin-left: 10px;" placeholder="">
+                        </div>
+                        <div class="col-12 col-md-4 d-flex align-items-center ">
+                            <p style="color: #838383; font-weight: bold; margin: 0;" class="col-md-3">DNI</p>
+                            <input type="text" class="input-form mg-input2 col-md-9" style="height: 40px; background-color: #FFC107d2; color: #ffffff;  font-weight: bold;" placeholder="">
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 col-md-4 d-flex align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">AREA</p>
+                            <input type="text" class="input-form mg-input2 col-md-8 backgd-azul" style="height: 40px; margin-left: 5px;" placeholder="">
+                        </div>
+                        <div class="col-12 col-md-4 d-flex align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0; flex-shrink: 0;" class="d-flex col-md-6">VAC. LIBRE</p>
+                            <div class="d-flex col-md-6 ">
+                                <input type="text" class="input-form mg-input2 col-md-6 backgd-azul" style="height: 40px; " placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0 ; flex-shrink: 0;" class="d-flex col-md-6">VAC. CONSUMIDAS</p>
+                            <div class="d-flex col-md-6 ">
+                                <input type="text" class="input-form mg-input2 col-md-6 backgd-azul" style="height: 40px; " placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-star align-items-center">
+                        <div class="col-12 col-md-6 d-flex align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">FECHA</p>
+                            <div class="d-flex col-md-10 ">
+                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px; " placeholder="">
+                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px;" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 col-md-12 align-items-center">
+                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">DESCRIPCION</p>
+                            <div class="d-flex col-md-12">
+                                <textarea class="input-form mg-input2 col-md-12" style="height: 80px; margin-left: 5px;" placeholder=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 d-flex justify-content-end" style="padding-top: 40px;">
+                    <button type="submit" class="btn-form Cl-boton2" style="height: 50px;" >GUARDAR</button>
+                </div>
+                </form>
+            </div>
+            <br>
+            <br>
+            <div class="row justify-content-center align-items-center" >
+                <div class="container justify-content-center align-items-center cuadro1" style="padding:50px;">
+                    <div class="py-4 justify-content-center align-items-center img-logo d-flex"> 
+                        <img class="img-fluid" src="{{ asset('./img/ec_logo_del_software.png') }}"> 
+                    </div>
+                    <p class="py-5 justify-content-center align-items-center img-logo d-flex" style="color: #838383; font-weight: bold" >se registro <span style="color: #00D957 ; padding-left:5px;"> exitosamente <span></p>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn-form Cl-boton1"> ACEPTAR </button>
+                    </div>
+                </div>   
+            </div>
+        </div>
+     
+        
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

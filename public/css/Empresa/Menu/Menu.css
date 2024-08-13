@@ -1,14 +1,10 @@
 *{
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     text-decoration: none;
     font-family: 'Open Sans Condensed', sans-serif;
 }
 
-body{
-    background-color: #dfe9f5;
-}
+
 
 nav{
     position: fixed;
@@ -105,8 +101,3 @@ a.logout:hover{
     }
 }
 
-.container {
-    margin-left: 110px; /* Ajuste para el estado contraído */
-    transition: margin-left 0.5s ease;
-    padding: 20px; /* Añade algo de relleno para el contenido */
-}

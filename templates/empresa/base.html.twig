@@ -42,7 +42,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="session" href="">
+                            <a class="session" href="{{ path('app_empresa_Permisos_mostrar') }}">
                                 <i class="fas fa-paperclip" alt="30px"></i>
                                 <span class="nav-item">Permisos</span>
                             </a>
@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="session" href="">
+                            <a class="session" href="{{ path('app_empresa_Vacaciones_mostrar') }}">
                                 <i class="fas fa-tasks" alt="30px"></i>
                                 <span class="nav-item">Vacaciones</span>
                             </a>
@@ -89,7 +89,7 @@
         {% endif %}
 
         
-        <div class="container-xxl" style="display: flex; justify-content: center; align-items: center;">
+        
             {% if app.user %}
                 <!-- Contenido principal -->
     

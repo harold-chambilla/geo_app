@@ -4,7 +4,9 @@
 
 {% block css %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/colaborador/acceder.css') }}">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/login/login-style.css') }}">
 {% endblock %}
 
 {% block body_full %}
@@ -49,57 +51,57 @@
             }
         }
     } %}
-	<div class="container d-flex justify-content-center align-items-center min-vh-100">
-		<div class="login-container">
-		<div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%; font-family: 'Courier New', Courier, monospace;">
-			<div class="card-body">
+	<section class="d-flex justify-content-center align-items-center full-height">
+            <div class="container justify-content-center align-items-center" style="max-width: 600px; width: 100%;">
+                <div class="d-flex justify-content-center align-items-center" >
+                    <div class="container justify-content-center align-items-center">
 				
-				  <!----------LOGO  ------------>
-				<div class="col-md-12 logo"> 
-                <img class="img-fluid" src="{{ asset('./img/ec_logo_del_software.png') }}" > 
-            	</div>
-				  <!--------------------> 
+								<!----------LOGO  ------------>
+								<div class="  row justify-content-center align-items-center img-logo "> 
+								<img class="img-fluid" src="{{ asset('./img/ec_logo_del_software.png') }}" > 
+								</div>
+								<!--------------------> 
 
-				  {% if error %}
-					<div class="alert alert-danger" role="alert">
-						{{ error.messageKey|trans(error.messageData, 'security') }}
-					</div>
-				{% endif %}
+						{% if error %}
+							<div class="alert alert-danger" role="alert">
+								{{ error.messageKey|trans(error.messageData, 'security') }}
+							</div>
+						{% endif %}
 
 
-				<form action="{{ path('app_empresa_seguridad_acceder') }}" method="post">
-					<div class="form-group" >
-						<span class=" custom-ico input-group-prepend ">
-							<img for="ruc" src="{{ contenido.empresa.icono.tipo == 'local' ? asset(contenido.empresa.icono.valor) : contenido.empresa.icono.valor }}" width="20" height="20" style="margin-right: 10px;">
-							<input type="text" class="form-control" id="ruc" name="_ruc">
-						</span>
-					</div>
-					<div class="form-group" >
-						<span class="custom-ico input-group-prepend ">
-							<img for="username" src="{{ contenido.usuario.icono.tipo == 'local' ? asset(contenido.usuario.icono.valor) : contenido.usuario.icono.valor }}"  width="20" height="20" style="margin-right: 10px;">
-							<input type="text" class="form-control" id="username" name="_username_visible" value="{{ last_username }}">
-							<input type="hidden" id="_username" name="_username">
-						</span>
-					</div>
-					<div class="form-group" >
-					<span class="custom-ico input-group-prepend ">
-						<img for="password" src="{{ contenido.clave.icono.tipo == 'local' ? asset(contenido.clave.icono.valor) : contenido.clave.icono.valor }}"  width="20" height="20" style="margin-right: 10px;">
-						<input type="password" class="form-control" id="password" name="_password">
-					</span>
-					</div>
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-					<div class="d-grid gap-2">
-						<button class="boton" type="submit"><strong>Iniciar Sesión</strong></button>
-					</div>
-				</form>
-				<footer>
-					<p>{{ contenido.footer.version }}</p>
-					<p><a href="{{ contenido.footer.terminos.enlace.tipo == 'local' ? asset(contenido.footer.terminos.enlace.valor) : contenido.footer.terminos.enlace.valor }}">{{ contenido.footer.terminos.valor }}</a></p>
-				</footer> 
+						<form class="py-5 justify-content-center align-items-center" action="{{ path('app_empresa_seguridad_acceder') }}" method="post">
+							<div class="py-2 d-flex justify-content-center align-items-center">
+								<span class="col-12">
+									<img for="ruc" src="{{ contenido.empresa.icono.tipo == 'local' ? asset(contenido.empresa.icono.valor) : contenido.empresa.icono.valor }}" width="62" height="62" class="col-2">
+									<input type="text" class="input-form mg-input2 col-9"  id="ruc" name="_ruc" placeholder="ID" style="width:100% ; height: 53px;">
+								</span>
+							</div>
+							<div class="py-2 d-flex justify-content-center align-items-center">
+								<span class="col-12">
+									<img for="username" src="{{ contenido.usuario.icono.tipo == 'local' ? asset(contenido.usuario.icono.valor) : contenido.usuario.icono.valor }}"   width="62" height="62" class="col-2">
+									<input type="text" class="input-form mg-input2 col-9" id="username" name="_username_visible" value="{{ last_username }}" placeholder="Usuario" style="width:100% ; height: 53px;">
+									<input type="hidden" id="_username" name="_username">
+								</span>
+							</div>
+							<div class="py-2 d-flex justify-content-center align-items-center">
+								<span class="col-12">
+									<img for="password" src="{{ contenido.clave.icono.tipo == 'local' ? asset(contenido.clave.icono.valor) : contenido.clave.icono.valor }}"  width="62" height="62" class="col-2">
+									<input type="password" class="input-form mg-input2 col-9" id="password" name="_password" placeholder="Contraseña" style="width:100% ; height: 53px;">
+								</span>
+							</div>
+							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+							<div class="d-grid gap-2 py-4 d-flex justify-content-center align-items-center">
+								<button style="width:182px ; height:54px;" class="btn-form Cl-boton1" style="width:182 ; height:54;" type="submit"><strong>INGRESAR</strong></button>
+							</div>
+						</form>
+						<footer>
+							<p>{{ contenido.footer.version }}</p>
+							<p><a href="{{ contenido.footer.terminos.enlace.tipo == 'local' ? asset(contenido.footer.terminos.enlace.valor) : contenido.footer.terminos.enlace.valor }}">{{ contenido.footer.terminos.valor }}</a></p>
+						</footer> 
+				</div>
 			</div>
 		</div>
-		</div>
-	</div>
+	</secton>
 {% endblock %}
 
 {% block js %}
