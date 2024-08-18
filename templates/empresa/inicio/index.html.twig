@@ -1,0 +1,64 @@
+{% extends 'empresa/base.html.twig' %}
+
+{% block title %}Horario{% endblock %}
+
+{% block css %}
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/inicio/style_inicio.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
+{% endblock %}
+
+{% block body_sidebar %}
+
+{% endblock %}
+ <section class="d-flex justify-content-center align-items-center full-height">
+        <div class="container px-3 py-5" style="max-width: 1200px; border: 2px solid #0057A4;border-radius: 15px;">
+            <div class="row">
+                <!-- Primera fila -->
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5 mt-md-5 mt-3">
+                    <button class="btn cuadrado-btn">
+                        Asistencia
+                        <div class="triangle" style="color: #0057A4;"></div>
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5 mt-md-5 mt-3">
+                    <button class="btn cuadrado-btn">
+                        Permisos
+                        <div class="triangle" style="color: #A4007E;"></div>
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5 mt-md-5 mt-3">
+                    <button class="btn cuadrado-btn">
+                        Vacaciones
+                        <div class="triangle" style="color: #FFC107;"></div>
+                    </button>
+                </div>
+    
+                <!-- Segunda fila -->
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5">
+                    <button class="btn cuadrado-btn">
+                        Empleados
+                        <div class="triangle" style="color: #384AEE;"></div>
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5">
+                    <button class="btn cuadrado-btn">
+                        Horario
+                        <div class="triangle" style="color: #00A3FF;"></div>
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center my-5">
+                    <button class="btn cuadrado-btn">
+                        Reporte
+                        <div class="triangle" style="color: #098D0B;"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% block js %}
+    <script src="{{ asset('js/calendario/calendario.js') }}"></script>
+{% endblock %}
+
+
