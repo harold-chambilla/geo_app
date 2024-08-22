@@ -22,7 +22,7 @@ class EmpresaController extends AbstractController
     public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        return $this->rendirectToRoute('app_empresa_inicio_mostrar');
+        return $this->redirectToRoute('app_empresa_inicio_mostrar');
     }
 
     #[Route('/api/asistencia', name: 'api_adm_asistencia', methods: ['GET'])]
