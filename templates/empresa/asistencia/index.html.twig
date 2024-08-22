@@ -5,6 +5,7 @@
 {% block css %}
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/empresa/asistencia/style-asistencia.css') }}">
     <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
 {% endblock %}
 
@@ -12,89 +13,152 @@
 <section class="d-flex justify-content-center align-items-center full-height">
         <div class="container">
             <div class="row justify-content-center align-items-center" style="padding-bottom:50px;">
-                <div class="col-12 col-md-3 d-flex justify-content-center">
-                    <button class="btn-form Cl-boton1">Registrar</button>
-                </div>
-                <div class="col-12 col-md-3 d-flex justify-content-center">
-                    <button class="btn-form Cl-boton2">Historial</button>
-                </div>
-                <div class="col-12 col-md-6 d-flex justify-content-end">
-                    <div class="margin-busc d-flex align-items-center">
-                        <button style="background-color: #fff; border: none;">
-                            <img src="path/to/lupa.png" alt="">
-                            <span style="padding: 0 10px; color: #0057A4;">DNI</span>
-                        </button>
-                        <input type="number" class="input-form mg-input1">
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center align-items-center margin-busc" style="    border: 2px solid #0057A4;">
-                <form class="container" style="padding:50px;">
-                    <div class="row justify-content-center align-items-center" >
-                        <div class="col-12 col-md-8 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-2">USUARIO</p>
-                            <input type="text" class="input-form mg-input2 col-md-9" style="height: 40px; margin-left: 10px;" placeholder="">
+                <div class="container">
+                    <div class="row  justify-content-between">
+                        <!-- Input de Fecha -->
+                        <div class="col-4 d-flex align-items-center justify-content-start margin-black">
+                            <div class="col-2 d-flex align-items-center justify-content-center">
+                                <img src="path/to/lupa.png" alt="">
+                            </div>
+                            <input type="date" class="input-form mg-input2 col-9" style="height: 40px; font-weight: bold;" placeholder="">
                         </div>
-                        <div class="col-12 col-md-4 d-flex align-items-center ">
-                            <p style="color: #838383; font-weight: bold; margin: 0;" class="col-md-3">DNI</p>
-                            <input type="text" class="input-form mg-input2 col-md-9" style="height: 40px; background-color: #FFC107a8; color: #ffffff;  font-weight: bold;" placeholder="">
-                        </div>
-                    </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">AREA</p>
-                            <input type="text" class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="">
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">FECHA</p>
-                            <div class="d-flex col-md-10 ">
-                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px; " placeholder="">
-                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px;" placeholder="">
+                        
+                        <!-- Botón Buscar e Input Numérico -->
+                        <div class="col-7 d-flex justify-content-end">
+                            <div class="margin-black d-flex align-items-center col-12">
+                                <button class="col-2" style="background-color: #fff; border: none; display: flex; align-items: center;">
+                                    <img src="path/to/lupa.png" alt="">
+                                    <span style="padding: 0 10px; color: #0057A4; font-weight: bold;">Buscar</span>
+                                </button>
+                                <input type="number" class="input-form col-9" style="font-weight: bold;">
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">MOTIVO</p>
-                            <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
+                    <div class="row justify-content-between py-5">
+                        <div class="inputContainer col-md-3 mb-3 ">
+                            <select class="form-control mg-input2 input" placeholder="Area">
                                 <option value="" disabled selected hidden></option>
-                                <option>ENFERMEDAD</option>
-                                <option>ACCIDENTE</option>
-                                <option>FAMILIAR</option>
-                                <option>OTROS</option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
                             </select>
+                            <p class="label" style="color: #1565D8;">Area</p>
                         </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">ARCHIVO</p>
-                            <div class="d-flex col-md-10">
-                                <input type="file" class="input-form mg-input2  col-md-12" style="height: 40px;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row  align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">MOMENTO</p>
-                            <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
+                        <div class="inputContainer col-md-3 mb-3 ">
+                            <select class="form-control mg-input2 input" placeholder="Puesto">
                                 <option value="" disabled selected hidden></option>
-                                <option>INGRESO</option>
-                                <option>SALIDA</option>
-                                <option>AMBOS</option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
                             </select>
+                            <p class="label" style="color: #1565D8;">Puesto</p>
+                        </div>
+                        <div class="inputContainer col-md-2 mb-3 ">
+                            <select class="form-control mg-input1 input" placeholder="Estado Ingreso">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label" style="color: #FFC107;">Estado Ingreso</p>
+                        </div>
+                        <div class="inputContainer col-md-2 mb-3">
+                            <select class="form-control mg-input1 input" placeholder="Estado Salida">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label" style="color: #FFC107;">Estado Salida</p>
+                        </div>
+                        <div class="inputContainer col-md-2">
+                            <select class="form-control mg-input2 input" placeholder="Modalidad">
+                                <option value="" disabled selected hidden></option>
+                                <option>Presencial</option>
+                                <option>Virtual</option>
+                                <option>Hibrido</option>
+                            </select>
+                            <p for="" class="label" style="color: #1565D8;">Modalidad</p>
                         </div>
                     </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-12 align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">DESCRIPCION</p>
-                            <div class="d-flex col-md-12">
-                                <textarea class="input-form mg-input2 col-md-12" style="height: 80px; margin-left: 5px;" placeholder=""></textarea>
-                            </div>
-                        </div>
+                    <div class="row py-2">
+                        <table class="table custom-table" style="border-collapse: separate; border-spacing: 0; width: 100%; border-radius: 15px; overflow: hidden;">
+                            <thead>
+                                <tr >
+                                    <th  >Nombre</th>
+                                    <th>Puesto</th>
+                                    <th>Área</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Salida</th>
+                                    <th>Modalidad</th>
+                                    <th>H. Extra</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr>
+                                    <td>Juan Pérez</td>
+                                    <td>Gerente</td>
+                                    <td>Administración</td>
+                                    <td>2024-08-01</td>
+                                    <td>2024-08-10</td>
+                                    <td>Presencial</td>
+                                    <td>5 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>Analista</td>
+                                    <td>Finanzas</td>
+                                    <td>2024-07-15</td>
+                                    <td>2024-07-25</td>
+                                    <td>Remoto</td>
+                                    <td>2 horas</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-12 col-md-12 d-flex justify-content-end" style="padding-top: 40px;">
-                    <button type="submit" class="btn-form Cl-boton2" style="height: 50px;" >GUARDAR</button>
                 </div>
-                </form>
             </div>
         </div>
-    </section>
+    <section>
 {% endblock %}
