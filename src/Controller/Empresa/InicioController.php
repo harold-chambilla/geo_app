@@ -14,14 +14,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/empresa/Inicio', name: 'app_Inicio_Permisos_')]
+#[Route('/empresa/inicio', name: 'app_empresa_inicio_')]
 class InicioController extends AbstractController 
 {	
 
 	#[Route('/', name: 'mostrar')]
 	public function mostrar(): Response
 	{
-		return $this->render('empresa/Inicio/index.html.twig');
+		return $this->render('empresa/inicio/index.html.twig');
 	}
 
 }

@@ -14,12 +14,12 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
         
-		{% block css %}
+	 {% block css %}
 	        {# Aqui va el contenido que se reemplazara en cada visrta, dejar vacio en base a no ser que solo sirva para el base. #}
-		{% endblock %}
+	{% endblock %}
     </head>
     <body>
-		{% if app.user %}
+	{% if app.user %}
             <nav>
                 <!-- Barra lateral -->
                 <ul>
@@ -30,13 +30,13 @@
                     </li>
                     <div class="ico-ubi-sesion">
                         <li>
-                            <a class="session" href="{{ path('app_Inicio_mostrar') }}">
+                            <a class="session" href="{{ path('app_empresa_inicio_mostrar') }}">
                                 <i class="fas fa-home"></i>
                                 <span class="nav-item">Inicio</span>
                             </a>
                         </li>
                         <li>
-                            <a class="session" href="{{ path('app_empresa_Asistencia_mostrar') }}">
+                            <a class="session" href="{{ path('app_empresa_asistencia_mostrar') }}">
                                 <i class="fas fa-check" alt="30px"></i>
                                 <span class="nav-item">Asistencias</span>
                             </a>
@@ -54,13 +54,13 @@
                             </a>
                         </li>
                         <li>
-                            <a class="session" href="{{ path('app_empresa_Vacaciones_mostrar') }}">
+                            <a class="session" href="{{ path('app_empresa_vacaciones_mostrar') }}">
                                 <i class="fas fa-tasks" alt="30px"></i>
                                 <span class="nav-item">Vacaciones</span>
                             </a>
                         </li>
                         <li>
-                            <a class="session" href="{{ path('app_empresa_Horario_mostrar') }}">
+                            <a class="session" href="{{ path('app_empresa_horario_mostrar') }}">
                                 <i class="fas fa-calendar" alt="30px"></i>
                                 <span class="nav-item">Horario</span>
                             </a>
@@ -86,15 +86,10 @@
                     </div>
                 </ul>
             </nav>
-        {% endif %}
-
-        
-        
+        {% endif %}        
             {% if app.user %}
                 <!-- Contenido principal -->
-    
                     {% block body_sidebar %}{% endblock %}
-                
             {% else  %}
                 <!-- Contenido principal sin barra lateral -->
                 <div class="col-md-12">
@@ -102,7 +97,6 @@
                 </div>
             {% endif %}
         </div>
-		
-		{% block js %}{% endblock %}
+	{% block js %}{% endblock %}
     </body>
 </html>
