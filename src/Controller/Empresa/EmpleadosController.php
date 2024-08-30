@@ -4,6 +4,7 @@ namespace App\Controller\Empresa;
 
 use App\Form\Empresa\CargadorArchivoType;
 use App\Funciones\Empresa\EmpleadosFunciones;
+use App\Funciones\Empresa\EmpresaFunciones;
 use App\Repository\ColaboradorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,22 +19,16 @@ class EmpleadosController extends AbstractController
     private string $uploadDirectory = 'uploads/empresa/empleados';
     private string $downloadDirectory = 'downloads/empresa/empleados';
 
-	public function __construct(
+    public function __construct(    
+        private EmpresaFunciones $empresaFunciones,
 		private ColaboradorRepository $colaboradorRepository
-	){}
+    ){}
 
     # Formulario de registro simple
     #[Route('/', name: 'mostrar')]
     public function index(Request $request): Response
-	{
-		$colaborador = $this->colaboradorRepository->findOneBy([
-			'col_nombreusuario' => $this->getUser()->getUserIdentifier(),
-		]);
-		$visible =  explode(' ', $colaborador->getColNombres())[0] . ' ' . explode(' ', $colaborador->getColApellidos())[0];
-
-		return $this->render('empresa/empleados/index.html.twig', [
-			'usuario' => $visible
-		]);
+    {   
+    	return $this->render('empresa/empleados/index.html.twig');
     }
 
     # Carga masiva de datos
@@ -72,22 +67,4 @@ class EmpleadosController extends AbstractController
     {
         return $empleadosFunciones->descargar($archivo, $this->downloadDirectory);
     }
-
-    //Crear empleado
-	#[Route('/api/empleado/crear', name: 'crear_empleado', methods: ['POST'])]
-	public function crearEmpleado(Request $request, EmpleadosFunciones $empleadosFunciones): JsonResponse
-	{	
-		$datos = json_decode($request->getContent(), true);
-		if($datos['empleado']){
-			//$registro = $empleadosFunciones->registro($datos['empleado']);
-			return $this->json(['message' => "Test de API"], JsonResponse::HTTP_OK);
-		}
-		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
-	}
-
-    #[Route('/api/empleado/test', name: 'test', methods: ['GET'])]
-	public function tester(Request $request): JsonResponse
-	{	
-        return $this->json(['message' => "Funciona!"], JsonResponse::HTTP_OK);
-	}
 }

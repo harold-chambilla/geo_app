@@ -24,10 +24,16 @@ services:
     App\Security\Empresa\AuthenticatorEmpresa:
         public: true
 
-    # Empresa - Funciones - Empleados
+    # Empresa - Funciones
+    App\Funciones\Empresa\EmpresaFunciones:
+        arguments:
+            $colaboradorRepository: '@App\Repository\ColaboradorRepository'
+            $security: '@security.helper'
+            $entityManagerInterface: '@doctrine.orm.entity_manager'
+        public: true
+
     App\Funciones\Empresa\EmpleadosFunciones:
 
-    # Empresa - Funciones - Horarios
     App\Funciones\Empresa\HorariosFunciones:
 
     

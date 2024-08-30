@@ -1,7 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios";
 
-
 export const administracionStore = defineStore('administracion', {
     state: () => ({
         asistencias: [],
