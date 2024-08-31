@@ -22,70 +22,72 @@
     </head>
     <body>
 	{% if app.user %}
-    <nav class="sidebar-menu">
+    <nav class="sidebar-menu flex-column">
             <ul class="menu-list ">
                 <!-- Logo -->
-                <li class=" logo py-2 nav-item" >
+                <li class=" logo  nav-item icono-menu" >
 
-                        <img src="{{ asset('icono_menu.png') }}" alt="" class="ico-logo" style="border: 1px solid black; width: 50px; height: 50px;">
+                        <img src="{{ asset('ico/empresa/Menu/ico_logo.png') }}" alt="" class="ico-logo">
                 </li>
 
                 <!-- Menú Principal -->
-                <li class=" traslado py-1 " style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_inicio_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                 <div class="flex-grow-1 d-flex flex-column justify-content-center" style="margin-bottom:50px">
+                 <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_inicio_mostrar') }}" style="width: 100px; height: 20px;">
+                        <img src="{{ asset('ico/empresa/Menu/inicio.png') }}" alt="" class="icon">
                         <span class="ms-3">Home</span>
                     </a>
                 </li>
 
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_asistencia_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                  <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_asistencia_mostrar') }}"style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/asistencia.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Asistencia</span>
                     </a>
                 </li>
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_Permisos_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                  <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_Permisos_mostrar') }}"style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/permisos.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Permisos</span>
                     </a>
                 </li>
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_empleados_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                  <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_empleados_mostrar') }}"style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/empleados.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Empleados</span>
                     </a>
                 </li>
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_vacaciones_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                 <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_vacaciones_mostrar') }}"style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/vacaiones.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Vacaciones</span>
                     </a>
                 </li>
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_horario_mostrar') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                  <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_horario_mostrar') }}"style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/horario.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Horario</span>
                     </a>
                 </li>
-                <li class="traslado py-1" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                  <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="" style="width: 100px; height: 20px;">
+                        <i > <img src="{{ asset('ico/empresa/Menu/reporte.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Reportes</span>
                     </a>
                 </li>
+                </div>
         
                 <!-- Opciones y Salir -->
             <div class="bottom-menu">
-                <li class="py-2 traslado" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_opciones_mostrar') }}">
+                 <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_opciones_mostrar') }}"style="width: 100px; height: 20px;">
                         <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Opciones</span>
                     </a>
                 </li>
-                <li class="py-2 traslado" style="width: 100px;">
-                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_seguridad_desconectarse') }}">
-                        <i > <img src="{{ asset('icono_menu.png') }}" alt="" class="icon"></i>
+                <li class=" traslado ico-menu" >
+                    <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_seguridad_desconectarse') }}" style="width: 100px; height: 20px;">
+                        <i > <img src="{{asset('ico/empresa/Menu/salida.png') }}" alt="" class="icon"></i>
                         <span class="ms-3">Salir</span>
                     </a>
                 </li>

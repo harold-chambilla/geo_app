@@ -1,6 +1,6 @@
 .img-logo{
   width: 570px;
   height: 72px;
-  border: 1px solid #000000;
-  padding: 60px;
+  position: center;
+  margin-bottom: 50px;
 }
