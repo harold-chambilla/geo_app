@@ -80,7 +80,7 @@
   const { user, error } = userStore;
   </script>
   
-  <style scoped>
-  /* Puedes agregar estilos personalizados aquí */
-  </style>
+<style scoped>
+    /* Puedes agregar estilos personalizados aquí */
+</style>
   
