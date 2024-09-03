@@ -27,6 +27,7 @@ class EmpleadosController extends AbstractController
 
     public function __construct(    
         private EmpresaFunciones $empresaFunciones,
+        private EmpleadosFunciones $empleadosFunciones,
         private ColaboradorRepository $colaboradorRepository,
         private AreaRepository $areaRepository,
         private PuestoRepository $puestoRepository,
@@ -34,22 +35,9 @@ class EmpleadosController extends AbstractController
         private EntityManagerInterface $entityManagerInterface
     ){}
 
-    # Formulario de registro simple
     #[Route('/', name: 'mostrar')]
     public function index(Request $request): Response
     {   
-        return $this->render('empresa/empleados/index.html.twig', [
-            'contenido' => [
-                'areas' => $this->empresaFunciones->obtenerAreas($this->empresaFunciones->obtenerEmpresa()),
-                'sedes' => $this->empresaFunciones->obtenerSedes($this->empresaFunciones->obtenerEmpresa())    
-            ]
-        ]);
-    }
-
-    # Carga masiva de datos
-    #[Route('/cargar', name: 'cargar')]
-    public function carga(Request $request, EmpleadosFunciones $empleadosFunciones): Response
-    {
         $form = $this->createForm(CargadorArchivoType::class);
         $form->handleRequest($request);
         $employeesFile = [
@@ -60,23 +48,26 @@ class EmpleadosController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $employeesFile['data'] = $form->get('archivo')->getData();
             if($employeesFile['data']) {
-                $employeesFile['name'] = $empleadosFunciones->cargar($employeesFile['data'], $this->uploadDirectory);
+                $employeesFile['name'] = $this->empleadosFunciones->cargar($employeesFile['data'], $this->uploadDirectory);
             }
 
-            $datos = $empleadosFunciones->extraer($employeesFile['name'], $this->uploadDirectory);
-            $colaboradores = $empleadosFunciones->listadoColaboradores($datos);
-            $registro = $empleadosFunciones->registroMasivo($colaboradores);
+            $datos = $this->empleadosFunciones->extraer($employeesFile['name'], $this->uploadDirectory);
+            $colaboradores = $this->empleadosFunciones->listadoColaboradores($datos);
+            $registro = $this->empleadosFunciones->registroMasivo($colaboradores);
 
             $this->addFlash('success', 'El archivo se cargó correctamente: ' . $employeesFile['name']);
             return $this->redirectToRoute('app_empresa_empleados_cargar');
-        }
-
-        return $this->render('empresa/empleados/carga.html.twig', [
-            'form' => $form
+        }        
+        
+        return $this->render('empresa/empleados/index.html.twig', [
+            'form' => $form,
+            'contenido' => [
+                'areas' => $this->empresaFunciones->obtenerAreas($this->empresaFunciones->obtenerEmpresa()),
+                'sedes' => $this->empresaFunciones->obtenerSedes($this->empresaFunciones->obtenerEmpresa())    
+            ]
         ]);
     }
 
-    # Descarga de modelo
     #[Route('/descargar/{archivo}', name: 'descargar')]
     public function descargar($archivo, EmpleadosFunciones $empleadosFunciones): BinaryFileResponse
     {
