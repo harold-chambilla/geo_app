@@ -10,73 +10,73 @@
 {% endblock %}
 
 {% block body_sidebar %}
-<section class="d-flex justify-content-center align-items-center full-height">
-        <div class="container">
-            <div class="row justify-content-center align-items-center" style="padding-bottom:50px;">
+<body style="margin:15px">
+    <section class="d-flex justify-content-center align-items-center full-height distancia" >
                 <div class="container">
-                    <div class="row  justify-content-between">
-                        <!-- Input de Fecha -->
-                        <div class="col-4 d-flex align-items-center justify-content-start margin-black">
-                            <div class="col-2 d-flex align-items-center justify-content-center">
-                                <img src="path/to/lupa.png" alt="">
-                            </div>
-                            <input type="date" class="input-form mg-input2 col-9" style="height: 40px; font-weight: bold;" placeholder="">
+                    <div class="row justify-content-between">
+                    <!-- Input de Fecha -->
+                    <div class="col-md-4 mb-4 d-flex align-items-center">
+                        <div class="col-2 d-flex align-items-center justify-content-center">
                         </div>
-                        
-                        <!-- Botón Buscar e Input Numérico -->
-                        <div class="col-7 d-flex justify-content-end">
-                            <div class="margin-black d-flex align-items-center col-12">
-                                <button class="col-2" style="background-color: #fff; border: none; display: flex; align-items: center;">
-                                    <img src="path/to/lupa.png" alt="">
-                                    <span style="padding: 0 10px; color: #0057A4; font-weight: bold;">Buscar</span>
-                                </button>
-                                <input type="number" class="input-form col-9" style="font-weight: bold;">
-                            </div>
+                        <input type="date" class="input-form mg-input2 col-md-8" style="height: 40px; font-weight: bold;">
+                    </div>
+    
+                    <!-- Botón Buscar e Input Numérico -->
+                    <div class="col-md-8 mb-4 d-flex justify-content-end">
+                        <div class="d-flex align-items-center col-12">
+                            <button class="col-2" style="background-color: #fff; border: none;">
+                                <img src="path/to/lupa.png" alt="Lupa">
+                                <span style="padding-right: 10px; color: #0057A4; font-weight: bold;">Buscar</span>
+                            </button>
+                            <input type="number" class="input-form col-10" style="font-weight: bold;">
                         </div>
                     </div>
-                    <div class="row justify-content-between py-5">
-                        <div class="inputContainer col-md-3 mb-3 ">
-                            <select class="form-control mg-input2 input" placeholder="Area">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label" style="color: #1565D8;">Area</p>
-                        </div>
-                        <div class="inputContainer col-md-3 mb-3 ">
-                            <select class="form-control mg-input2 input" placeholder="Puesto">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label" style="color: #1565D8;">Puesto</p>
-                        </div>
-                        <div class="inputContainer col-md-2 mb-3 ">
-                            <select class="form-control mg-input1 input" placeholder="Estado Ingreso">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label" style="color: #FFC107;">Estado Ingreso</p>
-                        </div>
-                        <div class="inputContainer col-md-2 mb-3">
-                            <select class="form-control mg-input1 input" placeholder="Estado Salida">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label" style="color: #FFC107;">Estado Salida</p>
-                        </div>
-                        <div class="inputContainer col-md-2">
-                            <select class="form-control mg-input2 input" placeholder="Modalidad">
-                                <option value="" disabled selected hidden></option>
-                                <option>Presencial</option>
-                                <option>Virtual</option>
-                                <option>Hibrido</option>
-                            </select>
-                            <p for="" class="label" style="color: #1565D8;">Modalidad</p>
-                        </div>
-                    </div>
+                </div>
+                <div class="row justify-content-between py-5">
+    <div class="inputContainer col-md-3 mb-3">
+        <select class="form-control mg-input2 input">
+            <option value="" disabled selected hidden></option>
+            <option>Administrador</option>
+            <option>Colaborador</option>
+        </select>
+        <label class="label" style="color: #1565D8;">Área</label>
+    </div>
+    <div class="inputContainer col-md-3 mb-3">
+        <select class="form-control mg-input2 input">
+            <option value="" disabled selected hidden></option>
+            <option>Administrador</option>
+            <option>Colaborador</option>
+        </select>
+        <label class="label" style="color: #1565D8;">Puesto</label>
+    </div>
+    <div class="inputContainer col-md-2 mb-3">
+        <select class="form-control mg-input1 input">
+            <option value="" disabled selected hidden></option>
+            <option>Administrador</option>
+            <option>Colaborador</option>
+        </select>
+        <label class="label" style="color: #FFC107;">Estado Ingreso</label>
+    </div>
+    <div class="inputContainer col-md-2 mb-3">
+        <select class="form-control mg-input1 input">
+            <option value="" disabled selected hidden></option>
+            <option>Administrador</option>
+            <option>Colaborador</option>
+        </select>
+        <label class="label" style="color: #FFC107;">Estado Salida</label>
+    </div>
+    <div class="inputContainer col-md-2 mb-3">
+        <select class="form-control mg-input2 input">
+            <option value="" disabled selected hidden></option>
+            <option>Presencial</option>
+            <option>Virtual</option>
+            <option>Híbrido</option>
+        </select>
+        <label class="label" style="color: #1565D8;">Modalidad</label>
+    </div>
+</div>
+
+                    
                     <div class="row py-2">
                         <table class="table custom-table" style="border-collapse: separate; border-spacing: 0; width: 100%; border-radius: 15px; overflow: hidden;">
                             <thead>
@@ -160,5 +160,6 @@
                 </div>
             </div>
         </div>
-    <section>
+    </section>
+</body>
 {% endblock %}
