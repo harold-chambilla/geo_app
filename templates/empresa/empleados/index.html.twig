@@ -1,14 +1,12 @@
 {% extends 'empresa/base.html.twig' %}
 
-{% block title %}Empleados{% endblock %}
+{% block title %}Carga de archivo (Empleados) - EasilyControl!{% endblock %}
 
 {% block css %}
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Empresa/opciones/general.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/Empresa/empleados/empleados_individual.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/empleados/empleados_individual.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/Empresa/empleados/empleados_masivo.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}"> 
 {% endblock %}
 
 {% block body_sidebar %}
@@ -18,138 +16,22 @@
            <div class="tabs">
             <input type="radio" name="tabs" id="tab1" checked="checked" />
             <label for="tab1">Registro individual</label>
-            <div class="tab tab-content ">
-                <h2>Datos del personal</h2>
-                <div class="d-flex justify-content-center align-items-center min-vh-30">               
-                <form class="Cont-Form ">
-                    <div class="form-row">
-                        <div class="inputContainer">
-                            <input type="text" class="input1" placeholder="Nombre">
-                            <p class="label">Nombre</p>
-                        </div>
-                        <div class="inputContainer">
-                            <input type="text" class="input1" placeholder="Apellido">
-                            <p class="label">Apellido</p>
-                        </div>
-                        <div class="inputContainer">
-                            <input type="text" class="input1" placeholder="DNI">
-                            <p class="label">DNI</p>
-                        </div>
-                    </div>
-                
-                    <div class="form-row">
-                        <div class="inputContainer">
-                            <input type="email" class="input3 input1" placeholder="Correo electrónico" >
-                            <p class="label">Correo electrónico</p>
-                        </div>
-                        <div class="inputContainer" >
-                            <input type="date" class="input2 input1" >
-                            <p class="label2 label" >Fecha de nacimiento</p>
-                        </div>
-                        <div class="inputContainer">
-                            <select class="input1">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label">Área</p>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="inputContainer">
-                            <select class="input1">
-                                <option value="" disabled selected hidden></option>
-                                <option>Administrador</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label">Puesto</p>
-                        </div>
-                        <div class="inputContainer ">
-                            <select class="input1">
-                                <option value="" disabled selected hidden></option>
-                                <option>Super-Admin</option>
-                                <option>Administrador</option>
-                                <option>Coordinador</option>
-                                <option>Supervisor</option>
-                                <option>Colaborador</option>
-                            </select>
-                            <p class="label">ROL</p>
-                        </div>
-                        <div class="inputContainer ">
-                            <select class="input1">
-                                <option value="" disabled selected hidden></option>
-                                <option>Miraflores</option>
-                                <option>ATE</option>
-                                <option>La Molina</option>
-                            </select>
-                            <p class="label">Sede</p>
-                        </div>
-                    </div>
-                    <div class="linea-azul"></div>
-                    <div class="form-row">
-                        <div class="inputContainer">
-                            <input type="text" class="input1" placeholder="USUARIO">
-                            <p class="label">Usuario</p>
-                        </div>
-                        <div class="inputContainer ">
-                            <input type="password" class="input1" placeholder="Contraseña">
-                            <p class="label">Contraseña</p>
-                        </div>
-                        <div class="inputContainer ">
-                            <input type="password" class="input1" placeholder="Repetir Contraseña">
-                            <p class="label">Repetir Contraseña</p>
-                        </div>
-                    </div>
-                    <div class="inputContainer">
-                        <span class="checkboxLabel"><input type="checkbox" id="terms" class="checkboxInput">
-                        Acepto los términos y condiciones</span>
-                    </div>
-                    <button type="submit" class="submitBtnA">Registrar</button>
-                </div> 
-                </form>
+            <div class="tab tab-content">
+                <div id="crear_empleado_local" data-contenido="{{ contenido|json_encode }}"></div>
             </div>
-
-
 
             <input type="radio" name="tabs" id="tab2" />
             <label for="tab2">Registro masivo</label>
-            <div class="tab tab-content ">
-                <div class="d-flex justify-content-center align-items-center min-vh-40">
-                <form class="form ">
-                    <div class="form-row" style="margin: 25px 10px; ">
-                        <p class="text1">Descargar Formato</p>
-                        <a class="input_xl" href="{{ asset('archivo.xlsx') }}" download
-                            style="padding: 5px 10px;  border-radius: 10px; font-size: 18px; white-space: nowrap; width: 200px; display: inline-block; text-align: center; line-height: 30px; color: #696F79; border: 2px solid #1565D8; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
-                            Formato_masivo.xlsx
-                        </a>
-                        <img  style="margin: 5px 10px; " src="https://cdn-icons-png.flaticon.com/512/1682/1682612.png" alt="Download icon" width="30">
-                    </div>
-                    <div class="form-row" style="margin: 25px 10px; ">
-                        <p  class="text1" style="text-align: right;">Subir excel</p>
-                        <div class="fileInputWrapper">
-                            <input type="file" id="excelFile" class="fileInput">
-                            <label for="excelFile" class="fileInputLabel"></label>
-                        </div>
-                    </div>
-
-                    <div class="inputContainer">
-                        
-                        <span class="checkboxLabel"><input type="checkbox" id="terms2" class="checkboxInput">Acepto los términos y condiciones</span>
-                    </div>
-                    <button type="submit" class="submitBtnA"  style="margin-bottom: 40px; " >Enviar</button>
-                </form>
-                </div>
+            <div class="tab tab-content">
+                <!-- Contenido removido -->
             </div>
 
             <input type="radio" name="tabs" id="tab3" />
             <label for="tab3">Historial</label>
             <div class="tab tab-content">
-                <h2>Vue</h2>
-                <p>Though developed in the year 2016, this <a href="https://vuejs.org/">JavaScript framework</a> has already made its way into the market and has proven its worth by offering various features. Its dual integration mode is one of the most attractive features for creating high-end SPA or Single Page Application. It is a much reliable platform for developing cross-platform.</p>
+                <!-- Contenido removido -->
             </div>
         </div>
     </div>
 </section>
-
-<div id="crear-empleado"></div>
 {% endblock %}
