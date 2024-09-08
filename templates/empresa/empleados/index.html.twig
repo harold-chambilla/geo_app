@@ -23,9 +23,44 @@
             <input type="radio" name="tabs" id="tab2" />
             <label for="tab2">Registro masivo</label>
             <div class="tab tab-content">
-                <!-- Contenido removido -->
-            </div>
+                <div class="d-flex justify-content-center align-items-center min-vh-40">
+                    <form class="form" action="{{ path('app_empresa_empleados_mostrar') }}" method="post" enctype="multipart/form-data">
+                        {% for flash_message in app.flashes('success') %}
+                            <div class="alert alert-success" role="alert">
+                                {{ flash_message }}
+                            </div>
+                        {% endfor %}
 
+                        <div class="form-row" style="margin: 25px 10px;">
+                            <p class="text1">Descargar Formato</p>
+                            <a class="input_xl" href="{{ path('app_empresa_empleados_descargar', {'archivo': 'formato_empleados.xlsx'}) }}" download
+                                style="padding: 5px 10px; border-radius: 10px; font-size: 18px; white-space: nowrap; width: 200px; display: inline-block; text-align: center; line-height: 30px; color: #696F79; border: 2px solid #1565D8; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                                Formato_masivo.xlsx
+                            </a>
+                            <img style="margin: 5px 10px;" src="https://cdn-icons-png.flaticon.com/512/1682/1682612.png" alt="Download icon" width="30">
+                        </div>
+
+                        <div class="form-row" style="margin: 25px 10px;">
+                            <p class="text1" style="text-align: right;">Subir excel</p>
+                            <div class="fileInputWrapper">
+                                {{ form_widget(form.archivo) }}
+                                {{ form_errors(form.archivo) }}
+                            </div>
+                        </div>
+
+                        <div class="inputContainer">
+                            <span class="checkboxLabel">
+                                {{ form_widget(form.terms, {'attr': {'class': 'checkboxInput'}}) }}
+                                Acepto los términos y condiciones
+                            </span>
+                        </div>
+
+                        {{ form_row(form.cargar, {'attr': {'class': 'submitBtnA', 'style': 'margin-bottom: 40px;'}}) }}
+
+                        {{ form_end(form) }}
+                    </form>
+                </div>
+            </div>
             <input type="radio" name="tabs" id="tab3" />
             <label for="tab3">Historial</label>
             <div class="tab tab-content">

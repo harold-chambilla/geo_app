@@ -3,10 +3,17 @@
 namespace App\Controller\Empresa;
 
 use App\Entity\Colaborador;
+use App\Entity\Empresa;
 use App\Funciones\Empresa\EmpresaFunciones;
+use App\Repository\AreaRepository;
 use App\Repository\AsistenciaRepository;
 use App\Repository\ColaboradorRepository;
+use App\Repository\ConfiguracionAsistenciaRepository;
 use App\Repository\EmpresaRepository;
+use App\Repository\GrupoRepository;
+use App\Repository\HorarioTrabajoRepository;
+use App\Repository\PuestoRepository;
+use App\Repository\SedeRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Func;
@@ -22,7 +29,7 @@ class EmpresaController extends AbstractController
 {
     public function __construct(
         private EmpresaFunciones $empresaFunciones
-    ){}
+    ) {}
 
     #[Route('/', name: 'mostrar')]
     public function index(): Response
@@ -50,7 +57,7 @@ class EmpresaController extends AbstractController
             $asistencias = $colaborador->getColAsistencias();
             $horaTrabajo = $colaborador->getColHorariostrabajo();
             $confAsis = $colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia();
-            
+
             foreach ($confAsis as $conf) {
                 $modalidad = $conf->getCasModalidad();
             }
@@ -71,9 +78,8 @@ class EmpresaController extends AbstractController
                     'hora_extra' => $horaOriginal->diff($asistencia->getAsiHorasalida())->format('%H:%I:%s') ?? null
                 ];
             }
-            
         }
-        
+
 
         return $this->json($asistenciasColaborador, Response::HTTP_OK);
     }
@@ -108,7 +114,8 @@ class EmpresaController extends AbstractController
                     && ($modalidad === null || $colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia()->first()->getCasModalidad() === $modalidad)
                     && ($estadoEntrada === null || $asistencia->getAsiEstadoentrada() === $estadoEntrada)
                     && ($estadoSalida === null || $asistencia->getAsiEstadosalida() === $estadoSalida)
-                    && ($search === null || $this->matchesSearchCriteria($colaborador, $asistencia, $search))) {
+                    && ($search === null || $this->matchesSearchCriteria($colaborador, $asistencia, $search))
+                ) {
                     $asistenciasFiltradas[] = [
                         'nombre' => $colaborador->getColNombres() . ' ' . $colaborador->getColApellidos(),
                         'puesto' => $colaborador->getColPuesto(),
@@ -148,12 +155,12 @@ class EmpresaController extends AbstractController
     //     }
 
     //     $asistenciasColaborador = [];
-        
+
     //     foreach ($colaboradores as $colaborador) {
     //         $asistencias = $colaborador->getColAsistencias();
     //         $horaTrabajo = $colaborador->getColHorariostrabajo();
     //         $confAsis = $colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia();
-            
+
     //         foreach ($confAsis as $conf) {
     //             $modalidad = $conf->getCasModalidad();
     //         }
@@ -161,7 +168,7 @@ class EmpresaController extends AbstractController
     //         foreach ($horaTrabajo as $horaTb) {
     //             $horaOriginal = $horaTb->getHotHorasalida();
     //         }
-            
+
 
     //         foreach ($asistencias as $asistencia) {
     //             if ($asistencia->getAsiFechaentrada()->format('Y-m-d') === $fecha) {
@@ -187,7 +194,7 @@ class EmpresaController extends AbstractController
     // }
 
     #[Route('/api/asistencia/filtr', name: 'api_adm_asistencia_fi', methods: ['GET'])]
-    public function listAsistenciaFilt(ColaboradorRepository $colaboradorRepository,Request $request): JsonResponse 
+    public function listAsistenciaFilt(ColaboradorRepository $colaboradorRepository, Request $request): JsonResponse
     {
         // Obtener los parámetros de filtro
         $area = $request->query->get('area') ?? null;
@@ -214,7 +221,7 @@ class EmpresaController extends AbstractController
             $asistencias = $colaborador->getColAsistencias();
             $horaTrabajo = $colaborador->getColHorariostrabajo();
             $confAsis = $colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia();
-            
+
             foreach ($confAsis as $conf) {
                 $modalidad = $conf->getCasModalidad();
             }
@@ -235,7 +242,6 @@ class EmpresaController extends AbstractController
                     'hora_extra' => $horaOriginal->diff($asistencia->getAsiHorasalida())->format('%H:%I:%s') ?? null
                 ];
             }
-            
         }
 
         return $this->json($asistenciasColaborador, Response::HTTP_OK);
@@ -291,9 +297,9 @@ class EmpresaController extends AbstractController
                 'hora_salida' => $asistencia ? ($asistencia->getAsiHorasalida() ? $asistencia->getAsiHorasalida()->format('H:i:s') : null) : null,
             ];
 
-        // Agregar los datos del colaborador al array
-        // $datosColaboradores[] = $datosColaborador;
-    }
+            // Agregar los datos del colaborador al array
+            // $datosColaboradores[] = $datosColaborador;
+        }
 
         return $this->json($datosColaborador, Response::HTTP_OK);
     }
@@ -307,7 +313,7 @@ class EmpresaController extends AbstractController
         EmpresaRepository $empresaRepository,
     ): JsonResponse {
         $admin = $this->getUser();
-        
+
         if (!$admin) {
             return new JsonResponse(['error' => 'Acceso denegado'], Response::HTTP_UNAUTHORIZED);
         }
@@ -348,21 +354,156 @@ class EmpresaController extends AbstractController
         $nuevoColaborador->setPassword($passwordHasher->hashPassword($nuevoColaborador, $password));
         $nuevoColaborador->setRoles(['ROLE_EMPLEADO']);
         $nuevoColaborador->setColEmpresa($admin->getColEmpresa());
-        
+
         $entityManager->persist($nuevoColaborador);
         $entityManager->flush();
 
         return $this->json(['success' => 'Usuario creado exitosamente'], Response::HTTP_CREATED);
     }
 
+    #[Route('/api/{id}/registros', name: 'api_empresa_registros', methods: ['GET'])]
+    public function obtenerRegistrosPorEmpresa(
+        Empresa $empresa,
+        ColaboradorRepository $colaboradorRepository,
+        AsistenciaRepository $asistenciaRepository,
+        SedeRepository $sedeRepository,
+        GrupoRepository $grupoRepository,
+        ConfiguracionAsistenciaRepository $configuracionAsistenciaRepository,
+        PuestoRepository $puestoRepository,
+        HorarioTrabajoRepository $horarioTrabajoRepository,
+        AreaRepository $areaRepository
+    ): JsonResponse {
+        if (!$empresa) {
+            return new JsonResponse(['error' => 'Empresa no encontrada.'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Obtener los colaboradores asociados con la empresa, ordenados de manera descendente por ID
+        $colaboradores = $colaboradorRepository
+            ->findBy(['col_empresa' => $empresa], ['id' => 'DESC']);
+
+        // Obtener solo los IDs de los colaboradores
+        $colaboradorIds = array_map(function ($colaborador) {
+            $data = [
+                'id' => $colaborador->getId(),
+                'nombres' => $colaborador->getColNombres(),
+            ];
+            return $data;
+        }, $colaboradores);
+
+
+        $colaboradoresData = [];
+
+        foreach ($colaboradores as $colaborador) {
+            // Obtener las asistencias de cada colaborador, ordenadas de manera descendente por ID
+            $data = [
+                'id' => $colaborador->getId(),
+                'nombres' => $colaborador->getColNombres(),
+            ];
+            $asistencias = $asistenciaRepository
+                ->findBy(['asi_colaborador' => $colaborador->getId()], ['id' => 'DESC']);
+
+            // Obtener los IDs de las asistencias
+            $asistenciaIds = array_map(function ($asistencia) {
+                return $asistencia->getId();
+            }, $asistencias);
+
+            // Añadir los datos del colaborador y sus asistencias al arreglo
+            $horariosTrabajo = $horarioTrabajoRepository
+                ->findBy(['hot_colaborador' => $colaborador->getId()], ['id' => 'DESC']);
+
+            // Obtener los IDs de los horarios de trabajo
+            $horarioTrabajoIds = array_map(function ($horario) {
+                return $horario->getId();
+            }, $horariosTrabajo);
+
+            // Obtener el puesto del colaborador (asumimos que cada colaborador tiene un puesto)
+            $puesto = $colaborador->getColPuesto(); // Asegúrate de que este método existe en la entidad `Colaborador`
+            $puestoId = $puesto ? $puesto->getId() : null;
+
+            // Añadir los datos del colaborador, sus asistencias, horarios de trabajo y puesto al arreglo
+            $colaboradoresData[] = [
+                // 'colaborador_id' => $colaborador->getId(),
+                'colaborador_id' => $data,
+                'asistencias' => $asistenciaIds,
+                'horarios_trabajo' => $horarioTrabajoIds,
+                'puesto_id' => $puestoId,
+            ];
+        }
+
+        $asistencias = $asistenciaRepository
+            ->createQueryBuilder('a')
+            ->where('a.asi_colaborador IN (:colaboradorIds)')
+            ->setParameter('colaboradorIds', $colaboradorIds)
+            ->orderBy('a.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $asistenciaIds = array_map(function ($asistencia) {
+            return $asistencia->getId();
+        }, $asistencias);
+
+        $sedes = $sedeRepository->findBy(['sed_empresa' => $empresa], ['id' => 'DESC']);
+
+        $sedeIds = array_map(function ($sede) {
+            return $sede->getId();
+        }, $sedes);
+
+        $grupos = $grupoRepository->findBy(['grp_empresa' => $empresa], ['id' => 'DESC']);
+
+        $grupoIds = array_map(function ($grupo) {
+            return $grupo->getId();
+        }, $grupos);
+
+        $areas = $areaRepository
+            ->findBy(['ara_empresa' => $empresa], ['id' => 'DESC']);
+
+        $areasData = [];
+
+        foreach ($areas as $area) {
+            // Obtener los puestos asociados con el área
+            $puestos = $puestoRepository
+                ->findBy(['pst_area' => $area], ['id' => 'DESC']);
+
+            // Obtener los IDs de los puestos
+            $puestoIds = array_map(function ($puesto) {
+                return $puesto->getId();
+            }, $puestos);
+
+            // Añadir los datos del área y sus puestos al arreglo
+            $areasData[] = [
+                'area_id' => $area->getId(),
+                'puestos' => $puestoIds,
+            ];
+        }
+
+        $configuracionesAsistencia =  $configuracionAsistenciaRepository
+            ->findBy(['cas_empresa' => $empresa], ['id' => 'DESC']);
+
+        $configuracionAsistenciaIds = array_map(function ($configuracionAsistencia) {
+            return $configuracionAsistencia->getId();
+        }, $configuracionesAsistencia);
+
+        $data = [
+            'empresa_id' => $empresa->getId(),
+            // 'colaboradores' => $colaboradorIds,
+            'colaboradoresData' => $colaboradoresData,
+            'asistencias' => $asistenciaIds,
+            'sedes' => $sedeIds,
+            'grupos' => $grupoIds,
+            'areas' => $areasData,
+            'configuraciones_asistencia' => $configuracionAsistenciaIds,
+        ];
+
+        return $this->json($data);
+    }
+
     private function matchesSearchCriteria($colaborador, $asistencia, $search)
     {
         return !$search || stripos($asistencia->getAsiEstadoentrada(), $search) !== false ||
-        stripos($asistencia->getAsiEstadosalida(), $search) !== false ||
-        stripos($asistencia->getAsiFechaentrada()->format('Y-m-d'), $search) !== false ||
-        stripos($colaborador->getColPuesto(), $search) !== false ||
-        stripos($colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia()->first()->getCasModalidad(), $search) !== false ||
-        stripos($colaborador->getColArea(), $search) !== false
-        ;
+            stripos($asistencia->getAsiEstadosalida(), $search) !== false ||
+            stripos($asistencia->getAsiFechaentrada()->format('Y-m-d'), $search) !== false ||
+            stripos($colaborador->getColPuesto(), $search) !== false ||
+            stripos($colaborador->getColEmpresa()->getEmpConfiguracionesAsistencia()->first()->getCasModalidad(), $search) !== false ||
+            stripos($colaborador->getColArea(), $search) !== false;
     }
 }
