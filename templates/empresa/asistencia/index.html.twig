@@ -10,156 +10,215 @@
 {% endblock %}
 
 {% block body_sidebar %}
-<body style="margin:15px">
-    <section class="d-flex justify-content-center align-items-center full-height distancia" >
-                <div class="container">
-                    <div class="row justify-content-between">
-                    <!-- Input de Fecha -->
-                    <div class="col-md-4 mb-4 d-flex align-items-center">
-                        <div class="col-2 d-flex align-items-center justify-content-center">
-                        </div>
-                        <input type="date" class="input-form mg-input2 col-md-8" style="height: 40px; font-weight: bold;">
+<body >
+     <main class=" main-container d-flex justify-content-center align-items-center">
+        <div class="cont-Principal">
+            <section class="distancia container-fluid py-4 " style="margin:10px">
+                <div class="row justify-content-between d-flex align-items-center justify-content-center">
+                    <!--- Input de Fecha -->
+                    <div class="col-4 d-flex justify-content-center align-items-center p-0 margin-black">
+                        <input type="date" class="input-form input-cln" style="flex-grow: 1; font-weight: bold; text-align: center;">
                     </div>
-    
-                    <!-- Botón Buscar e Input Numérico -->
-                    <div class="col-md-8 mb-4 d-flex justify-content-end">
-                        <div class="d-flex align-items-center col-12">
-                            <button class="col-2" style="background-color: #fff; border: none;">
-                                <img src="path/to/lupa.png" alt="Lupa">
-                                <span style="padding-right: 10px; color: #0057A4; font-weight: bold;">Buscar</span>
+                            
+                    <!--Botón Buscar e Input Numérico -->
+                    <div class="col-7 d-flex justify-content-center align-items-center p-0 margin-black">
+                            <button class="d-flex align-items-center justify-content-center" style="background-color: #fff; border: none;">
+                                <img src="path/to/lupa.png" alt="" style="width: 10px;">
+                                <span style="color: #0057A4; font-weight: bold; width:95%;" class="input-buscar">Buscar</span>
                             </button>
-                            <input type="number" class="input-form col-10" style="font-weight: bold;">
-                        </div>
+                            <input type="number" class="input-form" style="font-weight: bold; width: calc(120% - 70px);    margin-right: 10px;">
                     </div>
                 </div>
-                <div class="row justify-content-between py-5">
-    <div class="inputContainer col-md-3 mb-3">
-        <select class="form-control mg-input2 input">
-            <option value="" disabled selected hidden></option>
-            <option>Administrador</option>
-            <option>Colaborador</option>
-        </select>
-        <label class="label" style="color: #1565D8;">Área</label>
-    </div>
-    <div class="inputContainer col-md-3 mb-3">
-        <select class="form-control mg-input2 input">
-            <option value="" disabled selected hidden></option>
-            <option>Administrador</option>
-            <option>Colaborador</option>
-        </select>
-        <label class="label" style="color: #1565D8;">Puesto</label>
-    </div>
-    <div class="inputContainer col-md-2 mb-3">
-        <select class="form-control mg-input1 input">
-            <option value="" disabled selected hidden></option>
-            <option>Administrador</option>
-            <option>Colaborador</option>
-        </select>
-        <label class="label" style="color: #FFC107;">Estado Ingreso</label>
-    </div>
-    <div class="inputContainer col-md-2 mb-3">
-        <select class="form-control mg-input1 input">
-            <option value="" disabled selected hidden></option>
-            <option>Administrador</option>
-            <option>Colaborador</option>
-        </select>
-        <label class="label" style="color: #FFC107;">Estado Salida</label>
-    </div>
-    <div class="inputContainer col-md-2 mb-3">
-        <select class="form-control mg-input2 input">
-            <option value="" disabled selected hidden></option>
-            <option>Presencial</option>
-            <option>Virtual</option>
-            <option>Híbrido</option>
-        </select>
-        <label class="label" style="color: #1565D8;">Modalidad</label>
+            </section>
+            <section class=" distancia container-fluid py-2">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="inputContainer col-11 col-md-3 mb-3">
+                            <select class="form-control mg-input2 input" placeholder="Area">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label text-primary">Area</p>
+                        </div>
+                        <div class="inputContainer col-11 col-md-3 mb-3">
+                            <select class="form-control mg-input2 input" placeholder="Puesto">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label" style="color: #1565D8;">Puesto</p>
+                        </div>
+                        <div class="inputContainer col-11 col-md-2 mb-3">
+                            <select class="form-control mg-input1 input" placeholder="Ingreso">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label" style="color: #FFC107;">Ingreso</p>
+                        </div>
+                        <div class="inputContainer col-11 col-md-2 mb-3">
+                            <select class="form-control mg-input1 input" placeholder="Salida">
+                                <option value="" disabled selected hidden></option>
+                                <option>Administrador</option>
+                                <option>Colaborador</option>
+                            </select>
+                            <p class="label" style="color: #FFC107;">Salida</p>
+                        </div>
+                        <div class="inputContainer col-11 col-md-2 mb-3">
+                            <select class="form-control mg-input2 input" placeholder="Modo">
+                                <option value="" disabled selected hidden></option>
+                                <option>Presencial</option>
+                                <option>Virtual</option>
+                                <option>Hibrido</option>
+                            </select>
+                            <p class="label" style="color: #1565D8;">Modo</p>
+                        </div>
+                    </div>    
+            </section>
+            <section class="distancia container-fluid py-2">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="table-container ">
+                            <table class="table custom-table" style="border-collapse: separate; border-spacing: 0; border-radius: 15px; overflow: hidden;">
+                                <thead>
+                                    <tr>
+                                        <th class=" d-md-table-cell">Nombre</th>
+                                        <th class="d-none d-md-table-cell">Puesto</th>
+                                        <th class="d-none d-md-table-cell">Área</th>
+                                        <th class=" d-md-table-cell">Fecha</th>
+                                        <th class=" d-md-table-cell">Ingreso</th>
+                                        <th class=" d-md-table-cell">Salida</th>
+                                        <th class="d-none d-md-table-cell">Modalidad</th>
+                                        <th class="d-none d-md-table-cell">H. Extra</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="d-md-table-cell" onclick="openModal('Juan Pérez')">Juan Pérez</td>
+                                        <td class="d-none d-md-table-cell">Gerente</td>
+                                        <td class="d-none d-md-table-cell">Administración</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-08-10</td>
+                                        <td class="d-none d-md-table-cell">Presencial</td>
+                                        <td class="d-none d-md-table-cell">5 horas</td>
+                                    </tr>
+                                    <tr>
+                                        <td class=" d-md-table-cell">María López</td>
+                                        <td class="d-none d-md-table-cell">Analista</td>
+                                        <td class="d-none d-md-table-cell">Finanzas</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-07-15</td>
+                                        <td class=" d-md-table-cell">2024-07-25</td>
+                                        <td class="d-none d-md-table-cell">Remoto</td>
+                                        <td class="d-none d-md-table-cell">2 horas</td>
+                                    </tr>
+                                    <tr>
+                                        <td class=" d-md-table-cell">Juan Pérez</td>
+                                        <td class="d-none d-md-table-cell">Gerente</td>
+                                        <td class="d-none d-md-table-cell">Administración</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-08-10</td>
+                                        <td class="d-none d-md-table-cell">Presencial</td>
+                                        <td class="d-none d-md-table-cell">5 horas</td>
+                                    </tr>
+                                    <tr>
+                                        <td class=" d-md-table-cell">María López</td>
+                                        <td class="d-none d-md-table-cell">Analista</td>
+                                        <td class="d-none d-md-table-cell">Finanzas</td>
+                                        <td class=" d-md-table-cell">2024-08-01</td>
+                                        <td class=" d-md-table-cell">2024-07-15</td>
+                                        <td class=" d-md-table-cell">2024-07-25</td>
+                                        <td class="d-none d-md-table-cell">Remoto</td>
+                                        <td class="d-none d-md-table-cell">2 horas</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end py-2" >
+                        <div class="pagination-container d-flex align-items-center" >
+                            <a href="#" class="pagination-link">Anterior</a>
+                            <span class="pagination-number active">1</span>
+                            <a href="#" class="pagination-link">Después</a>
+                        </div>
+                    </div>                
+                </div>
+            </section>
+        </div>
+        <!-- Modal -->
+<div id="myModal" class="modal justify-content-center align-items-center distancia-modal">
+    <div class="modal-content">
+        <section class="cabecera-zl">
+            <div class="d-flex flex-column">
+                <span class="Modalidad">INGRESO PUNTUAL</span>
+                <span class="Nombre">Juan Marco Sanchez Rodriguez</span>
+            </div>
+            <span class="close" style="font-size: 24px; cursor: pointer;">&times;</span>
+        </section>
+    
+        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center my-3">
+            <section class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="cuerpo-bl" style="border: #000 2px solid; height: 100%; display: flex; justify-content: center; align-items: center;">
+                    <img src="ruta_de_la_imagen" alt="Foto" style="width: 233px; height: 217px;">
+                </div>
+            </section>
+            <section class="col-md-6 d-flex flex-column justify-content-center align-items-start">
+                <div class="d-flex align-items-center " style="color: #111111d0;">DNI: <p class="mb-0 ms-2">78674567</p></div>
+                <div class="d-flex align-items-center " style="color: #111111d0;">Hora de entrada indicada: <p class="mb-0 ms-2">8:30</p></div>
+                <div class="d-flex align-items-center my-3" style="color: #0057A4;">Hora de marcación: <p class="mb-0 ms-2">8:30</p></div>
+                <div class="d-flex align-items-center mb-2" style="color: #0057A4;">Fecha: <p class="mb-0 ms-2">21/02/2024</p></div>
+                <div class="d-flex align-items-center " style="color: #0057A4;">Ubicación de marcación:</div>
+                <div style="text-align: right; width: 100%;" class="my-2">
+                <button class="Cl-boton1 py-2" style="text-align:center; width: 45%; border-radius: 15px;" >Mapa</button>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 
-                    
-                    <div class="row py-2">
-                        <table class="table custom-table" style="border-collapse: separate; border-spacing: 0; width: 100%; border-radius: 15px; overflow: hidden;">
-                            <thead>
-                                <tr >
-                                    <th  >Nombre</th>
-                                    <th>Puesto</th>
-                                    <th>Área</th>
-                                    <th>Fecha Ingreso</th>
-                                    <th>Salida</th>
-                                    <th>Modalidad</th>
-                                    <th>H. Extra</th>
-                                </tr>
-                            </thead>
-                            <tbody >
-                                <tr>
-                                    <td>Juan Pérez</td>
-                                    <td>Gerente</td>
-                                    <td>Administración</td>
-                                    <td>2024-08-01</td>
-                                    <td>2024-08-10</td>
-                                    <td>Presencial</td>
-                                    <td>5 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                                <tr>
-                                    <td>María López</td>
-                                    <td>Analista</td>
-                                    <td>Finanzas</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-25</td>
-                                    <td>Remoto</td>
-                                    <td>2 horas</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </main>
+<script>
+        // Abrir el modal y mostrar el nombre correspondiente
+    function openModal(name) {
+        document.getElementById('myModal').style.display = "block";
+        document.getElementById('modalName').innerText = name;
+    }
+
+    // Cerrar el modal cuando se hace clic en "X"
+    window.onload = function() {
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('myModal').style.display = "none";
+        };
+    }
+
+    // Cerrar el modal si se hace clic fuera de él
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('myModal')) {
+            document.getElementById('myModal').style.display = "none";
+        }
+    }
+
+
+
+    const labels = document.querySelectorAll('.label');
+
+    labels.forEach(label => {
+        const inputField = label.previousElementSibling;
+
+        inputField.addEventListener('focus', () => {
+            label.classList.add('fixed');
+        });
+
+        inputField.addEventListener('blur', () => {
+            if (inputField.value === '') {
+                label.classList.remove('fixed');
+            }
+        });
+    });
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>   
 </body>
 {% endblock %}

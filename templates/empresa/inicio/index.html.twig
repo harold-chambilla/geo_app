@@ -1,64 +1,66 @@
 {% extends 'empresa/base.html.twig' %}
 
-{% block title %}Horario{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block css %}
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
     <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/empresa/inicio/style_inicio.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
 {% endblock %}
-
 {% block body_sidebar %}
-<body style="margin:15px">
- <section class="d-flex justify-content-center align-items-center full-height distancia" >
-        <div class="container py-3" style="max-width: 1100px; border: 2px solid #0057A4;border-radius: 15px;}">
-            <div class="row">
-                <!-- Primera fila -->
-                <div class="col-12 col-md-4 d-flex justify-content-center my-2 mt-md-5 mt-3">
-                    <a class="btn cuadrado-btn" href="{{ path('app_empresa_asistencia_mostrar') }}">
-                        Asistencia
-                        <div class="triangle" style="color: #0057A4;"></div>
-                    </a>
+<body> 
+    <main class=" main-container d-flex justify-content-center align-items-center">
+        <div class="cont-Principal" >
+            <section class="distancia container-fluid" >
+                <div class="brd-azul my-3" >
+                    <div class="row">
+                        <!-- Primera fila -->
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio" >
+                            <a class="btn cuadrado-btn" href="{{ path('app_empresa_asistencia_mostrar') }}">
+                                Asistencia
+                                <div class="triangle" style="color: #0057A4;"></div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
+                            <a class="btn cuadrado-btn" href="{{ path('app_empresa_permisos_mostrar') }}">
+                                Permisos
+                                <div class="triangle" style="color: #A4007E;"></div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
+                            <a class="btn cuadrado-btn" href="{{ path('app_empresa_vacaciones_mostrar') }}">
+                                Vacaciones
+                                <div class="triangle" style="color: #FFC107;"></div>
+                            </a>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <!-- Segunda fila -->
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
+                            <a class="btn cuadrado-btn" href="{{ path('app_empresa_empleados_mostrar') }}">
+                                Empleados
+                                <div class="triangle" style="color: #384AEE;"></div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
+                            <a class="btn cuadrado-btn" href="{{ path('app_empresa_horario_mostrar') }}">
+                                Horario
+                                <div class="triangle" style="color: #00A3FF;"></div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
+                            <a class="btn cuadrado-btn">
+                                Reporte
+                                <div class="triangle" style="color: #098D0B;"></div>
+                            </a>
+                        </div>
+                    
+                    </div>
                 </div>
-                <div class="col-12 col-md-4 d-flex justify-content-center my-2 mt-md-5 mt-3">
-                    <a class="btn cuadrado-btn" href="{{ path('app_empresa_permisos_mostrar') }}">
-                        Permisos
-                        <div class="triangle" style="color: #A4007E;"></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-4 d-flex justify-content-center my-2 mt-md-5 mt-3">
-                    <a class="btn cuadrado-btn" href="{{ path('app_empresa_vacaciones_mostrar') }}">
-                        Vacaciones
-                        <div class="triangle" style="color: #FFC107;"></div>
-                    </a>
-                </div>
-    
-                <!-- Segunda fila -->
-                <div class="col-12 col-md-4 d-flex justify-content-center my-3">
-                    <a class="btn cuadrado-btn" href="{{ path('app_empresa_empleados_mostrar') }}">
-                        Empleados
-                        <div class="triangle" style="color: #384AEE;"></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-4 d-flex justify-content-center my-3">
-                    <a class="btn cuadrado-btn" href="{{ path('app_empresa_horario_mostrar') }}">
-                        Horario
-                        <div class="triangle" style="color: #00A3FF;"></div>
-                    </a>
-                </div>
-                <div class="col-12 col-md-4 d-flex justify-content-center my-3">
-                    <a class="btn cuadrado-btn">
-                        Reporte
-                        <div class="triangle" style="color: #098D0B;"></div>
-                    </a>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
+    </main>
 </body>
-{% endblock %}
-
-{% block js %}
-    <script src="{{ asset('js/calendario/calendario.js') }}"></script>
 {% endblock %}
