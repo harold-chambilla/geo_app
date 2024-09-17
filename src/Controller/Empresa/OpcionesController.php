@@ -37,19 +37,6 @@ class OpcionesController extends AbstractController
 		return $this->json(null, JsonResponse::HTTP_NOT_FOUND);	
 	}
 
-	//Editar RUC
-	#[Route('/api/ruc/modificar', name: 'modificar_ruc', methods: ['POST'])]
-	public function modificarRuc(Request $request): JsonResponse
-	{	
-		$datos = json_decode($request->getContent(), true);
-		$empresa = $this->empresaFunciones->obtenerEmpresa();
-		if($datos['ruc']){
-			$this->empresaFunciones->actualizarRUC($empresa, $datos['ruc']);
-			return $this->json(['message' => 'RUC modificado correctamente'], JsonResponse::HTTP_OK);
-		}
-		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
-	}
-
 	//Obtener razon social
 	#[Route('/api/razonsocial', name: 'obtener_razonsocial')]
 	public function obtenerRazonSocial(): JsonResponse
@@ -60,19 +47,6 @@ class OpcionesController extends AbstractController
 		return $this->json(null, JsonResponse::HTTP_NOT_FOUND);
 	}
 
-	//Editar Razon social
-	#[Route('/api/razonsocial/modificar', name: 'modificar_razonsocial', methods: ['POST'])]
-	public function modificarRazonSocial(Request $request): JsonResponse
-	{	
-		$datos = json_decode($request->getContent(), true);
-		$empresa = $this->empresaFunciones->obtenerEmpresa();
-		if($datos['razonsocial']){
-			$this->empresaFunciones->actualizarRazonSocial($empresa, $datos['razonsocial']);
-			return $this->json(['message' => 'Razon social modificada correctamente'], JsonResponse::HTTP_OK);
-		}
-		return $this->json(null, JsonResponse::HTTP_NOT_MODIFIED);
-	}
-	
 	//Obtener sedes y sucursales
 	#[Route('/api/sedes', name: 'obtener_sedes')]
 	public function obtenerSedes(): JsonResponse
@@ -82,7 +56,4 @@ class OpcionesController extends AbstractController
 		}
 		return $this->json(null, JsonResponse::HTTP_NOT_FOUND);
 	}
-
-	//Editar sedes y sucursales
-	
 }

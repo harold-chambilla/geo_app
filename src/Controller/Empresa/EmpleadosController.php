@@ -132,4 +132,22 @@ class EmpleadosController extends AbstractController
 
         return $this->json(['success' => 'Usuario creado exitosamente'], Response::HTTP_CREATED);
     }
+
+    #[Route('/api/listado', name: 'api_listado', methods: ['GET'])]
+    public function listarRegistros(EntityManagerInterface $em): JsonResponse
+    {
+        $admin = $this->getUser();
+        $admin = $this->colaboradorRepository->findOneBy(['col_nombreusuario' => $admin->getUserIdentifier()]);
+
+        $empresa = $admin->getColEmpresa();
+
+        if (!$empresa) {
+            return new JsonResponse(['error' => 'Empresa no encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Llamar a la función obtenerRegistros y devolver la respuesta como JSON
+        $colaboradoresArray = $this->empleadosFunciones->obtenerRegistros($empresa);
+
+        return new JsonResponse($colaboradoresArray, Response::HTTP_OK);
+    }
 }

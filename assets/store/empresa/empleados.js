@@ -3,6 +3,7 @@ import axios from "axios";
 
 export const empleadosStore = defineStore('empleados', {
     state: () => ({
+        empleados: [],
         error: null,
     }),
     getters: {},
@@ -30,5 +31,15 @@ export const empleadosStore = defineStore('empleados', {
                     this.user = null;
               }
         },
+        async fetchEmpleados() {
+            try {
+                const response = await axios.get('/empresa/empleados/api/listado');
+                this.empleados = response.data;
+                this.error = null;
+            } catch (error) {
+                this.error = error.response?.data?.message || 'Error al obtener el listado de empleados';
+                this.empleados = [];
+            }
+        }
     }
 })

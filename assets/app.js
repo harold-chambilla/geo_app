@@ -32,6 +32,8 @@ import Horario from "../assets/vue/controllers/empresa/horario/secciones/Horario
 import APITester from "../assets/vue/controllers/empresa/APITester.vue";
 import CrearEmpleado from './vue/controllers/empresa/empleados/CrearEmpleado.vue';
 import CrearEmpleadoLocal from './vue/controllers/empresa/empleados/CrearEmpleadoLocal.vue';
+import ListarEmpleados from './vue/controllers/empresa/empleados/ListarEmpleados.vue';
+import VerEmpresa from './vue/controllers/empresa/opciones/VerEmpresa.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -42,6 +44,8 @@ const horario = createApp(Horario);
 const api_tester = createApp(APITester);
 const crearEmpleado = createApp(CrearEmpleado);
 const crear_empleado_local = createApp(CrearEmpleadoLocal);
+const listar_empleados = createApp(ListarEmpleados);
+const ver_empresa = createApp(VerEmpresa);
 
 app.use(pinia);
 app.mount('#app');
@@ -69,3 +73,8 @@ api_tester.mount('#api_tester');
 crear_empleado_local.use(pinia);
 crear_empleado_local.mount('#crear_empleado_local');
 
+listar_empleados.use(pinia);
+listar_empleados.mount('#listar_empleados');
+
+ver_empresa.use(pinia);
+ver_empresa.mount('#ver_empresa');

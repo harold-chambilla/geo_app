@@ -25,27 +25,11 @@
                 <div class="tab tab-content">
                         <div class="conte1">
                             <div class="col-md-5 d-flex justify-content-center align-items-center min-vh-40">
-                                <img class="Img_empresa" src="{{ asset('images.jpg') }}">
+                                <img class="Img_empresa" src="{{ asset('img/logo/logo.png') }}">
                             </div>
                             <div class="col-md-7">
-                                <div class="justify-content-center align-items-center min-vh-40" >
-                                        <div class="form-row d-flex " style="align-items: center; ">
-                                            <p class="Plbra3">Ruc:</p>
-                                            <input type="text" class="inputContainer1 " value="Videojuegos" readonly>
-                                            <button class="img_ico">
-                                                <img src="{{ asset('editar.png') }}" alt="Editar">
-                                            </button>
-                                        </div>
-                                        <br>
-                                        <div class="form-row d-flex " style="align-items: center; ">
-                                            <p class="Plbra3">Razon social :</p>
-                                            <input type="text" class="inputContainer1 " value="Videojuegos" readonly>
-                                            <button class="img_ico">
-                                                <img src="{{ asset('editar.png') }}" alt="Editar">
-                                            </button>
-                                    </div>
-                                </div>
-                            </div>
+                                <div id="ver_empresa"></div> 
+                            </div> 
                         </div>
                             <span class="Ttl1">SUCURSALES</span>
                             <div class="linea-azul"></div>
@@ -142,7 +126,7 @@
 
 											<div class="col-md-6  ">
 												<div class="conten ">
-													<div class="Plbra2 " for="direccionInput">Area </div>
+													<div class="Plbra2 " for="direccionInput">Motivo </div>
 													<input type="text" id="textoArea1" placeholder="Dirección" class="input-linea2">
 												</div>
 												<button id="nuevoBoton" class="Btn2">Agregar</button>
@@ -234,7 +218,7 @@
 {% endblock %}
 
 
-{% block javascripts %}
+{% block js %}
     <script>
         // Función para mostrar el modal
         function mostrarPopup() {

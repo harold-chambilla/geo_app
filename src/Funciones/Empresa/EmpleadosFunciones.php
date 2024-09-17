@@ -3,6 +3,7 @@
 namespace App\Funciones\Empresa;
 
 use App\Entity\Colaborador;
+use App\Entity\Empresa;
 use App\Repository\ColaboradorRepository;
 use App\Repository\PuestoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -413,5 +414,31 @@ class EmpleadosFunciones
             }
         }
         return $colaboradores;
+    }
+
+    public function obtenerRegistros(Empresa $empresa): array
+    {
+        $colaboradores = $this->colaboradorRepository->findBy(
+            ['col_empresa' => $empresa],
+            ['id' => 'DESC']
+        ); 
+
+        $colaboradoresArray = [];
+        foreach ($colaboradores as $colaborador) {
+            // Puedes acceder a las propiedades del colaborador según tus necesidades
+            $colaboradoresArray[] = [
+                'id' => $colaborador->getId(),
+                'nombres' => $colaborador->getColNombres(),
+                'apellidos' => $colaborador->getColApellidos(),
+                'dni' => $colaborador->getColDninit(),
+                'fechanacimiento' => $colaborador->getColFechanacimiento()?->format('Y-m-d'),
+                'area' => $colaborador->getColArea(),
+                'correo' => $colaborador->getColCorreoelectronico(),
+                'nombreusuario' => $colaborador->getColNombreusuario(),
+                'roles' => $colaborador->getRoles(),
+                'eliminado' => $colaborador->isColEliminado(),
+            ];
+        }
+        return $colaboradoresArray;    
     }
 }
