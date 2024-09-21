@@ -14,13 +14,37 @@ const pinia = createPinia();
 
 const googleMapsApiKey = 'AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q';
 const googleMapsScript = document.createElement('script');
-googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=geometry&callback=initMap`;
+googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places,geometry`;
+// googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places`;
 googleMapsScript.async = true;
 googleMapsScript.defer = true;
 
 document.body.appendChild(googleMapsScript);
-window.initMap = () => {}
+// window.initMap = () => {}
 
+
+    // assets/app.js
+
+// export const loadGoogleMapsScript = () => {
+//     return new Promise((resolve, reject) => {
+//       // Verificamos si el script ya fue cargado
+//       const existingScript = document.getElementById('googleMaps');
+  
+//       if (!existingScript) {
+//         // Si no está cargado, creamos el script dinámicamente
+//         const script = document.createElement('script');
+//         script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q&libraries=places,geometry`;
+//         script.id = 'googleMaps';
+//         script.onload = resolve;
+//         script.onerror = reject;
+//         document.body.appendChild(script);
+//       } else {
+//         // Si ya está cargado, resolvemos la promesa directamente
+//         resolve();
+//       }
+//     });
+//   };
+  
 // Importamos nuestras secciones y componentes
 
 import App from "../assets/vue/controllers/test/App.vue";
@@ -34,6 +58,7 @@ import CrearEmpleado from './vue/controllers/empresa/empleados/CrearEmpleado.vue
 import CrearEmpleadoLocal from './vue/controllers/empresa/empleados/CrearEmpleadoLocal.vue';
 import ListarEmpleados from './vue/controllers/empresa/empleados/ListarEmpleados.vue';
 import VerEmpresa from './vue/controllers/empresa/opciones/VerEmpresa.vue';
+import Map_Geocoding from './vue/controllers/test/Map_Geocoding.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -46,6 +71,8 @@ const crearEmpleado = createApp(CrearEmpleado);
 const crear_empleado_local = createApp(CrearEmpleadoLocal);
 const listar_empleados = createApp(ListarEmpleados);
 const ver_empresa = createApp(VerEmpresa);
+
+const mapGeo = createApp(Map_Geocoding);
 
 app.use(pinia);
 app.mount('#app');
@@ -78,3 +105,6 @@ listar_empleados.mount('#listar_empleados');
 
 ver_empresa.use(pinia);
 ver_empresa.mount('#ver_empresa');
+
+mapGeo.use(pinia);
+mapGeo.mount('#mapGeo');
