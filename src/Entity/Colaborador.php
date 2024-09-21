@@ -66,10 +66,17 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'pst_colaboradores')]
     private ?Puesto $col_puesto = null;
 
+    /**
+     * @var Collection<int, Permiso>
+     */
+    #[ORM\OneToMany(targetEntity: Permiso::class, mappedBy: 'pms_colaborador')]
+    private Collection $col_permisos;
+
     public function __construct()
     {
         $this->col_asistencias = new ArrayCollection();
         $this->col_horariostrabajo = new ArrayCollection();
+        $this->col_permisos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -318,6 +325,36 @@ class Colaborador implements UserInterface, PasswordAuthenticatedUserInterface
     public function setColPuesto(?Puesto $col_puesto): static
     {
         $this->col_puesto = $col_puesto;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Permiso>
+     */
+    public function getColPermisos(): Collection
+    {
+        return $this->col_permisos;
+    }
+
+    public function addColPermiso(Permiso $colPermiso): static
+    {
+        if (!$this->col_permisos->contains($colPermiso)) {
+            $this->col_permisos->add($colPermiso);
+            $colPermiso->setPmsColaborador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeColPermiso(Permiso $colPermiso): static
+    {
+        if ($this->col_permisos->removeElement($colPermiso)) {
+            // set the owning side to null (unless already changed)
+            if ($colPermiso->getPmsColaborador() === $this) {
+                $colPermiso->setPmsColaborador(null);
+            }
+        }
 
         return $this;
     }

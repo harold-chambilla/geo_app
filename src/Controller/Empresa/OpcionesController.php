@@ -6,10 +6,12 @@ use App\Entity\Colaborador;
 use App\Entity\Empresa;
 use App\Funciones\Empresa\AreaFunciones;
 use App\Funciones\Empresa\EmpresaFunciones;
+use App\Funciones\Empresa\PermisoFunciones;
 use App\Repository\ColaboradorRepository;
 use App\Repository\EmpresaRepository;
 use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +23,9 @@ class OpcionesController extends AbstractController
 	public function __construct(
 		private ColaboradorRepository $colaboradorRepository, 
         private EmpresaFunciones $empresaFunciones,
-        private AreaFunciones $areaFunciones
+        private AreaFunciones $areaFunciones,
+        private PermisoFunciones $permisoFunciones,
+        private Security $security
 	){}
 
 	#[Route('/', name: 'mostrar')]
@@ -98,4 +102,59 @@ class OpcionesController extends AbstractController
             return new JsonResponse(['error' => $resultado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/api/motivos', name: 'obtener_motivos', methods: ['GET'])]
+    public function obtenerMotivos(): JsonResponse
+    {
+        // Obtener el usuario autenticado
+        $usuario = $this->security->getUser();
+
+        // Buscar el colaborador asociado al usuario autenticado
+        $colaborador = $this->colaboradorRepository->findOneBy(['col_nombreusuario' => $usuario->getUserIdentifier()]);
+
+        // Verificar si se encontró el colaborador
+        if (!$colaborador) {
+            return new JsonResponse(['error' => 'Colaborador no encontrado'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Llamar a la función para obtener los motivos del colaborador
+        $motivos = $this->permisoFunciones->obtenerMotivos($colaborador);
+
+        // Retornar los motivos como un JSON
+        return new JsonResponse($motivos, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/insertar-motivos', name: 'insertar_motivos', methods: ['POST'])]
+    public function insertarMotivos(Request $request): JsonResponse
+    {
+        // Obtener el usuario autenticado
+        $usuario = $this->security->getUser();
+
+        // Buscar el colaborador asociado al usuario autenticado
+        $colaborador = $this->colaboradorRepository->findOneBy(['col_nombreusuario' => $usuario->getUserIdentifier()]);
+
+        // Verificar si se encontró el colaborador
+        if (!$colaborador) {
+            return new JsonResponse(['error' => 'Colaborador no encontrado'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Obtener el contenido JSON de la solicitud
+        $data = json_decode($request->getContent(), true);
+
+        // Verificar si se enviaron motivos
+        if (!isset($data['motivos']) || !is_array($data['motivos'])) {
+            return new JsonResponse(['error' => 'Formato inválido. Se requiere un array de motivos.'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // Llamar a la función para agregar los motivos
+        $resultado = $this->permisoFunciones->agregarMotivos($data['motivos'], $colaborador);
+
+        // Verificar si la función de agregarMotivos devuelve 'Ok' o un error
+        if ($resultado === 'Ok') {
+            return new JsonResponse(['message' => 'Motivos agregados correctamente'], JsonResponse::HTTP_OK);
+        } else {
+            return new JsonResponse(['error' => $resultado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
