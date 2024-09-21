@@ -59,6 +59,8 @@ import CrearEmpleadoLocal from './vue/controllers/empresa/empleados/CrearEmplead
 import ListarEmpleados from './vue/controllers/empresa/empleados/ListarEmpleados.vue';
 import VerEmpresa from './vue/controllers/empresa/opciones/VerEmpresa.vue';
 import Map_Geocoding from './vue/controllers/test/Map_Geocoding.vue';
+import Area from './vue/controllers/empresa/opciones/Area.vue';
+import Permisos from './vue/controllers/empresa/opciones/Permisos.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -71,6 +73,8 @@ const crearEmpleado = createApp(CrearEmpleado);
 const crear_empleado_local = createApp(CrearEmpleadoLocal);
 const listar_empleados = createApp(ListarEmpleados);
 const ver_empresa = createApp(VerEmpresa);
+const area = createApp(Area);
+const permisos = createApp(Permisos);
 
 const mapGeo = createApp(Map_Geocoding);
 
@@ -108,3 +112,8 @@ ver_empresa.mount('#ver_empresa');
 
 mapGeo.use(pinia);
 mapGeo.mount('#mapGeo');
+area.use(pinia);
+area.mount("#area");
+
+permisos.use(pinia);
+permisos.mount('#permisos');
