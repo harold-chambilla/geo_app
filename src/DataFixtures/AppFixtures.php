@@ -71,6 +71,16 @@ class AppFixtures extends Fixture
         $grupopredeterminado->setGrpEliminado(0);
         $manager->persist($grupopredeterminado);
 
+        $cas_predeterminado = new ConfiguracionAsistencia();
+        $cas_predeterminado->setCasModalidad('["PRESENCIAL"]');
+        $cas_predeterminado->setCasArea(true);
+        $cas_predeterminado->setCasPuesto(true);
+        $cas_predeterminado->setCasGrupo($grupopredeterminado);
+        $cas_predeterminado->setCasEstado('sistema');
+        $cas_predeterminado->setCasEliminado(false);
+        $cas_predeterminado->setCasPredhorario(true);
+        $manager->persist($cas_predeterminado);
+
         // Configurar las areas y puestos
 
         $areas = [

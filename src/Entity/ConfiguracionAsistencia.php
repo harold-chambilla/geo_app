@@ -28,6 +28,18 @@ class ConfiguracionAsistencia
     #[ORM\ManyToOne(inversedBy: 'sed_configuracionesAsistencia')]
     private ?Sede $cas_sede = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_area = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_puesto = null;
+
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $cas_estado = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_predhorario = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +101,54 @@ class ConfiguracionAsistencia
     public function setCasSede(?Sede $cas_sede): static
     {
         $this->cas_sede = $cas_sede;
+
+        return $this;
+    }
+
+    public function isCasArea(): ?bool
+    {
+        return $this->cas_area;
+    }
+
+    public function setCasArea(?bool $cas_area): static
+    {
+        $this->cas_area = $cas_area;
+
+        return $this;
+    }
+
+    public function isCasPuesto(): ?bool
+    {
+        return $this->cas_puesto;
+    }
+
+    public function setCasPuesto(?bool $cas_puesto): static
+    {
+        $this->cas_puesto = $cas_puesto;
+
+        return $this;
+    }
+
+    public function getCasEstado(): ?string
+    {
+        return $this->cas_estado;
+    }
+
+    public function setCasEstado(?string $cas_estado): static
+    {
+        $this->cas_estado = $cas_estado;
+
+        return $this;
+    }
+
+    public function isCasPredhorario(): ?bool
+    {
+        return $this->cas_predhorario;
+    }
+
+    public function setCasPredhorario(?bool $cas_predhorario): static
+    {
+        $this->cas_predhorario = $cas_predhorario;
 
         return $this;
     }

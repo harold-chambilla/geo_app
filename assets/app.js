@@ -36,6 +36,7 @@ import ListarEmpleados from './vue/controllers/empresa/empleados/ListarEmpleados
 import VerEmpresa from './vue/controllers/empresa/opciones/VerEmpresa.vue';
 import Area from './vue/controllers/empresa/opciones/Area.vue';
 import Permisos from './vue/controllers/empresa/opciones/Permisos.vue';
+import Notificaciones from './vue/controllers/empresa/opciones/Notificaciones.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -50,6 +51,7 @@ const listar_empleados = createApp(ListarEmpleados);
 const ver_empresa = createApp(VerEmpresa);
 const area = createApp(Area);
 const permisos = createApp(Permisos);
+const notificaciones = createApp(Notificaciones);
 
 app.use(pinia);
 app.mount('#app');
@@ -88,3 +90,6 @@ area.mount("#area");
 
 permisos.use(pinia);
 permisos.mount('#permisos');
+
+notificaciones.use(pinia);
+notificaciones.mount('#notificaciones');
