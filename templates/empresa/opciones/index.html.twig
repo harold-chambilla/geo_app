@@ -19,197 +19,162 @@
 <section class="tabs-wrapper">
     <div class="tabs-container">
         <div class="tabs-block">
-           <div class="tabs">
+            <div class="tabs">
                 <input type="radio" name="tabs" id="tab1" checked="checked" />
                 <label for="tab1"> Empresa </label>
                 <div class="tab tab-content">
-                        <div class="conte1">
-                            <div class="col-md-5 d-flex justify-content-center align-items-center min-vh-40">
-                                <img class="Img_empresa" src="{{ asset('img/logo/logo.png') }}">
-                            </div>
-                            <div class="col-md-7">
-                                <div id="ver_empresa"></div> 
-                            </div> 
+                    <div class="conte1">
+                        <div class="col-md-5 d-flex justify-content-center align-items-center min-vh-40">
+                            <img class="Img_empresa" src="{{ asset('img/logo/logo.png') }}">
                         </div>
-                            <span class="Ttl1">SUCURSALES</span>
-                            <div class="linea-azul"></div>
-                            <div class="container_direc">
-                                <table id="tablaSedes">
-                                    <thead>
-                                        <tr>
-                                        <th class="Azul-prin">Sede</th>
-                                        <th class="plomo">Dirección</th>
-                                        <th>Opciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodySedes"></tbody>
-                                </table>
-                                <button class="Btn1" onclick="mostrarPopup()">+ AGREGAR</button>
-                            </div>
+                        <div class="col-md-7">
+                            <div id="ver_empresa"></div> 
+                        </div> 
+                    </div>
+                    <span class="Ttl1">SUCURSALES</span>
+                    <div class="linea-azul"></div>
+                    <div class="container_direc">
+                        <table id="tablaSedes">
+                            <thead>
+                                <tr>
+                                    <th class="Azul-prin">Sede</th>
+                                    <th class="plomo">Dirección</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodySedes"></tbody>
+                        </table>
+                        <button class="Btn1" onclick="mostrarPopup()">+ AGREGAR</button>
+                    </div>
 
-                        <div class="overlay" id="overlay"></div>
-                            <div class="popup" id="popup">
-                                <button class="close" onclick="cerrarPopup()">x</button>
-                                <div id="direccionDiv" style="justify-content: center; align-items: center;">
-                                    <div class="form-row d-flex input-amarillo justify-content-center align-items-center">
-                                                <p class="Plbra3 " for="direccionInput" >UBICACION</p>
-                                                <input type="text" id="direccionInput" placeholder="Dirección" class="inputContainer1 " style="width: 250px; margin-right: 30px;">
-                                                <button class="img_ico" style="20px">
-                                                    <img class="icono" src="{{ asset('lupa.png') }}" alt="Buscar" style="cursor: pointer;" onclick="buscarDireccion()">
-                                                </button>
-                                    </div>
-                                
+                    <div class="overlay" id="overlay"></div>
+                    <div class="popup" id="popup">
+                        <button class="close" onclick="cerrarPopup()">x</button>
+                        <div id="direccionDiv" style="justify-content: center; align-items: center;">
+                            <div class="form-row d-flex input-amarillo justify-content-center align-items-center">
+                                <p class="Plbra3 " for="direccionInput" >UBICACION</p>
+                                <input type="text" id="direccionInput" placeholder="Dirección" class="inputContainer1 " style="width: 250px; margin-right: 30px;">
+                                <button class="img_ico" style="20px">
+                                    <img class="icono" src="{{ asset('lupa.png') }}" alt="Buscar" style="cursor: pointer;" onclick="buscarDireccion()">
+                                </button>
+                            </div>
+                        
+                            <div class="form-row d-flex justify-content-center align-items-center min-vh-40">
+                                <div id="mapa" class="col-md-7" style="padding=20px;"></div>
+                                <div class="col-md-5 justify-content-center align-items" style="padding=20px; height=100px">
+                                    <div class="linea_separadora"></div>
                                     <div class="form-row d-flex justify-content-center align-items-center min-vh-40">
-                                        <div id="mapa" class="col-md-7" style="padding=20px;"></div>
-                                            <div class="col-md-5 justify-content-center align-items" style="padding=20px; height=100px">
-                                                <div class="linea_separadora"></div>
-                                                    <div class="form-row d-flex justify-content-center align-items-center min-vh-40">
-                                                    <div style="float: left;" id="Nom_Empresa">
-                                                    <div for="nombreEmpresa" id="Nom_Empresa" class="Plbra3" style="width:200px">Nombre de la Empresa:</div>
-                                                    <input type="text" id="nombreEmpresa" placeholder="Nombre de la Empresa" class="inputContainer1 ">
-                                                    <button class="Btn2" onclick="guardarSede()">Guardar</button>
-                                                </div>
-                                            </div>
+                                        <div style="float: left;" id="Nom_Empresa">
+                                            <div for="nombreEmpresa" id="Nom_Empresa" class="Plbra3" style="width:200px">Nombre de la Empresa:</div>
+                                            <input type="text" id="nombreEmpresa" placeholder="Nombre de la Empresa" class="inputContainer1 ">
+                                            <button class="Btn2" onclick="guardarSede()">Guardar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                    </div>
                 </div>
-
                 <input type="radio" name="tabs" id="tab2" />
                 <label for="tab2">Personal</label>
-                			<div class="tab tab-content">
-								<div class="contenedor">
-								<div class="area">
-									<div class="Ttl1">AREA Y PUESTO</div>
-									<div class="linea-azul"></div>
-									<div class="row Cont-formulario" style = "padding: 20px 0px">
-										<div class="col-md-6 " >
-											<div class="conten ">
-												<div class="Plbra2" for="direccionInput">Area </div>
-												<input type="text" id="textoArea" placeholder="Dirección" class="input-linea2">
-											</div>
-											<button id="agregarBoton" class="Btn2">Agregar</button>
-										</div>
-										<div class="col-md-6 d-flex justify-content-center align-items-center min-vh-40">
-											<div class=" div-container" id="textoGuardado"></div>
-										</div>
-									</div>
-								</div>
-	
-									<div class="row Cont-formulario" style = "padding: 20px 0px">
-											<div class="col-md-6 ">
-												<div class="conten">
-													<div class="Plbra2" for="direccionInput">Area </div>
-													<select id="selectOpciones">
-														<option value="">Selecciona una opción</option>
-													</select>
-												</div>
-												<div class="conten" style = "padding: 20px 0px">
-													<div class="Plbra2" for="direccionInput">Puesto </div>
-													<input class="input-linea2" type="text" id="inputPuesto" placeholder="Escribe el puesto...">
-												</div>
-												<button class="Btn2" id="guardarPuesto">Agregar</button>
-											</div>
-											<div class="col-md-6 d-flex justify-content-center align-items-center min-vh-40">
-												<div class="div-container" id="puestosGuardados"></div>
-											</div>
-										</div>
-										<button class="Btn2" id="guardarPuesto">Guardar</button>
-									<div class="Ttl1"> PERMISOS</div>
-									<div class="linea-azul"></div >
-										<div class="row Cont-formulario" style = "padding: 20px 0px">
-											<div class="col-md-6 d-flex justify-content-center align-items-center min-vh-40 ">
-												<div class="div-container" id="nuevoTextoGuardado"></div>
-											</div>
-
-											<div class="col-md-6  ">
-												<div class="conten ">
-													<div class="Plbra2 " for="direccionInput">Motivo </div>
-													<input type="text" id="textoArea1" placeholder="Dirección" class="input-linea2">
-												</div>
-												<button id="nuevoBoton" class="Btn2">Agregar</button>
-											</div>
-											
-										</div>	
-									<div class="Ttl1"> ASISTENCIA </div>
-									<div class="linea-azul"></div>
-									<div class="row Cont-formulario" style="padding:20px">
-
-										<div class="col-md-6">
-											<div class="conten-asis">
-												<div class="d-flex Plbra_xtr align-items-center" style="margin:15px; eight:28px;">
-                                                    <p class="Plbra3 col-4" style="display: flex; font-size: 14px ; ">Tmp. de falta</p> 
-                                                    <input type="number" class="imput1 col-4" min="1" max="8" style="margin:2px 5px; height:20px;"> horas 
-                                                </div>
-												<div class="d-flex Plbra_xtr align-items-center"  style="margin:15px ; height:28px;">
-                                                    <p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Tolerancia de ingreso</p> 
-                                                    <input class="imput1 col-4" type="number" min="10" max="120" style="margin:2px 5px; height:20px;"> min. 
-                                                </div>
-												<div class="d-flex Plbra_xtr align-items-center" style="margin:15px; height:28px;">
-                                                    <p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Permitir foto</p> 
-                                                    <input type="checkbox" class="input_xtr col-4"> si 
-                                                    <input type="checkbox" class="input_xtr col-4"> no 
-                                                </div>
-												
-											</div>
-											<button id="nuevoBoton" class="Btn2">Agregar</button>
-										</div>
-										<div class="col-md-6">
-											<div class="conten" style="padding:10px">
-												<div class="Plbra Horas_ext" for=> Permitir horas extra</div>
-												<select id="selectOpciones" class="input_xtr">
-													<option value="">Selecciona una opción</option>
-												</select>
-												
-											</div>
-											<button id="nuevoBoton" class="Btn2">Guardar</button>
-                                            <div class="d-flex justify-content-center align-items-center min-vh-40">
-											    <div class="div-container" id="nuevoTextoGuardado"></div>
-                                            </div>
-										</div>
-
-										
-										
-									</div>	
-							  	</div>
+                <div class="tab tab-content">
+                    <div class="contenedor">
+                        <div id="area"></div>
+                        <div class="Ttl1"> PERMISOS</div>
+                        <div class="linea-azul"></div>
+                        <div class="row Cont-formulario" style="padding: 20px 0px">
+                            <div class="col-md-6 d-flex justify-content-center align-items-center min-vh-40">
+                                <div class="div-container" id="nuevoTextoGuardado"></div>
                             </div>
-                
+
+                            <div class="col-md-6">
+                                <div class="conten">
+                                    <div class="Plbra2" for="direccionInput">Motivo </div>
+                                    <input type="text" id="textoArea1" placeholder="Dirección" class="input-linea2">
+                                </div>
+                                <button id="nuevoBoton" class="Btn2">Agregar</button>
+                            </div>
+                        </div>  
+                        <div class="Ttl1"> ASISTENCIA </div>
+                        <div class="linea-azul"></div>
+                        <div class="row Cont-formulario" style="padding:20px">
+                            <div class="col-md-6">
+                                <div class="conten-asis">
+                                    <div class="d-flex Plbra_xtr align-items-center" style="margin:15px; eight:28px;">
+                                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px;">Tmp. de falta</p> 
+                                        <input type="number" class="imput1 col-4" min="1" max="8" style="margin:2px 5px; height:20px;"> horas 
+                                    </div>
+                                    <div class="d-flex Plbra_xtr align-items-center" style="margin:15px; height:28px;">
+                                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px">Tolerancia de ingreso</p> 
+                                        <input class="imput1 col-4" type="number" min="10" max="120" style="margin:2px 5px; height:20px;"> min. 
+                                    </div>
+                                    <div class="d-flex Plbra_xtr align-items-center" style="margin:15px; height:28px;">
+                                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px;">Permitir foto</p> 
+                                        <input type="checkbox" class="input_xtr col-4"> si 
+                                        <input type="checkbox" class="input_xtr col-4"> no 
+                                    </div>
+                                </div>
+                                <button id="nuevoBoton" class="Btn2">Agregar</button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="conten" style="padding:10px">
+                                    <div class="Plbra Horas_ext" for=""> Permitir horas extra</div>
+                                    <select id="selectOpciones" class="input_xtr">
+                                        <option value="">Selecciona una opción</option>
+                                    </select>
+                                </div>
+                                <button id="nuevoBoton" class="Btn2">Guardar</button>
+                                <div class="d-flex justify-content-center align-items-center min-vh-40">
+                                    <div class="div-container" id="nuevoTextoGuardado"></div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
 
                 <input type="radio" name="tabs" id="tab3" />
                 <label for="tab3">Sistema</label>
-                <div class="tab tab-content ">
+                <div class="tab tab-content">
                     <div class="notificaciones">
-									<div class="Ttl1"> NOTIFICACIONES</div>
-									<div class="linea-azul"></div >
-									<div class="opcion">
-									  
-									  <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío por correo de faltas y tardanzas diaria</div>
-									</div>
-									<div class="opcion">
-									  
-									  <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo de permisos creados </div>
-									</div>
-									<div class="opcion">
-									  
-									  <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo de vacaciones creadas</div>
-									</div>
-									<div class="opcion">
-									  
-									  <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo el registro de su marcación de asistencia</div>
-									</div>
-									<button class="Btn2">Guardar</button>
-								  </div>
-								  <div class="Ttl1"> HORARIO</div>
-									<div class="linea-azul"></div >
-										<div class="Plbra2 Plbra_xtr"><p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Area </p> <input type="checkbox" class="input_xtr"> si <input type="checkbox" class="input_xtr"> no </div>
-										<div class="Plbra2 Plbra_xtr"><p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Puesto</p> <input type="checkbox" class="input_xtr"> si <input type="checkbox" class="input_xtr"> no </div>
-										<div class="Plbra2 Plbra_xtr"><p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Modalidad de trabajo total</p> <input type="checkbox" class="input_xtr"> presencial <input type="checkbox" class="input_xtr"> remoto </div>
-										<div class="Plbra2 Plbra_xtr"><p class="Plbra3 col-4" style="display: flex; font-size: 14px ">Predeterminar horario</p> <input type="checkbox" class="input_xtr"> si <input type="checkbox" class="input_xtr"> no </div>
-									<button class="Btn2">Guardar</button>
-                            </div>
-
+                        <div class="Ttl1"> NOTIFICACIONES</div>
+                        <div class="linea-azul"></div>
+                        <div class="opcion">
+                            <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío por correo de faltas y tardanzas diaria</div>
+                        </div>
+                        <div class="opcion">
+                            <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo de permisos creados </div>
+                        </div>
+                        <div class="opcion">
+                            <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo de vacaciones creadas</div>
+                        </div>
+                        <div class="opcion">
+                            <div class="Plbra2" style="padding:20px"><input type="checkbox" id="faltasTardanzas" style="position: relative; right:5px">Envío al colaborador por correo el registro de su marcación de asistencia</div>
+                        </div>
+                        <button class="Btn2">Guardar</button>
+                    </div>
+                    <div class="Ttl1"> HORARIO</div>
+                    <div class="linea-azul"></div>
+                    <div class="Plbra2 Plbra_xtr">
+                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px">Area</p> 
+                        <input type="checkbox" class="input_xtr"> si 
+                        <input type="checkbox" class="input_xtr"> no 
+                    </div>
+                    <div class="Plbra2 Plbra_xtr">
+                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px">Puesto</p> 
+                        <input type="checkbox" class="input_xtr"> si 
+                        <input type="checkbox" class="input_xtr"> no 
+                    </div>
+                    <div class="Plbra2 Plbra_xtr">
+                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px">Modalidad de trabajo total</p> 
+                        <input type="checkbox" class="input_xtr"> presencial 
+                        <input type="checkbox" class="input_xtr"> remoto 
+                    </div>
+                    <div class="Plbra2 Plbra_xtr">
+                        <p class="Plbra3 col-4" style="display: flex; font-size: 14px">Predeterminar horario</p> 
+                        <input type="checkbox" class="input_xtr"> si 
+                        <input type="checkbox" class="input_xtr"> no 
+                    </div>
+                    <button class="Btn2">Guardar</button>
                 </div>
             </div>
         </div>

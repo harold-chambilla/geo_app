@@ -34,6 +34,7 @@ import CrearEmpleado from './vue/controllers/empresa/empleados/CrearEmpleado.vue
 import CrearEmpleadoLocal from './vue/controllers/empresa/empleados/CrearEmpleadoLocal.vue';
 import ListarEmpleados from './vue/controllers/empresa/empleados/ListarEmpleados.vue';
 import VerEmpresa from './vue/controllers/empresa/opciones/VerEmpresa.vue';
+import Area from './vue/controllers/empresa/opciones/Area.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -46,6 +47,7 @@ const crearEmpleado = createApp(CrearEmpleado);
 const crear_empleado_local = createApp(CrearEmpleadoLocal);
 const listar_empleados = createApp(ListarEmpleados);
 const ver_empresa = createApp(VerEmpresa);
+const area = createApp(Area);
 
 app.use(pinia);
 app.mount('#app');
@@ -78,3 +80,6 @@ listar_empleados.mount('#listar_empleados');
 
 ver_empresa.use(pinia);
 ver_empresa.mount('#ver_empresa');
+
+area.use(pinia);
+area.mount("#area");
