@@ -101,9 +101,7 @@
             padding: 8px; /* Espaciado interno de las celdas */
         }
     
-        .custom-table tbody td {
-            color: #fff; /* Color del texto en el cuerpo de la tabla */
-        }
+
     /*------pie de pagina enumerada------*/
     .pagination-container {
         display: flex;

@@ -16,10 +16,10 @@ nav {
 }
 
 span.ms-3{
-    margin-left: 15px; /* Ajusta el margen para mover los elementos hacia la derecha */
+    margin-left: 15px; 
 }
 img.icon{
-    margin-left: 15px; /* Ajusta el margen para mover los elementos hacia la derecha */
+    margin-left: 28px; 
 }
 
 nav:hover {
@@ -64,13 +64,10 @@ nav ul {
 }
 
 .bottom-menu {
-    margin-top: auto; 
-    background-color: #FFC107; 
-    padding: 5px 0;
+    
     width: 100%;
-    height: 160px;
+    height: 20%;
 }
-
 /*---------------logo-----------------*/
 .ico-logo {
     width: 100px;
@@ -86,6 +83,9 @@ nav ul {
     align-items: center;
     text-decoration: none;
     color: #fff;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .nav-link:hover,
@@ -97,8 +97,8 @@ nav ul {
 /*---------------icono -----------------*/
 .icon {
    
-    width: 30px; 
-    height: 30px; 
+    width: 35px; 
+    height: 35px; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -111,15 +111,20 @@ nav:hover .traslado {
     transform: translateX(25px);
     transition: transform 0.5s ease; /* Transición más lenta */
 }
-.nav-link {
-    padding: 0.2rem 1rem;
+
+.dif-ico{
+ margin:  15px 0px ;
 }
 
 @media screen and (max-width: 500px) {
     nav {
         width: 70px;
     }
-    .nav-link {
-        padding: 1.2rem .3rem;
+
+    img.icon{
+        margin-left: 18px 
     }
+
+
+
     }

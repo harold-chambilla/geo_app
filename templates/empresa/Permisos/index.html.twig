@@ -5,115 +5,222 @@
 {% block css %}
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/empresa/permisos/Permisos-style.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/Permisos/permisos.css') }}">
     <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
 
 {% endblock %}
 
 {% block body_sidebar %}
- <section class="d-flex justify-content-center align-items-center full-height">
-        <div class="container">
-            <div class="row justify-content-center align-items-center" style="padding-bottom:50px;">
-                <div class="col-12 col-md-3 d-flex justify-content-center">
-                    <button class="btn-form Cl-boton1">Registrar</button>
-                </div>
-                <div class="col-12 col-md-3 d-flex justify-content-center">
-                    <button class="btn-form Cl-boton2">Historial</button>
-                </div>
-                <div class="col-12 col-md-6 d-flex justify-content-end">
-                    <div class="margin-busc d-flex align-items-center">
-                        <button style="background-color: #fff; border: none;">
-                            <img src="path/to/lupa.png" alt="">
-                            <span style="padding: 0 10px; color: #0057A4;">DNI</span>
-                        </button>
-                        <input type="number" class="input-form mg-input1">
+<main class=" main-container d-flex justify-content-center align-items-center" style="height: 100%;">
+        <div class="cont-Principal" >
+            <section class="distancia container-fluid full-height py-4" style="height: 100%;">
+                <section class="d-flex flex-column justify-content-center align-items-center ">
+                        <div class="row justify-content-start align-items-center" style="padding-bottom:20px; width: 100%;">
+            
+                                <button class="btn-form Cl-boton1 with-100-20" onclick="mostrarSeccion('formulario')" >Registrar</button>
+                                <button class="btn-form Cl-boton2 with-100-20" onclick="mostrarSeccion('Historial')"  >Historial</button>
+                            
+                            
+                        </div>
+                </section>
+
+                <!-- Formulario-->
+                <section id="formulario" class="row justify-content-center align-items-center margin-busc mb-3"  style="border: 2px solid #0057A4;">
+                    <form class="cuadrado justify-content-center align-items-center" onsubmit="return false;" >
+                        <div class="row justify-content-center align-items-center" >
+                            <div class="col-12 col-md-9 d-flex align-items-center">
+                                <p class="label_usuario" style="margin-left: 5px;" >USUARIO</p>
+                                <input type="text" class="input-form mg-input2 col-md-9 " style="height: 40px;" placeholder="">
+                            </div>
+                            <div class="col-12 col-md-3 d-flex align-items-center ">
+                                <p  class="label_usuario" style="margin-left: 5px;">DNI</p>
+                                <input type="text" class="input-form mg-input2 col-md-12 " style="height: 40px; background-color: #FFC107a8; color: #ffffff;  font-weight: bold;" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <p  class="label_usuario" style="margin-left: 5px;">AREA</p>
+                                <input type="text" class="input-form mg-input2 col-md-8" style="height: 40px;" placeholder="">
+                            </div>
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <p class="label_usuario " style="margin-left: 10px;">FECHA</p>
+                                <div class="fecha">
+                                    <input type="date" class="with-100-20 input-form mg-input2 col-12 " style="height: 40px; " placeholder="">
+                                    <input type="date" class="with-100-20 input-form mg-input2 col-12  " style="height: 40px;" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <p class="label_usuario" style="margin-left: 5px;">MOTIVO</p>
+                                <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
+                                    <option value="" disabled selected hidden></option>
+                                    <option>ENFERMEDAD</option>
+                                    <option>ACCIDENTE</option>
+                                    <option>FAMILIAR</option>
+                                    <option>OTROS</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <p class="label_usuario" style="margin-left: 5px; margin-right: 15px;">ARCHIVO</p>
+                                <div class="col-11" style="height: 40px; padding-left: 15px;">
+                                    <label for="file-upload" class="custom-file-label">SUBIR ARCHIVO</label>
+                                    <input id="file-upload" type="file" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  align-items-center">
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <p class="label_usuario" style="margin-left: 5px;">MOMENTO</p>
+                                <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
+                                    <option value="" disabled selected hidden></option>
+                                    <option>INGRESO</option>
+                                    <option>SALIDA</option>
+                                    <option>AMBOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-md-12 align-items-center">
+                                <p class="label_usuario" style="margin-left: 5px;">DESCRIPCION</p>
+                                <div class="d-flex col-md-12">
+                                    <textarea class="input-form mg-input2 col-md-12 text_area"  placeholder=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 d-flex con_bont">
+                            <button type="submit" class="btn-form Cl-boton2" onclick="mensajeExito()" style="height: 50px;">GUARDAR</button>
+                    </div>
+                    </form>
+                </section>
+
+                <!-- Ventana emergente de éxito -->
+                <div id="mensajeExito" class="modal justify-content-center align-items-center" style="display: none;height: 100%;">
+                    <div class="modal-content" style="width: 250px; height:  380px;">
+                        <div class=" justify-content-center align-items-center img-logo d-flex" style="top:50px"> 
+                            <img class="img-fluid" src="{{ asset('ico/empresa/estado/correcto.png') }}"> 
+                        </div>
+                        <p class="py-3 justify-content-center align-items-center img-logo " style="color: #838383; font-weight: bold">
+                            se registro  <span style="color: #00D957; padding-left:5px;">exitosamente </span>
+                        </p>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn-form Cl-boton1" onclick="cerrarMensaje()">ACEPTAR</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row justify-content-center align-items-center margin-busc" style="    border: 2px solid #0057A4;">
-                <form class="container" style="padding:50px;">
-                    <div class="row justify-content-center align-items-center" >
-                        <div class="col-12 col-md-8 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-2">USUARIO</p>
-                            <input type="text" class="input-form mg-input2 col-md-9" style="height: 40px; margin-left: 10px;" placeholder="">
-                        </div>
-                        <div class="col-12 col-md-4 d-flex align-items-center ">
-                            <p style="color: #838383; font-weight: bold; margin: 0;" class="col-md-3">DNI</p>
-                            <input type="text" class="input-form mg-input2 col-md-9" style="height: 40px; background-color: #FFC107a8; color: #ffffff;  font-weight: bold;" placeholder="">
-                        </div>
-                    </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">AREA</p>
-                            <input type="text" class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="">
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">FECHA</p>
-                            <div class="d-flex col-md-10 ">
-                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px; " placeholder="">
-                                <input type="text" class="input-form mg-input2 col-md-6" style="height: 40px;" placeholder="">
+
+
+                <!-- Registro-->
+                <section id="Historial" class="row justify-content-center align-items-center" style="border: 2px solid #ffffff;">
+                    <div class="cuadradot justify-content-center align-items-center py-4" style="margin-left: 25px;">
+                        <div class="row  w-100">
+                            <!-- Botón Buscar e Input Numérico -->
+                            <div class="col-12 col-md-6 d-flex justify-content-center align-items-center p-0">
+                                <div class="margin-busc d-flex align-items-center w-100">
+                                    <button style="background-color: #fff; border: none;">
+                                        <span style="padding: 0 10px; color: #0057A4;">DNI</span>
+                                    </button>
+                                    <input type="number" class="input-form mg-input1 w-100" style="margin-left: 5px;">
+                                </div>
+                            </div>
+                    
+                            
+                            <div class="col-12 col-md-6 d-flex justify-content-end align-items-center py-2">
+                                <select class="input-form mg-input2 col-6 col-md-4" style="height: 40px; margin-left: 5px;">
+                                    <option value="" disabled selected hidden>Seleccionar Área</option>
+                                    <option>ENFERMEDAD</option>
+                                    <option>ACCIDENTE</option>
+                                    <option>FAMILIAR</option>
+                                    <option>OTROS</option>
+                                </select>
+                                <select class="input-form mg-input2 col-6 col-md-4" style="height: 40px; margin-left: 5px;">
+                                    <option value="" disabled selected hidden>Seleccionar Área</option>
+                                    <option>ENFERMEDAD</option>
+                                    <option>ACCIDENTE</option>
+                                    <option>FAMILIAR</option>
+                                    <option>OTROS</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">MOTIVO</p>
-                            <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
-                                <option value="" disabled selected hidden></option>
-                                <option>ENFERMEDAD</option>
-                                <option>ACCIDENTE</option>
-                                <option>FAMILIAR</option>
-                                <option>OTROS</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">ARCHIVO</p>
-                            <div class="d-flex col-md-10">
-                                <input type="file" class="input-form mg-input2  col-md-12" style="height: 40px;">
+                    
+                    <!--- Tablas -->
+                    <div class="cuadradot flex justify-content-center align-items-center" style="border: 2px solid #0057A4; border-radius: 5px;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); margin-left: 13px;" >
+                        <div class="d-flex align-items-center justify-content-center " style="height: 500px;">
+                            <div class="table-container ">
+                                <table class="table custom-table" style="border-collapse: separate; border-spacing: 0; border-radius: 15px; overflow: hidden;">
+                                    <thead>
+                                        <tr>
+                                            <th class=" d-md-table-cell">Nombre</th>
+                                            <th class="d-none d-md-table-cell">Puesto</th>
+                                            <th class="d-none d-md-table-cell">Area</th>
+                                            <th class=" d-md-table-cell">F. Inicio</th>
+                                            <th class=" d-md-table-cell">F. Final</th>
+                                            <th class=" d-md-table-cell">Motivo</th>
+                                            <th class=" d-md-table-cell">Descripción</th>
+                                            <th class=" d-md-table-cell">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class=" d-md-table-cell">Juan Marco Sanchez Rodriguez</td>
+                                            <td class="d-none d-md-table-cell">Contabilidad</td>
+                                            <td class="d-none d-md-table-cell">Finanzas</td>
+                                            <td class=" d-md-table-cell">21/02/2024</td>
+                                            <td class=" d-md-table-cell">26/02/2024</td>
+                                            <td class=" d-md-table-cell">D.M.</td>
+                                            <td class=" d-md-table-cell">Se rompió la rodilla</td>
+                                            <td class=" d-md-table-cell" class="text-center">
+                                                <button class="btn btn-link p-0 mx-1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-link p-0 mx-1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class=" d-md-table-cell">Juan Marco Sanchez Rodriguez</td>
+                                            <td class="d-none d-md-table-cell">Contabilidad</td>
+                                            <td class="d-none d-md-table-cell">Finanzas</td>
+                                            <td class=" d-md-table-cell">21/02/2024</td>
+                                            <td class=" d-md-table-cell">26/02/2024</td>
+                                            <td class=" d-md-table-cell">D.M.</td>
+                                            <td class=" d-md-table-cell">Se rompió la rodilla</td>
+                                            <td class=" d-md-table-cell" class="text-center">
+                                                <button class="btn btn-link p-0 mx-1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-link p-0 mx-1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
+                        </div>               
                     </div>
-                    <div class="row  align-items-center">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 4px;" class="col-md-3">MOMENTO</p>
-                            <select class="input-form mg-input2 col-md-8" style="height: 40px; margin-left: 5px;" placeholder="Area">
-                                <option value="" disabled selected hidden></option>
-                                <option>INGRESO</option>
-                                <option>SALIDA</option>
-                                <option>AMBOS</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 col-md-12 align-items-center">
-                            <p style="color: #838383; font-weight: bold; margin: 0; padding: 2px; flex-shrink: 0;" class="col-md-2">DESCRIPCION</p>
-                            <div class="d-flex col-md-12">
-                                <textarea class="input-form mg-input2 col-md-12" style="height: 80px; margin-left: 5px;" placeholder=""></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12 d-flex justify-content-end" style="padding-top: 40px;">
-                    <button type="submit" class="btn-form Cl-boton2" style="height: 50px;" >GUARDAR</button>
-                </div>
-                </form>
-            </div>
-        
-        <br>
-        <br>
-                        
-            <!--div class="row justify-content-center align-items-center" >
-                <div class="container justify-content-center align-items-center cuadro1" style="padding:50px;">
-                    <div class="py-4 justify-content-center align-items-center img-logo d-flex"> 
-                        <img class="img-fluid" src="{{ asset('./img/ec_logo_del_software.png') }}"> 
-                    </div>
-                    <p class="py-5 justify-content-center align-items-center img-logo d-flex" style="color: #838383; font-weight: bold" >se registro <span style="color: #00D957 ; padding-left:5px;"> exitosamente <span></p>
-                    <div class="d-flex justify-content-center">
-                        <button class="btn-form Cl-boton1"> ACEPTAR </button>
-                    </div>
-                </div>   
-            </div-->
+                </section>
+
         </div>
-    </section>
+    </main>
+    <script>
+  // Muestra la sección correspondiente
+  function mostrarSeccion(seccion) {
+            const secciones = ['formulario', 'Historial'];
+            secciones.forEach(function(item) {
+                document.getElementById(item).style.display = item === seccion ? 'block' : 'none';
+            });
+        }
+
+        // Mostrar sección 'formulario' por defecto
+        mostrarSeccion('formulario');
+</script>
+<script>
+    function mensajeExito() {
+        // Mostrar el mensaje de éxito
+        document.getElementById('mensajeExito').style.display = 'flex';
+    }
+    
+    function cerrarMensaje() {
+        // Ocultar el mensaje de éxito
+        document.getElementById('mensajeExito').style.display = 'none';
+    }
+    </script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -56,16 +56,6 @@
 }
 
 /********input-margin******************/
-.input-form {
-    width: 60%;
-    border: 1px solid #DADCE0;
-    border-radius: 7px;
-    font-size: 16px;
-    outline: none;
-    background: none;
-    z-index: 1;
-    margin: 5px;
-}
 .mg-input1 {
     color: #0057A4;
     border: 1px solid #FFC107;
@@ -220,7 +210,7 @@ border: 1px solid #111111;
 
         /********input-margin******************/
         .input-form {
-            width: 60%;
+            width: 70%;
             border: 1px solid #DADCE0;
             border-radius: 7px;
             font-size: 16px;
@@ -229,6 +219,14 @@ border: 1px solid #111111;
             z-index: 1;
             margin: 5px;
         }
+        @media screen and (max-width: 400px) {
+            .distancia{
+                padding-left:80px ;
+            }
+            .full-height {
+                height: auto;
+            }
+            }
         .mg-input1 {
             color: #0057A4;
             border: 1px solid #FFC107;
@@ -295,36 +293,6 @@ border: 1px solid #111111;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        /********input-margin******************/
-        .input-form {
-            width: 60%;
-            border: 1px solid #DADCE0;
-            border-radius: 7px;
-            font-size: 16px;
-            outline: none;
-            background: none;
-            z-index: 1;
-            margin: 5px;
-        }
-        .mg-input1 {
-            color: #0057A4;
-            border: 1px solid #FFC107;
-            font-weight: bold;
-        }
-        .mg-input2 {
-            color: #333333;
-            border: 1px solid #0057A4;
-            font-weight: bold;
-        }
-        
-        
-        .full-height {
-            height: 100vh;
-        }
-        .backgd-azul{
-            background-color: #0057a473;
-           
-        }
         /*------------------Cuadros --------------*/
         .cuadro1{
         max-width: 600px;
@@ -333,3 +301,165 @@ border: 1px solid #111111;
         height: 100%;
         border: 1px solid #111111;
         }
+        
+
+
+            /********Botones******************/
+            .btn-form {
+                display: block;
+                margin: 5px;
+                width: 180px;
+                height: 36px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                cursor: pointer;
+            }
+    
+            /********BTN-COlOR******************/
+            .Cl-boton1 {
+                background-color: #0057A4;
+                color: white;
+                border: 1px solid #0057A4;
+            }
+            .Cl-boton1:hover {
+                background-color: #0057b3a8;
+                border: 1px solid #0057A4;
+            }
+    
+            .Cl-boton2 {
+                background-color: #FFC107;
+                color: white;
+                border: 1px solid #FFC107;
+            }
+            .Cl-boton2:hover {
+                background-color: #FFC107a8;
+                border: 1px solid #FFC107;
+            }
+    
+            .margin-busc {
+                display: flex;
+                align-items: center;
+                margin: 1px;
+                padding: 10px;
+                border: 1px solid #0057A4;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .margin-black{
+                display: flex;
+                align-items: center;
+                margin: 1px;
+                padding: 10px;
+                border: 1px solid #acabab;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3)
+            }
+    
+            /********input-margin******************/
+            .mg-input1 {
+                color: #0057A4;
+                border: 1px solid #FFC107;
+                font-weight: bold;
+            }
+            .mg-input2 {
+                color: #333333;
+                border: 1px solid #0057A4;
+                font-weight: bold;
+            }
+    
+    
+            
+            @media screen and (max-width: 400px) {
+                .distancia{
+                    padding-left:80px ;
+                }
+                .full-height {
+                    height: auto;
+                }
+                }
+             /********Botones******************/
+             .btn-form {
+                display: block;
+                margin: 5px;
+                width: 180px;
+                height: 36px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+            /********BTN-COlOR******************/
+            .Cl-boton1 {
+                background-color: #0057A4;
+                color: white;
+                border: 1px solid #0057A4;
+            }
+            .Cl-boton1:hover {
+                background-color: #0057b3a8;
+                border: 1px solid #0057A4;
+            }
+            
+            .Cl-boton2 {
+                background-color: #FFC107;
+                color: white;
+                border: 1px solid #FFC107;
+            }
+            .Cl-boton2:hover {
+                background-color: #FFC107a8;
+                border: 1px solid #FFC107;
+            }
+            
+            .margin-busc {
+                display: flex;
+                align-items: center;
+                margin: 1px;
+                padding: 10px;
+                border: 1px solid #0057A4;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            
+            /********input-margin******************/
+            .mg-input1 {
+                color: #0057A4;
+                border: 1px solid #FFC107;
+                font-weight: bold;
+            }
+            .mg-input2 {
+                color: #333333;
+                border: 1px solid #0057A4;
+                font-weight: bold;
+            }
+            
+            
+            .full-height {
+                height: 100vh;
+            }
+            .backgd-azul{
+                background-color: #0057a473;
+               
+            }
+            /*------------------Cuadros --------------*/
+            .cuadro1{
+            max-width: 600px;
+            width: 100%;
+            max-height: 370px;
+            height: 100%;
+            border: 1px solid #111111;
+            }
+            .cuadradot{
+                width: 90%;
+            }
+    
+            @media screen and (min-width: 400px) {
+                .cuadradot{
+                    width: 98%;
+                }
+            }
+    

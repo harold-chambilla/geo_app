@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240921145710 extends AbstractMigration
+final class Version20240928032433 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,7 +29,7 @@ final class Version20240921145710 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_D2F80BB37F0EA5D2 ON colaborador (col_empresa_id)');
         $this->addSql('CREATE INDEX IDX_D2F80BB378A49F5A ON colaborador (col_grupo_id)');
         $this->addSql('CREATE INDEX IDX_D2F80BB342662725 ON colaborador (col_puesto_id)');
-        $this->addSql('CREATE TABLE configuracion_asistencia (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, cas_modalidad VARCHAR(255) DEFAULT NULL, cas_eliminado BOOLEAN DEFAULT NULL, cas_empresa_id INTEGER DEFAULT NULL, cas_grupo_id INTEGER DEFAULT NULL, cas_sede_id INTEGER DEFAULT NULL, CONSTRAINT FK_FB765688FB64DBEF FOREIGN KEY (cas_empresa_id) REFERENCES empresa (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_FB765688FC776E39 FOREIGN KEY (cas_grupo_id) REFERENCES grupo (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_FB765688A54FAE20 FOREIGN KEY (cas_sede_id) REFERENCES sede (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE configuracion_asistencia (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, cas_modalidad VARCHAR(255) DEFAULT NULL, cas_eliminado BOOLEAN DEFAULT NULL, cas_area BOOLEAN DEFAULT NULL, cas_puesto BOOLEAN DEFAULT NULL, cas_estado VARCHAR(64) DEFAULT NULL, cas_predhorario BOOLEAN DEFAULT NULL, cas_empresa_id INTEGER DEFAULT NULL, cas_grupo_id INTEGER DEFAULT NULL, cas_sede_id INTEGER DEFAULT NULL, CONSTRAINT FK_FB765688FB64DBEF FOREIGN KEY (cas_empresa_id) REFERENCES empresa (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_FB765688FC776E39 FOREIGN KEY (cas_grupo_id) REFERENCES grupo (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_FB765688A54FAE20 FOREIGN KEY (cas_sede_id) REFERENCES sede (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_FB765688FB64DBEF ON configuracion_asistencia (cas_empresa_id)');
         $this->addSql('CREATE INDEX IDX_FB765688FC776E39 ON configuracion_asistencia (cas_grupo_id)');
         $this->addSql('CREATE INDEX IDX_FB765688A54FAE20 ON configuracion_asistencia (cas_sede_id)');
@@ -38,6 +38,10 @@ final class Version20240921145710 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_8C0E9BD39C9B4C10 ON grupo (grp_empresa_id)');
         $this->addSql('CREATE TABLE horario_trabajo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, hot_diasemana VARCHAR(255) DEFAULT NULL, hot_fecha DATE DEFAULT NULL, hot_horaentrada TIME DEFAULT NULL, hot_horasalida TIME DEFAULT NULL, hot_tipojornada VARCHAR(255) DEFAULT NULL, hot_eliminado BOOLEAN DEFAULT NULL, hot_colaborador_id INTEGER DEFAULT NULL, CONSTRAINT FK_DA85417D3D04A72 FOREIGN KEY (hot_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_DA85417D3D04A72 ON horario_trabajo (hot_colaborador_id)');
+        $this->addSql('CREATE TABLE motivo (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, mtv_nombre VARCHAR(64) NOT NULL, mtv_eliminado BOOLEAN NOT NULL)');
+        $this->addSql('CREATE TABLE permiso (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pms_eliminado BOOLEAN NOT NULL, pms_estado VARCHAR(64) DEFAULT NULL, pms_motivo_id INTEGER NOT NULL, pms_colaborador_id INTEGER NOT NULL, CONSTRAINT FK_FD7AAB9E334E2E81 FOREIGN KEY (pms_motivo_id) REFERENCES motivo (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_FD7AAB9EC3E7D0D4 FOREIGN KEY (pms_colaborador_id) REFERENCES colaborador (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_FD7AAB9E334E2E81 ON permiso (pms_motivo_id)');
+        $this->addSql('CREATE INDEX IDX_FD7AAB9EC3E7D0D4 ON permiso (pms_colaborador_id)');
         $this->addSql('CREATE TABLE puesto (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pst_nombre VARCHAR(255) NOT NULL, pst_eliminado BOOLEAN NOT NULL, pst_area_id INTEGER NOT NULL, CONSTRAINT FK_47C3D2DE89F131D5 FOREIGN KEY (pst_area_id) REFERENCES area (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_47C3D2DE89F131D5 ON puesto (pst_area_id)');
         $this->addSql('CREATE TABLE registro_cambios (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, reg_tablaafectada VARCHAR(255) DEFAULT NULL, reg_campoafectado VARCHAR(255) DEFAULT NULL, reg_valoranterior VARCHAR(255) DEFAULT NULL, reg_valornuevo VARCHAR(255) DEFAULT NULL, reg_fecha DATETIME DEFAULT NULL)');
@@ -55,6 +59,8 @@ final class Version20240921145710 extends AbstractMigration
         $this->addSql('DROP TABLE empresa');
         $this->addSql('DROP TABLE grupo');
         $this->addSql('DROP TABLE horario_trabajo');
+        $this->addSql('DROP TABLE motivo');
+        $this->addSql('DROP TABLE permiso');
         $this->addSql('DROP TABLE puesto');
         $this->addSql('DROP TABLE registro_cambios');
         $this->addSql('DROP TABLE sede');
