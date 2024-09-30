@@ -33,7 +33,7 @@
 
     <!-- Centrar el botón "Guardar" -->
     <div class="d-flex justify-content-center">
-      <button @click="guardarNotificaciones" class="btn btn-primary mt-3">Guardar</button>
+      <button @click="guardarNotificaciones" class="btn btn-primary btn-lg mt-3">Guardar</button>
     </div>
   </div>
 </template>

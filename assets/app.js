@@ -62,6 +62,8 @@ import Map_Geocoding from './vue/controllers/test/Map_Geocoding.vue';
 import Area from './vue/controllers/empresa/opciones/Area.vue';
 import Permisos from './vue/controllers/empresa/opciones/Permisos.vue';
 import Notificaciones from './vue/controllers/empresa/opciones/Notificaciones.vue';
+import Asistencia from './vue/controllers/empresa/opciones/Asistencia.vue';
+import OHorario from './vue/controllers/empresa/opciones/Horario.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -77,6 +79,8 @@ const ver_empresa = createApp(VerEmpresa);
 const area = createApp(Area);
 const permisos = createApp(Permisos);
 const notificaciones = createApp(Notificaciones);
+const asistencia = createApp(Asistencia);
+const ohorario = createApp(OHorario);
 
 const mapGeo = createApp(Map_Geocoding);
 
@@ -122,3 +126,9 @@ permisos.mount('#permisos');
 
 notificaciones.use(pinia);
 notificaciones.mount('#notificaciones');
+
+asistencia.use(pinia);
+asistencia.mount('#asistencia');
+
+ohorario.use(pinia);
+ohorario.mount('#ohorario');
