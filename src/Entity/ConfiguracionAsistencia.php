@@ -40,6 +40,18 @@ class ConfiguracionAsistencia
     #[ORM\Column(nullable: true)]
     private ?bool $cas_predhorario = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_faltas_tardanzas = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_permisos = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_vacaciones = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_marcacion = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +161,54 @@ class ConfiguracionAsistencia
     public function setCasPredhorario(?bool $cas_predhorario): static
     {
         $this->cas_predhorario = $cas_predhorario;
+
+        return $this;
+    }
+
+    public function isCasFaltasTardanzas(): ?bool
+    {
+        return $this->cas_faltas_tardanzas;
+    }
+
+    public function setCasFaltasTardanzas(?bool $cas_faltas_tardanzas): static
+    {
+        $this->cas_faltas_tardanzas = $cas_faltas_tardanzas;
+
+        return $this;
+    }
+
+    public function isCasPermisos(): ?bool
+    {
+        return $this->cas_permisos;
+    }
+
+    public function setCasPermisos(?bool $cas_permisos): static
+    {
+        $this->cas_permisos = $cas_permisos;
+
+        return $this;
+    }
+
+    public function isCasVacaciones(): ?bool
+    {
+        return $this->cas_vacaciones;
+    }
+
+    public function setCasVacaciones(?bool $cas_vacaciones): static
+    {
+        $this->cas_vacaciones = $cas_vacaciones;
+
+        return $this;
+    }
+
+    public function isCasMarcacion(): ?bool
+    {
+        return $this->cas_marcacion;
+    }
+
+    public function setCasMarcacion(?bool $cas_marcacion): static
+    {
+        $this->cas_marcacion = $cas_marcacion;
 
         return $this;
     }

@@ -21,6 +21,7 @@
 	{% endblock %}
     </head>
     <body>
+    {% set habilitado = false %}
 	{% if app.user %}
 <nav class="sidebar-menu flex-column">
         <ul class="menu-list " style="heigth:100%">
@@ -39,7 +40,7 @@
                     <span class="ms-3">Home</span>
                 </a>
             </li>
-
+              {% if habilitado %} 
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_asistencia_mostrar') }}"style="width: 100px; height: 20px;">
                     <i > <img src="{{ asset('ico/empresa/Menu/asistencia.png') }}" alt="" class="icon"></i>
@@ -52,30 +53,35 @@
                     <span class="ms-3">Permisos</span>
                 </a>
             </li>
+            {% endif %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_empleados_mostrar') }}"style="width: 100px; height: 20px;">
                     <i > <img src="{{ asset('ico/empresa/Menu/empleados.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Empleados</span>
                 </a>
             </li>
+            {% if habilitado %}
              <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_vacaciones_mostrar') }}"style="width: 100px; height: 20px;">
                     <i > <img src="{{ asset('ico/empresa/Menu/vacaiones.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Vacaciones</span>
                 </a>
             </li>
+            {% endif %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_horario_mostrar') }}"style="width: 100px; height: 20px;">
                     <i > <img src="{{ asset('ico/empresa/Menu/horario.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Horario</span>
                 </a>
             </li>
+            {% if habilitado %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="" style="width: 100px; height: 20px;">
                     <i > <img src="{{ asset('ico/empresa/Menu/reporte.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Reportes</span>
                 </a>
             </li>
+            {% endif %} 
         </div>
     
             <!-- Opciones y Salir -->

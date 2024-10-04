@@ -14,6 +14,8 @@
         <div class="cont-Principal" >
             <section class="distancia container-fluid" >
                 <div class="brd-azul my-3" >
+                    {% set habilitado = false %}
+                    {% if habilitado %}
                     <div class="row">
                         <!-- Primera fila -->
                         <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio" >
@@ -33,9 +35,9 @@
                                 Vacaciones
                                 <div class="triangle" style="color: #FFC107;"></div>
                             </a>
-                        </div>
+                        </div> 
                     </div>
-        
+                    {% endif %}
                     <div class="row">
                         <!-- Segunda fila -->
                         <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
@@ -43,20 +45,21 @@
                                 Empleados
                                 <div class="triangle" style="color: #384AEE;"></div>
                             </a>
-                        </div>
+                        </div> 
                         <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
                             <a class="btn cuadrado-btn" href="{{ path('app_empresa_horario_mostrar') }}">
                                 Horario
                                 <div class="triangle" style="color: #00A3FF;"></div>
                             </a>
                         </div>
+                        {% if habilitado %}
                         <div class="col-12 col-md-4 d-flex justify-content-center cdr-espacio">
                             <a class="btn cuadrado-btn">
                                 Reporte
                                 <div class="triangle" style="color: #098D0B;"></div>
                             </a>
                         </div>
-                    
+                        {% endif %}
                     </div>
                 </div>
             </section>
