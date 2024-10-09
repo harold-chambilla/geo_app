@@ -53,7 +53,7 @@ class ResultadoController extends AbstractController
         $responseEntrada = [
             'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos() ?? null,
             'dni' => $user->getColDninit(),
-            'horaEntrada' => $horaEntrada->format('H:i:s') ?? null,
+            // 'horaEntrada' => $horaEntrada->format('H:i:s') ?? null,
             'fecha' => $ultimoRegistro->getAsiFechaentrada()->format('d/m/Y') ?? null,
             'hora' => $ultimoRegistro->getAsiHoraentrada()->format('H:i:s') ?? null,
             'modalidad' => $modalidad ?? null,
@@ -66,7 +66,7 @@ class ResultadoController extends AbstractController
             $responseSalida = [
                 'usuario' => $user->getColNombres() . ' ' . $user->getColApellidos() ?? null,
                 'dni' => $user->getColDninit() ?? null,
-                'horaEntrada' => $horaSalida->format('H:i:s') ?? null,
+                // 'horaEntrada' => $horaSalida->format('H:i:s') ?? null,
                 'fecha' => $ultimoRegistro->getAsiFechasalida()->format('d/m/Y') ?? null,
                 'hora' => $ultimoRegistro->getAsiHorasalida()->format('H:i:s') ?? null,    
                 'modalidad' => $modalidad ?? null,    
