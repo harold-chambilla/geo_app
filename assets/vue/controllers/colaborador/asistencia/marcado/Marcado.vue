@@ -9,6 +9,7 @@
   import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
   import { funcionesStore } from '../../../../../store/colaborador/funciones';
   import { asistenciaStore } from '../../../../../store/colaborador/asistencia';
+  import { opcionesStore } from '../../../../../store/empresa/opciones';
   
   // Variables de ubicación
   const latitude = ref(0);
@@ -24,11 +25,18 @@
   const asistencia = ref("");
   const exactitudRadio = ref(null);
   const estadoEntrada = ref("");
+  const dentroDeSede = ref(false);
   
   // Llamado al Store
   const functStore = funcionesStore();
   const asisStore = asistenciaStore();
+
+  const opcionesStorage = opcionesStore();
   
+  const sedes = computed(() => {
+    return opcionesStorage.SEDES;  // Acceder a las sedes almacenadas en el store
+  });
+
   const mapReady = ref(false);
   
   onMounted(() => { //Utilizado para inicializar todo cuando ya esta cargado
@@ -41,6 +49,23 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
   // Limpiar el intervalo cuando el componente se desmonte y no consuma memoria mientras navegas
   clearInterval(currentTiempo);
 });
+
+const validarSedes = async () => {
+  await opcionesStorage.fetchSedes();  // Asegúrate de obtener las sedes antes de validar
+
+  dentroDeSede.value = sedes.value.some((sede) => {
+    const ubicacionSede = new google.maps.LatLng(parseFloat(sede.latitud), parseFloat(sede.longitud));
+    const ubicacionUsuario = new google.maps.LatLng(latitude.value, longitude.value);
+    const distancia = google.maps.geometry.spherical.computeDistanceBetween(ubicacionUsuario, ubicacionSede);
+    return distancia <= sede.radio;
+  });
+
+  if (dentroDeSede.value) {
+    estadoEntrada.value = "Dentro del radio de alguna sede.";
+  } else {
+    estadoEntrada.value = "Fuera del radio de todas las sedes.";
+  }
+};
 
   const watchCoordinates = () => {
     return new Promise((resolve, reject) => {
@@ -148,6 +173,7 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
   const turnoEntrada = async () => {
     try {
       const coords = await watchCoordinates();
+      await validarSedes();
       const newAsis = {
         fechaEntrada: currentFecha.value, //Lo que pasa es que la fecha esta asi / / y debe estar asi - -
         horaEntrada: currentTiempo.value,
@@ -171,6 +197,7 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
   const turnoSalida = async () => {
     try {
       const coords = await watchCoordinates();
+      await validarSedes();
       const updAsis = {
         fechaSalida: currentFecha.value,
         horaSalida: currentTiempo.value,

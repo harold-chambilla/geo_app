@@ -4,11 +4,14 @@ namespace App\Controller\Empresa;
 
 use App\Entity\Colaborador;
 use App\Entity\Empresa;
+use App\Entity\Sede;
 use App\Funciones\Empresa\AreaFunciones;
 use App\Funciones\Empresa\EmpresaFunciones;
 use App\Funciones\Empresa\PermisoFunciones;
 use App\Repository\ColaboradorRepository;
 use App\Repository\EmpresaRepository;
+use App\Repository\SedeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -25,7 +28,9 @@ class OpcionesController extends AbstractController
         private EmpresaFunciones $empresaFunciones,
         private AreaFunciones $areaFunciones,
         private PermisoFunciones $permisoFunciones,
-        private Security $security
+        private SedeRepository $sedeRepository,
+        private Security $security,
+        private EmpresaRepository $empresaRepository
 	){}
 
 	#[Route('/', name: 'mostrar')]
@@ -156,5 +161,120 @@ class OpcionesController extends AbstractController
             return new JsonResponse(['error' => $resultado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/api/listar/sedes', name: 'listar_sedes', methods: ['GET'])]
+    public function listarSedes(): JsonResponse
+    {
+        // Obtener el usuario autenticado
+        $usuario = $this->getUser();
+
+        // Obtener la empresa a la que pertenece el usuario
+        $empresa = $usuario->getColEmpresa(); // Suponiendo que el usuario tiene una relación con la empresa
+
+        if (!$empresa) {
+            return new JsonResponse(['error' => 'Empresa no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Obtener las sedes de la empresa
+        $sedes = $this->sedeRepository->findBy(['sed_empresa' => $empresa]);
+
+        if (empty($sedes)) {
+            return new JsonResponse(['error' => 'No se encontraron sedes para esta empresa'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        
+        // Radio por defecto para las sedes
+        $radioPorDefecto = 300; // Valor en metros
+
+        // Crear una respuesta con la información de las sedes
+        $data = [];
+        foreach ($sedes as $sede) {
+            $data[] = [
+                'id' => $sede->getId(),
+                'nombre' => $sede->getSedNombre(),
+                'direccion' => $sede->getSedDireccion(),
+                'latitud' => $sede->getSedUbicacion()[0],
+                'longitud' => $sede->getSedUbicacion()[1],
+                'radio' => $radioPorDefecto
+            ];
+        }
+
+        return new JsonResponse($data, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/guardar/sedes', name: 'guardar_coordenadas', methods: ['POST'])]
+    public function guardarCoordenadas(Request $request, EmpresaRepository $empresaRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $usuario = $this->getUser();
+
+    // Validar que el usuario tenga el rol de administrador
+    // if (!in_array('ROLE_ADMIN', $usuario->getRoles())) {
+    //     return new JsonResponse(['error' => 'Acceso denegado. Solo los administradores pueden crear sedes.'], JsonResponse::HTTP_FORBIDDEN);
+    // }
+
+    // Buscar la empresa asociada al usuario autenticado
+    $empresaId = $usuario->getColEmpresa(); // Asumiendo que el usuario tiene una relación con la empresa
+
+   
+
+    $empresa = $empresaRepository->find(['id' => $empresaId]);
+
+    if (!$empresa) {
+        return new JsonResponse(['error' => 'Empresa no encontrada para el usuario autenticado.'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    // Obtener los datos de la solicitud (latitud, longitud, dirección)
+    $nombreEmpresa = $request->request->get('nombreEmpresa');
+    $latitud = $request->request->get('latitud');
+    $longitud = $request->request->get('longitud');
+    $direccion = $request->request->get('direccion');
+    $pais = $request->request->get('pais');
+
+    // Validar que todos los datos estén presentes
+    if (!$latitud || !$longitud || !$direccion) {
+        return new JsonResponse(['error' => 'Faltan datos obligatorios.'], JsonResponse::HTTP_BAD_REQUEST);
+    }
+
+    // Crear una nueva entidad Sede
+    $sede = new Sede();
+    $sede->setSedNombre($nombreEmpresa);
+    $sede->setSedUbicacion([$latitud, $longitud]);  // Establecer las coordenadas
+    $sede->setSedDireccion($direccion);  // Establecer la dirección
+    $sede->setSedEmpresa($empresaId); // Asociar la sede a la empresa del usuario autenticado
+    $sede->setSedPais($pais);
+
+    // Guardar la nueva sede en la base de datos
+    $entityManager->persist($sede);
+    $entityManager->flush();
+
+    // Devolver la sede creada
+    return new JsonResponse([
+        'id' => $sede->getId(),
+        // 'ubicacion' => [$latitud, $longitud],
+        'nombre' => $sede->getSedNombre(),
+        'direccion' => $sede->getSedDireccion(),
+        // 'empresaId' => $empresa->getId(),
+    ], JsonResponse::HTTP_CREATED);
+    }
+
+    // src/Controller/SedeController.php
+
+#[Route('/api/borrar/sedes/{id}', name: 'borrar_sede', methods: ['DELETE'])]
+public function borrarSede(int $id, EntityManagerInterface $entityManager): JsonResponse
+{
+    // Buscar la sede por ID
+    $sede = $this->sedeRepository->find($id);
+
+    // Verificar si la sede existe
+    if (!$sede) {
+        return new JsonResponse(['error' => 'Sede no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    // Eliminar la sede
+    $entityManager->remove($sede);
+    $entityManager->flush();
+
+    // Responder con un mensaje de éxito
+    return new JsonResponse(['message' => 'Sede eliminada correctamente'], JsonResponse::HTTP_OK);
+}
 
 }

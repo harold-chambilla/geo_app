@@ -30,6 +30,7 @@
     "dependencies": {
         "@types/googlemaps": "^3.43.3",
         "axios": "^1.6.7",
-        "pinia": "^2.1.7"
+        "pinia": "^2.1.7",
+        "sweetalert2": "^11.14.2"
     }
 }

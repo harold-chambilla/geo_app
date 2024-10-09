@@ -1,177 +1,174 @@
 {% extends 'empresa/base.html.twig' %}
 
-{% block title %}Opciones{% endblock %}
+{% block title %}Opciones
+{% endblock %}
 
 {% block css %}
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/general.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/Opciones.css') }}">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/general.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/empresa/opciones/Personal.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/empresa/opciones/Sistema.css') }}">
-     
+	<link rel="stylesheet" href="{{ asset('css/empresa/opciones/Opciones.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+	<link rel="stylesheet" href="{{ asset('css/empresa/opciones/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/opciones/Personal.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/empresa/opciones/Sistema.css') }}">
+
 {% endblock %}
 
 
 {% block body_sidebar %}
-<section class="tabs-wrapper">
-    <div class="tabs-container">
-        <div class="tabs-block">
-            <div class="tabs">
-                <input type="radio" name="tabs" id="tab1" checked="checked" />
-                <label for="tab1"> Empresa </label>
-                <div class="tab tab-content">
-                    <div class="conte1">
-                        <div class="col-md-5 d-flex justify-content-center align-items-center min-vh-40">
-                            <img class="Img_empresa" src="{{ asset('img/logo/logo.png') }}">
-                        </div>
-                        <div class="col-md-7">
-                            <div id="ver_empresa"></div> 
-                        </div> 
-                    </div>
-                    <span class="Ttl1">SUCURSALES</span>
-                    <div class="linea-azul"></div>
-                    <div class="container_direc">
-                        <table id="tablaSedes">
-                            <thead>
-                                <tr>
-                                    <th class="Azul-prin">Sede</th>
-                                    <th class="plomo">Dirección</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodySedes"></tbody>
-                        </table>
-                        <button class="Btn1" onclick="mostrarPopup()">+ AGREGAR</button>
-                    </div>
+	<section class="tabs-wrapper">
+		<div class="tabs-container">
+			<div class="tabs-block">
+				<div class="tabs">
+					<input type="radio" name="tabs" id="tab1" checked="checked"/>
+					<label for="tab1">
+						Empresa
+					</label>
+					<div class="tab tab-content">
+						<div class="conte1">
+							<div class="col-md-5 d-flex justify-content-center align-items-center min-vh-40">
+								<img class="Img_empresa" src="{{ asset('img/logo/logo.png') }}">
+							</div>
+							<div class="col-md-7">
+								<div id="ver_empresa"></div>
+							</div>
+						</div>
+						<span class="Ttl1">SUCURSALES</span>
+						<div class="linea-azul"></div>
+						<div class="container_direc">
+                    <div id="listSedes"></div>
+							<button class="Btn1" onclick="mostrarPopup()">+ AGREGAR</button>
+						</div>
 
-                    <div class="overlay" id="overlay"></div>
-                    <div class="popup" id="popup">
-                        <button class="close" onclick="cerrarPopup()">x</button>
-                        <div id="direccionDiv" style="justify-content: center; align-items: center;">
-                            <div class="form-row d-flex input-amarillo justify-content-center align-items-center">
-                                <p class="Plbra3 " for="direccionInput" >UBICACION</p>
-                                <input type="text" id="direccionInput" placeholder="Dirección" class="inputContainer1 " style="width: 250px; margin-right: 30px;">
-                                <button class="img_ico" style="20px">
-                                    <img class="icono" src="{{ asset('lupa.png') }}" alt="Buscar" style="cursor: pointer;" onclick="buscarDireccion()">
-                                </button>
-                            </div>
-                        
-                            <div class="form-row d-flex justify-content-center align-items-center min-vh-40">
-                                <div id="mapa" class="col-md-7" style="padding=20px;"></div>
-                                <div class="col-md-5 justify-content-center align-items" style="padding=20px; height=100px">
-                                    <div class="linea_separadora"></div>
-                                    <div class="form-row d-flex justify-content-center align-items-center min-vh-40">
-                                        <div style="float: left;" id="Nom_Empresa">
-                                            <div for="nombreEmpresa" id="Nom_Empresa" class="Plbra3" style="width:200px">Nombre de la Empresa:</div>
-                                            <input type="text" id="nombreEmpresa" placeholder="Nombre de la Empresa" class="inputContainer1 ">
-                                            <button class="Btn2" onclick="guardarSede()">Guardar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <input type="radio" name="tabs" id="tab2" />
-                <label for="tab2">Personal</label>
-                <div class="tab tab-content">
-                    <div class="contenedor">
-                        <div id="area"></div>
-                        <div id="permisos"></div>
-                        <div id="asistencia"></div>
-                    </div>
-                </div>
+						<div class="overlay" id="overlay"></div>
+						<div class="popup" id="popup">
+							<button class="close" onclick="cerrarPopup()">x</button>
+							{# <div id="direccionDiv" style="justify-content: center; align-items: center;">
+								<div class="form-row d-flex input-amarillo justify-content-center align-items-center">
 
-                <input type="radio" name="tabs" id="tab3" />
-                <label for="tab3">Sistema</label>
-                <div class="tab tab-content">
-                    <div id="notificaciones"></div>
-                    <div id="ohorario"></div>
-                </div>
-            </div>
-        
-        </div>
-    </div>
-<div id="mapGeo"></div>
-</section>
+									<p class="Plbra3 " for="direccionInput">UBICACION</p>
+									<input type="text" id="direccionInput" placeholder="Dirección" class="inputContainer1 " style="width: 250px; margin-right: 30px;">
+									<button class="img_ico" style="20px">
+										<img class="icono" src="{{ asset('lupa.png') }}" alt="Buscar" style="cursor: pointer;" onclick="buscarDireccion()">
+									</button>
+								</div>
+
+								<div class="form-row d-flex justify-content-center align-items-center min-vh-40">
+									<div id="mapa" class="col-md-7" style="padding=20px;"></div>
+									<div class="col-md-5 justify-content-center align-items" style="padding=20px; height=100px">
+										<div class="linea_separadora"></div>
+										<div class="form-row d-flex justify-content-center align-items-center min-vh-40">
+											<div style="float: left;" id="Nom_Empresa">
+												<div for="nombreEmpresa" id="Nom_Empresa" class="Plbra3" style="width:200px">Nombre de la Empresa:</div>
+												<input type="text" id="nombreEmpresa" placeholder="Nombre de la Empresa" class="inputContainer1 ">
+												<button class="Btn2" onclick="guardarSede()">Guardar</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> #}
+                            <div id="mapGeo"></div>
+						</div>
+					</div>
+					<input type="radio" name="tabs" id="tab2"/>
+					<label for="tab2">Personal</label>
+					<div class="tab tab-content">
+						<div class="contenedor">
+							<div id="area"></div>
+							<div id="permisos"></div>
+							<div id="asistencia"></div>
+						</div>
+					</div>
+
+					<input type="radio" name="tabs" id="tab3"/>
+					<label for="tab3">Sistema</label>
+					<div class="tab tab-content">
+						<div id="notificaciones"></div>
+						<div id="ohorario"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
 {% endblock %}
 
 
 {% block js %}
-    <script>
-        // Función para mostrar el modal
-        function mostrarPopup() {
-            document.getElementById("overlay").style.display = "block";
-            document.getElementById("popup").style.display = "block";
-            
-            // Inicializar el mapa
-            var mapa = new google.maps.Map(document.getElementById('mapa'), {
-                center: {lat: -34.397, lng: 150.644}, // Coordenadas de ejemplo (Sydney, Australia)
-                zoom: 8
-            });
-        }
+	<script>
+		// Función para mostrar el modal
+function mostrarPopup() {
+document.getElementById("overlay").style.display = "block";
+document.getElementById("popup").style.display = "block";
 
-        // Función para cerrar el modal y borrar los datos
-        function cerrarPopup() {
-            document.getElementById("overlay").style.display = "none";
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("nombreEmpresa").value = ""; // Restablecer el valor del campo de nombre de empresa
-        }
+// Inicializar el mapa
+var mapa = new google.maps.Map(document.getElementById('mapa'), {
+center: {
+lat: -34.397,
+lng: 150.644
+}, // Coordenadas de ejemplo (Sydney, Australia)
+zoom: 8
+});
+}
 
-        // Función para buscar la dirección en el mapa
-        function buscarDireccion() {
-            // Aquí puedes agregar la lógica para buscar la dirección en el mapa
-            console.log("Buscar dirección en el mapa");
-        }
+// Función para cerrar el modal y borrar los datos
+function cerrarPopup() {
+document.getElementById("overlay").style.display = "none";
+document.getElementById("popup").style.display = "none";
+document.getElementById("nombreEmpresa").value = ""; // Restablecer el valor del campo de nombre de empresa
+}
 
-        // Función para guardar la sede en la tabla
-        function guardarSede() {
-            var sede = document.getElementById("nombreEmpresa").value;
-            var tablaSedes = document.getElementById("tablaSedes");
-            var tbodySedes = document.getElementById("tbodySedes");
+// Función para buscar la dirección en el mapa
+function buscarDireccion() { // Aquí puedes agregar la lógica para buscar la dirección en el mapa
+console.log("Buscar dirección en el mapa");
+}
 
-            // Obtener la dirección del campo oculto
-            var direccion = document.getElementById("direccionInput").value;
+// Función para guardar la sede en la tabla
+function guardarSede() {
+var sede = document.getElementById("nombreEmpresa").value;
+var tablaSedes = document.getElementById("tablaSedes");
+var tbodySedes = document.getElementById("tbodySedes");
 
-            // Crear una nueva fila en la tabla
-            var nuevaFila = document.createElement("tr");
+// Obtener la dirección del campo oculto
+var direccion = document.getElementById("direccionInput").value;
 
-            // Crear y agregar las celdas de la fila
-            var sedeCell = document.createElement("td");
-            sedeCell.textContent = sede;
-            sedeCell.classList.add("sede"); // Agregar la clase para el color
-            nuevaFila.appendChild(sedeCell);
+// Crear una nueva fila en la tabla
+var nuevaFila = document.createElement("tr");
 
-            var direccionCell = document.createElement("td");
-            direccionCell.textContent = direccion;
-            direccionCell.classList.add("direccion"); // Agregar la clase para el color
-            nuevaFila.appendChild(direccionCell);
+// Crear y agregar las celdas de la fila
+var sedeCell = document.createElement("td");
+sedeCell.textContent = sede;
+sedeCell.classList.add("sede"); // Agregar la clase para el color
+nuevaFila.appendChild(sedeCell);
 
-            var opcionesCell = document.createElement("td");
-            opcionesCell.classList.add("opciones"); // Agregar la clase para el espacio entre opciones
+var direccionCell = document.createElement("td");
+direccionCell.textContent = direccion;
+direccionCell.classList.add("direccion"); // Agregar la clase para el color
+nuevaFila.appendChild(direccionCell);
 
-            var editarIcono = document.createElement("img");
-            editarIcono.src = "editar.png";
-            editarIcono.alt = "Editar";
-            editarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
-            opcionesCell.appendChild(editarIcono);
+var opcionesCell = document.createElement("td");
+opcionesCell.classList.add("opciones"); // Agregar la clase para el espacio entre opciones
 
-            var guardarIcono = document.createElement("img");
-            guardarIcono.src = "guardar.png";
-            guardarIcono.alt = "Guardar";
-            guardarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
-            opcionesCell.appendChild(guardarIcono);
+var editarIcono = document.createElement("img");
+editarIcono.src = "editar.png";
+editarIcono.alt = "Editar";
+editarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
+opcionesCell.appendChild(editarIcono);
 
-            nuevaFila.appendChild(opcionesCell);
+var guardarIcono = document.createElement("img");
+guardarIcono.src = "guardar.png";
+guardarIcono.alt = "Guardar";
+guardarIcono.classList.add("icono"); // Agregar la clase para el tamaño del icono
+opcionesCell.appendChild(guardarIcono);
 
-            // Agregar la fila al cuerpo de la tabla
-            tbodySedes.appendChild(nuevaFila);
+nuevaFila.appendChild(opcionesCell);
 
-            // Cerrar la ventana emergente y borrar los datos
-            cerrarPopup();
-        }
-    </script>
+// Agregar la fila al cuerpo de la tabla
+tbodySedes.appendChild(nuevaFila);
+
+// Cerrar la ventana emergente y borrar los datos
+cerrarPopup();
+}
+	</script>
 {% endblock %}

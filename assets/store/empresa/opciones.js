@@ -15,7 +15,11 @@ export const opcionesStore = defineStore('opciones', {
     errorMotivos: null, // Para manejar errores al obtener los motivos
     errorRegistroAreas: null, // Para manejar errores en el registro de áreas
     errorRegistroMotivos: null, // Para manejar errores en el registro de motivos
+    sedes: []
   }),
+  getters: {
+    SEDES(state) { return state.sedes }
+  },
   actions: {
     // Acción para obtener el RUC
     async fetchRuc() {
@@ -87,7 +91,49 @@ export const opcionesStore = defineStore('opciones', {
         this.registroExitosoMotivos = null;
         this.errorRegistroMotivos = error.response?.data?.message || 'Error al registrar motivos';
       }
-    }
+    },
+
+    async saveCoordinates(sede) {
+      try {
+        let formData = new FormData();
+        // formData.append('sedeId', sede.id);
+        formData.append('nombreEmpresa', sede.empresaNombre);
+        formData.append('latitud', sede.latitude);
+        formData.append('longitud', sede.longitude);
+        formData.append('direccion', sede.direccion);
+        formData.append('pais', sede.pais); 
+        // formData.append('empresaId', sede.empresaId);
+        formData.forEach((value, key) => {
+          console.log(`${key}: ${value}`);
+        });
+        const response = await axios.post('/empresa/opciones/api/guardar/sedes', formData);
+        console.log('Coordenadas guardadas exitosamente:', response.data);
+        this.sedes.push(response.data);
+      } catch (error) {
+        console.error('Error al guardar las coordenadas:', error);
+      }
+    },
+
+    async fetchSedes() {
+      try {
+        const response = await axios.get('/empresa/opciones/api/listar/sedes');
+        console.log('apiconsumida')
+        this.sedes = response.data;  // Guardar las sedes en el estado
+        
+      } catch (error) {
+        console.error('Error al obtener las sedes:', error);
+      }
+    },
+    async deleteSede(sedeId) {
+      try {
+        await axios.delete(`/empresa/opciones/api/borrar/sedes/${sedeId}`);
+        this.sedes = this.sedes.filter(sede => sede.id !== sedeId);  // Remover la sede del estado
+        console.log(`Sede con ID ${sedeId} eliminada.`);
+      } catch (error) {
+        console.error('Error al eliminar la sede:', error);
+      }
+    },
+
   }
 });
 

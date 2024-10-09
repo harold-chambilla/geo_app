@@ -64,6 +64,7 @@ import Permisos from './vue/controllers/empresa/opciones/Permisos.vue';
 import Notificaciones from './vue/controllers/empresa/opciones/Notificaciones.vue';
 import Asistencia from './vue/controllers/empresa/opciones/Asistencia.vue';
 import OHorario from './vue/controllers/empresa/opciones/Horario.vue';
+import List_Sedes from './vue/controllers/test/List_Sedes.vue';
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -82,6 +83,8 @@ const notificaciones = createApp(Notificaciones);
 const asistencia = createApp(Asistencia);
 const ohorario = createApp(OHorario);
 
+const listSedes = createApp(List_Sedes)
+
 const mapGeo = createApp(Map_Geocoding);
 
 app.use(pinia);
@@ -92,6 +95,9 @@ resultado.mount('#resultado');
 
 marcado.use(pinia);
 marcado.mount('#marcado');
+
+listSedes.use(pinia);
+listSedes.mount('#listSedes')
 
 map.use(pinia);
 map.mount('#mapa');

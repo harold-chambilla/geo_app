@@ -3,13 +3,18 @@
 </template>
   
 <script setup>
-  // Dato a enviar a otro formulario se le pondra (*), los datos que no van a estar son estos (-), Datos que iran en infoWindows(+)
-  // Datos que se van a quedar en la misma vista (/)
-  import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { funcionesStore } from '../../../../../store/colaborador/funciones';
   import { asistenciaStore } from '../../../../../store/colaborador/asistencia';
   import edificioImg from '../../../../../img/colaborador/edificio-svg.png';
   import hombreImg from '../../../../../img/colaborador/hombre-svg.png';
+  import { opcionesStore } from '../../../../../store/empresa/opciones';
+
+  const opcionesStorage = opcionesStore();
+
+  const sedes = computed(() => {
+    return opcionesStorage.SEDES;  // Acceder a las sedes almacenadas en el store
+  });
   
   // Variables de ubicación
   const latitude = ref(0);
@@ -18,21 +23,14 @@
   const mapInitialized = ref(false);
   const watchId = ref(null);
   const verId = ref(null);
-  const fileInput = ref(null);
-  
-  // Variables adicionales
-  const distancia = ref(null);
-  const asistencia = ref("");
-  const exactitudRadio = ref(null);
-  const estadoEntrada = ref("");
-  
+
   // Llamado al Store
   const functStore = funcionesStore();
   const asisStore = asistenciaStore();
   
   const mapReady = ref(false);
   
-  
+  // Obtener la geolocalización del usuario
   const watchCoordinates = () => {
     return new Promise((resolve, reject) => {
       verId.value = navigator.geolocation.getCurrentPosition(
@@ -50,98 +48,118 @@
     });
   };
 
-  onMounted(() => {
-    if ('geolocation' in navigator) {
-      setTimeout(() => {    
-        const coordenadasInitMap = async () => {
-          try {
-            const coords = await watchCoordinates();
-            // coords es un objeto con latitude y longitude
-            latitude.value = coords.latitude;
-            longitude.value = coords.longitude;
-            exactitud.value = coords.accuracy;
-            if (!mapInitialized.value) { // Función a aparecer al actualizar la web
-              await initMap(latitude.value, longitude.value, exactitud.value);
-              // console.log("no creo: ", latitude.value);
-            }
-          } catch (error) {
-            console.error("Error al obtener coordenadas:", error);
-          }
-        };
-        coordenadasInitMap();
-      }, 500);
-    }
-  });
-  
-  // Esta función se ejecutará una vez que la API de Google Maps esté cargada y lista
-  const initMap = (latitud, longitud, exact) => {
+  // Función para inicializar el mapa con las sedes y la ubicación actual
+  const initMap = (latitud, longitud, exact, sedes) => {
     if (!mapInitialized.value) {
-      const ubiActual = { lat: latitud, lng: longitud };
-      const ubiDestino = { lat: -12.085184, lng: -76.976101 }; // Ubicación de la empresa
-  
-      const mapOptions = {
-        // center: ubiDestino,
-        // zoom: 4
-      };
-  
-      const map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  
-      const radio = 800;
-      const circle = new google.maps.Circle({
+      const ubiActual = { lat: latitud, lng: longitud };  // Ubicación actual del usuario
+      
+      const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+      });
+
+      // Añadir el marcador de la ubicación actual del usuario
+      const usuarioMarker = new google.maps.Marker({
+        position: ubiActual,
+        map: map,
+        title: "Aquí estoy!",
+        icon: { url: hombreImg, scaledSize: new google.maps.Size(50, 50) }
+      });
+
+      // Dibujar un círculo alrededor de la ubicación actual
+      new google.maps.Circle({
         strokeColor: '#8CD0FF',
         strokeOpacity: 0.8,
         strokeWeight: 2,
         fillColor: '#8CD0FF',
         fillOpacity: 0.35,
         map: map,
-        center: ubiDestino,
-        radius: radio
+        center: ubiActual,
+        radius: 300  // Utilizar la exactitud como radio del círculo
       });
-      const dist = google.maps.geometry.spherical.computeDistanceBetween(ubiActual, ubiDestino);
-  
-      const infoWindow = new google.maps.InfoWindow({
-        content: '<p>Latitud: ' + latitud + '</p>' +
-          '<p>Longitud: ' + longitud + '</p>' +
-          '<p>Exactitud: ' + exact + '</p>' +
-          '<p>Distancia: ' + dist + '</p>' +
-          '<a href="https://www.google.com/maps/search/' + latitud + ',' + longitud + '">Ver en google maps</a>',
-        map: map,
-        arialabel: "Uluru",
-        // pixelOffset: new google.maps.Size(0, -50)
-      })
-  
-      const marker = [
-        new google.maps.Marker({ position: ubiActual, map: map, title: "Aqui estoy!", icon: { url: hombreImg, scaledSize: new google.maps.Size(50, 50) } }),
-        new google.maps.Marker({ position: ubiDestino, map: map, title: "Mi empresa", icon: { url: edificioImg, scaledSize: new google.maps.Size(50, 50) } })
-      ];
-  
+
+      // Crear los límites (bounds) para ajustar el mapa a todas las ubicaciones
       const bounds = new google.maps.LatLngBounds();
-      bounds.extend(ubiActual);
-      bounds.extend(ubiDestino);
-      // const padding = 50;
-      // map.fitBounds(bounds, padding);
-      map.fitBounds(bounds)
-  
-      //const lat = new google.maps.LatLng(-12.033077753513151, -76.99137861370299)
-  
+      bounds.extend(ubiActual);  // Incluir la ubicación del usuario en los límites
+
+      // Añadir las sedes al mapa
+      sedes.forEach((sede) => {
+        const ubicacionSede = { lat: parseFloat(sede.latitud), lng: parseFloat(sede.longitud) };
+
+        // Verificar si las coordenadas de la sede son válidas
+        if (!isNaN(ubicacionSede.lat) && !isNaN(ubicacionSede.lng)) {
+          // Crear un marcador para cada sede
+          new google.maps.Marker({
+            position: ubicacionSede,
+            map: map,
+            title: sede.nombre,
+            icon: { url: edificioImg, scaledSize: new google.maps.Size(50, 50) }
+          });
+
+          // Dibujar un círculo para cada sede con su respectivo radio
+          new google.maps.Circle({
+            strokeColor: '#FF5733',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FFC300',
+            fillOpacity: 0.35,
+            map: map,
+            center: ubicacionSede,
+            radius: sede.radio  // Radio por defecto de la sede
+          });
+
+          // Extender los límites del mapa para incluir la ubicación de la sede
+          bounds.extend(ubicacionSede);
+        }
+      });
+
+      // Ajustar el mapa para que todas las ubicaciones (usuario y sedes) queden dentro de los límites
+      map.fitBounds(bounds);
+
+      // Añadir el listener de tilesloaded
       const tiles = new google.maps.event.addListenerOnce(map, 'tilesloaded', () => {
-        if (!mapInitialized.value) { // El mapa ya esta inicializado, por lo que no lo que el watch se limpiara y no se volvera a actualizar
+        if (!mapInitialized.value) {
           mapInitialized.value = true;
-          // Limpiar el observador de ubicación una vez que el usuario esté satisfecho con la ubicación  
           navigator.geolocation.clearWatch(watchId.value);
         }
       });
-  
-      // infoWindow.open(map, marker[0]);
-      marker[0].addListener("click", () => { //debido al emergente, el mapa se centra automaticamente en este, por eso tome como opcion cerrarlo para abrirlo.
-        infoWindow.open({
-          anchor: marker[0],
-          map: map,
-        });
-      });
     }
   };
+
+  // Llamar a la API y cargar las sedes en el mapa cuando el componente se monte
+  onMounted(() => {
+    if ('geolocation' in navigator) {
+      setTimeout(() => { 
+        const coordenadasInitMap = async () => {
+      try {
+        const coords = await watchCoordinates();  // Obtener las coordenadas del usuario
+        latitude.value = coords.latitude;
+        longitude.value = coords.longitude;
+        exactitud.value = coords.accuracy;
+
+        // Obtener el listado de sedes desde la API y luego inicializar el mapa
+        await opcionesStorage.fetchSedes();  // Llamada a la API para obtener las sedes
+
+        if (!mapInitialized.value && sedes.value.length > 0) {
+          initMap(latitude.value, longitude.value, exactitud.value, sedes.value);  // Inicializar el mapa con las sedes y la ubicación del usuario
+        }
+      } catch (error) {
+        console.error("Error al obtener las coordenadas o sedes:", error);
+      }
+    };
+    coordenadasInitMap();
+    }, 500);
+    }
+  });
+
+  // Cargar el script de Google Maps
   window.initMap = function () {
     mapReady.value = true;
   };
 </script>
+
+<style scoped>
+.maps {
+  height: 400px;
+  width: 100%;
+}
+</style>
