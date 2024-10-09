@@ -4,6 +4,7 @@ namespace App\Controller\Colaborador\Asistencia;
 
 use App\Entity\Asistencia;
 use App\Repository\AsistenciaRepository;
+use App\Repository\ColaboradorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,11 +22,19 @@ class MarcadoController extends AbstractController
     }
 
     #[Route('/', name: 'marcarasistencia')]
-    public function marcarAsistencia(): Response
+    public function marcarAsistencia(ColaboradorRepository $colaboradorRepository): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
+        $usuario_sec = $this->getUser()->getUserIdentifier();
+        $usuario = $colaboradorRepository->findOneBy(
+            [
+                "col_nombreusuario" => $usuario_sec
+            ]
+        );
+        $empresa = $usuario->getColEmpresa();
         return $this->render('colaborador/asistencia/marcado.html.twig', [
-            'usuario' => $this->getUser()->getUserIdentifier(),
+            'empresa' => $empresa->getEmpNombreempresa()
         ]);
     }
     
