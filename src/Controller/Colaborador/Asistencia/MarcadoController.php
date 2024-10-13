@@ -5,6 +5,7 @@ namespace App\Controller\Colaborador\Asistencia;
 use App\Entity\Asistencia;
 use App\Repository\AsistenciaRepository;
 use App\Repository\ColaboradorRepository;
+use App\Repository\SedeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,9 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class MarcadoController extends AbstractController
 {
     private $entityManager;
+    private $sedeRepository;
 
-    public function __construct(EntityManagerInterface $entityManager){
+    public function __construct(EntityManagerInterface $entityManager, SedeRepository $sedeRepository){
         $this->entityManager = $entityManager;
+        $this->sedeRepository = $sedeRepository;
     }
 
     #[Route('/', name: 'marcarasistencia')]
@@ -132,4 +135,46 @@ class MarcadoController extends AbstractController
         return $this->json($asistencia, Response::HTTP_OK);
     }
 
+    #[Route('/api/listar/sedes', name: 'listar_sedes_marcado', methods: ['GET'])]
+    public function listarSedesMarcado(): JsonResponse
+    {
+        // Obtener el usuario autenticado
+        $usuario = $this->getUser();
+
+        if (!$usuario) {
+            return new JsonResponse(['error' => 'Colaborador no encontrado'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Obtener la empresa a la que pertenece el usuario
+        $empresa = $usuario->getColEmpresa(); // Suponiendo que el usuario tiene una relación con la empresa
+
+        if (!$empresa) {
+            return new JsonResponse(['error' => 'Empresa no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Obtener las sedes de la empresa
+        $sedes = $this->sedeRepository->findBy(['sed_empresa' => $empresa]);
+
+        if (empty($sedes)) {
+            return new JsonResponse(['error' => 'No se encontraron sedes para esta empresa'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        
+        // Radio por defecto para las sedes
+        $radioPorDefecto = 300; // Valor en metros
+
+        // Crear una respuesta con la información de las sedes
+        $data = [];
+        foreach ($sedes as $sede) {
+            $data[] = [
+                'id' => $sede->getId(),
+                'nombre' => $sede->getSedNombre(),
+                'direccion' => $sede->getSedDireccion(),
+                'latitud' => $sede->getSedUbicacion()[0],
+                'longitud' => $sede->getSedUbicacion()[1],
+                'radio' => $radioPorDefecto
+            ];
+        }
+
+        return new JsonResponse($data, JsonResponse::HTTP_OK);
+    }
 }

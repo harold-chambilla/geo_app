@@ -51,7 +51,7 @@ onUnmounted(() => { //Utilizado para no utilizar componentes al desmontar
 });
 
 const validarSedes = async () => {
-  await opcionesStorage.fetchSedes();  // Asegúrate de obtener las sedes antes de validar
+  await asisStore.fetchSedesMarcado();  // Asegúrate de obtener las sedes antes de validar
 
   dentroDeSede.value = sedes.value.some((sede) => {
     const ubicacionSede = new google.maps.LatLng(parseFloat(sede.latitud), parseFloat(sede.longitud));

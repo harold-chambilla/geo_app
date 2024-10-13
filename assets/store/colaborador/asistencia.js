@@ -8,11 +8,13 @@ export const asistenciaStore = defineStore('asistencia', {
         entrada: null,
         salida: null,
         errorMessage: null,
+        sedes: []
        }),
     getters: {
         ENTRADA(state) { return state.entrada },
         SALIDA(state) { return state.salida },
-        ASISTENCIA(state) { return state.asistencia }
+        ASISTENCIA(state) { return state.asistencia },
+        SEDES(state) { return state.sedes }
     },
     actions: {
         async POST_ENTRADA(data) {
@@ -58,6 +60,16 @@ export const asistenciaStore = defineStore('asistencia', {
               this.salida = response.data.salida;
             } catch (error) {
               console.error('Error al obtener la asistencia:', error);
+            }
+          },
+          async fetchSedesMarcado() {
+            try {
+              const response = await axios.get('/marcado/api/listar/sedes');
+              console.log('apiconsumida')
+              this.sedes = response.data;  // Guardar las sedes en el estado
+              console.log('apiconsumida:', this.sedes)
+            } catch (error) {
+              console.error('Error al obtener las sedes:', error);
             }
           },
     }

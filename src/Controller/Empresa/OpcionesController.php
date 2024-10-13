@@ -168,6 +168,10 @@ class OpcionesController extends AbstractController
         // Obtener el usuario autenticado
         $usuario = $this->getUser();
 
+        if (!$usuario) {
+            return new JsonResponse(['error' => 'Colaborador no encontrado'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
         // Obtener la empresa a la que pertenece el usuario
         $empresa = $usuario->getColEmpresa(); // Suponiendo que el usuario tiene una relación con la empresa
 
