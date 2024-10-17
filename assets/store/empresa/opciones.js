@@ -15,7 +15,19 @@ export const opcionesStore = defineStore('opciones', {
     errorMotivos: null, // Para manejar errores al obtener los motivos
     errorRegistroAreas: null, // Para manejar errores en el registro de áreas
     errorRegistroMotivos: null, // Para manejar errores en el registro de motivos
-    sedes: []
+    sedes: [],
+    configuracionAsistencia: null, // Para almacenar la configuración de asistencia obtenida
+    errorConfiguracionAsistencia: null, // Para manejar errores al obtener la configuración
+    registroExitosoConfiguracion: null, // Para manejar el éxito del registro de configuración de asistencia
+    errorRegistroConfiguracion: null, // Para manejar errores en el registro de configuración
+    notificacionesActivas: null, // Para almacenar el estado de las notificaciones activas
+    errorNotificacionesActivas: null, // Para manejar errores al obtener notificaciones activas
+    registroExitosoNotificaciones: null, // Para manejar el éxito del registro de notificaciones
+    errorRegistroNotificaciones: null, // Para manejar errores en el registro de notificaciones
+    configuracionTrabajo: null, // Estado para la configuración de trabajo
+    errorConfiguracionTrabajo: null, // Para manejar errores en la obtención de configuración de trabajo
+    registroExitosoConfiguracionTrabajo: null, // Para manejar el éxito del registro de configuración de trabajo
+    errorRegistroConfiguracionTrabajo: null // Para manejar errores en el registro de configuración de trabajo
   }),
   getters: {
     SEDES(state) { return state.sedes }
@@ -134,6 +146,78 @@ export const opcionesStore = defineStore('opciones', {
       }
     },
 
+    // Acción para obtener la configuración de asistencia
+    async fetchConfiguracionAsistencia() {
+      try {
+        const response = await axios.get('/empresa/opciones/api/obtener-configuracion-asistencia');
+        this.configuracionAsistencia = response.data;
+        this.errorConfiguracionAsistencia = null;
+      } catch (error) {
+        this.configuracionAsistencia = null;
+        this.errorConfiguracionAsistencia = error.response?.data?.error || 'Error al obtener la configuración de asistencia';
+      }
+    },
+
+    // Acción para registrar o actualizar la configuración de asistencia
+    async registrarConfiguracionAsistencia(configuracion) {
+      try {
+        const response = await axios.post('/empresa/opciones/api/registrar-configuracion-asistencia', configuracion);
+        this.registroExitosoConfiguracion = response.data.message;
+        this.errorRegistroConfiguracion = null;
+      } catch (error) {
+        this.registroExitosoConfiguracion = null;
+        this.errorRegistroConfiguracion = error.response?.data?.error || 'Error al registrar la configuración de asistencia';
+      }
+    },
+
+    // Acción para obtener las notificaciones activas
+    async fetchNotificacionesActivas() {
+      try {
+        const response = await axios.get('/empresa/opciones/api/obtener-notificaciones-activas');
+        this.notificacionesActivas = response.data;
+        this.errorNotificacionesActivas = null;
+      } catch (error) {
+        this.notificacionesActivas = null;
+        this.errorNotificacionesActivas = error.response?.data?.error || 'Error al obtener las notificaciones activas';
+      }
+    },
+
+    // Acción para actualizar las notificaciones activas
+    async actualizarNotificacionesActivas(notificaciones) {
+      try {
+        const response = await axios.post('/empresa/opciones/api/actualizar-notificaciones-activas', notificaciones);
+        this.registroExitosoNotificaciones = response.data.message;
+        this.errorRegistroNotificaciones = null;
+      } catch (error) {
+        this.registroExitosoNotificaciones = null;
+        this.errorRegistroNotificaciones = error.response?.data?.error || 'Error al actualizar las notificaciones activas';
+      }
+    },
+
+    // Acción para obtener la configuración de trabajo
+    async fetchConfiguracionTrabajo() {
+      try {
+        const response = await axios.get('/empresa/opciones/api/obtener-configuracion-trabajo');
+        this.configuracionTrabajo = response.data;
+        this.errorConfiguracionTrabajo = null;
+      } catch (error) {
+        this.configuracionTrabajo = null;
+        this.errorConfiguracionTrabajo = error.response?.data?.error || 'Error al obtener la configuración de trabajo';
+      }
+    },
+
+    // Acción para actualizar la configuración de trabajo
+    async actualizarConfiguracionTrabajo(configuracion) {
+      try {
+        const response = await axios.post('/empresa/opciones/api/actualizar-configuracion-trabajo', configuracion);
+        this.registroExitosoConfiguracionTrabajo = response.data.message;
+        this.errorRegistroConfiguracionTrabajo = null;
+      } catch (error) {
+        this.registroExitosoConfiguracionTrabajo = null;
+        this.errorRegistroConfiguracionTrabajo = error.response?.data?.error || 'Error al actualizar la configuración de trabajo';
+      }
+    }
+    
   }
 });
 

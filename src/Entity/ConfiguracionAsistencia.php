@@ -52,6 +52,15 @@ class ConfiguracionAsistencia
     #[ORM\Column(nullable: true)]
     private ?bool $cas_marcacion = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $cas_tiempo_falta_horas = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $cas_tolerancia_ingreso_minutos = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $cas_permitir_foto = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -209,6 +218,42 @@ class ConfiguracionAsistencia
     public function setCasMarcacion(?bool $cas_marcacion): static
     {
         $this->cas_marcacion = $cas_marcacion;
+
+        return $this;
+    }
+
+    public function getCasTiempoFaltaHoras(): ?int
+    {
+        return $this->cas_tiempo_falta_horas;
+    }
+
+    public function setCasTiempoFaltaHoras(?int $cas_tiempo_falta_horas): static
+    {
+        $this->cas_tiempo_falta_horas = $cas_tiempo_falta_horas;
+
+        return $this;
+    }
+
+    public function getCasToleranciaIngresoMinutos(): ?int
+    {
+        return $this->cas_tolerancia_ingreso_minutos;
+    }
+
+    public function setCasToleranciaIngresoMinutos(?int $cas_tolerancia_ingreso_minutos): static
+    {
+        $this->cas_tolerancia_ingreso_minutos = $cas_tolerancia_ingreso_minutos;
+
+        return $this;
+    }
+
+    public function isCasPermitirFoto(): ?bool
+    {
+        return $this->cas_permitir_foto;
+    }
+
+    public function setCasPermitirFoto(?bool $cas_permitir_foto): static
+    {
+        $this->cas_permitir_foto = $cas_permitir_foto;
 
         return $this;
     }

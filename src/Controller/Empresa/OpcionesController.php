@@ -6,10 +6,13 @@ use App\Entity\Colaborador;
 use App\Entity\Empresa;
 use App\Entity\Sede;
 use App\Funciones\Empresa\AreaFunciones;
+use App\Funciones\Empresa\ConfiguracionAsistenciaFunciones;
 use App\Funciones\Empresa\EmpresaFunciones;
 use App\Funciones\Empresa\PermisoFunciones;
 use App\Repository\ColaboradorRepository;
+use App\Repository\ConfiguracionAsistenciaRepository;
 use App\Repository\EmpresaRepository;
+use App\Repository\GrupoRepository;
 use App\Repository\SedeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Func;
@@ -30,7 +33,10 @@ class OpcionesController extends AbstractController
         private PermisoFunciones $permisoFunciones,
         private SedeRepository $sedeRepository,
         private Security $security,
-        private EmpresaRepository $empresaRepository
+        private EmpresaRepository $empresaRepository,
+        private GrupoRepository $grupoRepository,
+        private ConfiguracionAsistenciaRepository $configuracionAsistenciaRepository,
+        private ConfiguracionAsistenciaFunciones $configuracionAsistenciaFunciones
 	){}
 
 	#[Route('/', name: 'mostrar')]
@@ -262,23 +268,210 @@ class OpcionesController extends AbstractController
 
     // src/Controller/SedeController.php
 
-#[Route('/api/borrar/sedes/{id}', name: 'borrar_sede', methods: ['DELETE'])]
-public function borrarSede(int $id, EntityManagerInterface $entityManager): JsonResponse
-{
-    // Buscar la sede por ID
-    $sede = $this->sedeRepository->find($id);
+    #[Route('/api/borrar/sedes/{id}', name: 'borrar_sede', methods: ['DELETE'])]
+    public function borrarSede(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Buscar la sede por ID
+        $sede = $this->sedeRepository->find($id);
 
-    // Verificar si la sede existe
-    if (!$sede) {
-        return new JsonResponse(['error' => 'Sede no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        // Verificar si la sede existe
+        if (!$sede) {
+            return new JsonResponse(['error' => 'Sede no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Eliminar la sede
+        $entityManager->remove($sede);
+        $entityManager->flush();
+
+        // Responder con un mensaje de éxito
+        return new JsonResponse(['message' => 'Sede eliminada correctamente'], JsonResponse::HTTP_OK);
     }
 
-    // Eliminar la sede
-    $entityManager->remove($sede);
-    $entityManager->flush();
+    #[Route('/api/obtener-configuracion-asistencia', name: 'obtener_configuracion_asistencia', methods: ['GET'])]
+    public function obtenerConfiguracionAsistencia(): JsonResponse
+    {
+        $grupoPredeterminado = $this->grupoRepository->findOneBy([
+            'grp_nombre' => 'Predeterminado'
+        ]);
 
-    // Responder con un mensaje de éxito
-    return new JsonResponse(['message' => 'Sede eliminada correctamente'], JsonResponse::HTTP_OK);
-}
+        $id = $this->configuracionAsistenciaRepository->findOneBy([
+           'cas_grupo' => $grupoPredeterminado 
+        ])->getId();
 
+        // Llamar a la función para obtener los datos de asistencia por ID
+        $datos = $this->configuracionAsistenciaFunciones->obtenerDatosAsistencia($id);
+
+        if (!$datos) {
+            return $this->json(['error' => 'Configuración no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($datos, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/registrar-configuracion-asistencia', name: 'registrar_configuracion_asistencia', methods: ['POST'])]
+    public function registrarConfiguracionAsistencia(Request $request): JsonResponse
+    {
+        // Obtener los datos enviados en el request
+        $datos = json_decode($request->getContent(), true);
+
+        if (!$datos || !isset($datos['tiempo_falta_horas'], $datos['tolerancia_ingreso_minutos'], $datos['permitir_foto'])) {
+            return $this->json(['error' => 'Datos inválidos'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // Verificar si existe el id en los datos
+        if (isset($datos['id'])) {
+            $id = $datos['id'];
+        } else {
+            // Buscar el ID del grupo predeterminado si no se proporcionó el id
+            $grupoPredeterminado = $this->grupoRepository->findOneBy([
+                'grp_nombre' => 'Predeterminado'
+            ]);
+
+            $id = $this->configuracionAsistenciaRepository->findOneBy([
+                'cas_grupo' => $grupoPredeterminado 
+            ])->getId();
+        }
+
+        // Incorporar el id en los datos para la función de registrar
+        $datos['id'] = $id;
+
+        // Llamar a la función para registrar o actualizar la configuración de asistencia
+        $estado = $this->configuracionAsistenciaFunciones->registrarDatosAsistencia($datos);
+
+        if ($estado !== 'Ok') {
+            return $this->json(['error' => $estado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json(['message' => 'Configuración registrada o actualizada correctamente'], JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * API para obtener las notificaciones activas de asistencia del grupo predeterminado.
+     *
+     * @return JsonResponse
+     */
+    #[Route('/api/obtener-notificaciones-activas', name: 'obtener_notificaciones_activas', methods: ['GET'])]
+    public function obtenerNotificacionesActivas(): JsonResponse
+    {
+        $grupoPredeterminado = $this->grupoRepository->findOneBy([
+            'grp_nombre' => 'Predeterminado'
+        ]);
+
+        $configuracion = $this->configuracionAsistenciaRepository->findOneBy([
+            'cas_grupo' => $grupoPredeterminado
+        ]);
+
+        if (!$configuracion) {
+            return $this->json(['error' => 'Configuración no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $notificaciones = $this->configuracionAsistenciaFunciones->obtenerNotificacionesActivas($configuracion->getId());
+
+        if (!$notificaciones) {
+            return $this->json(['error' => 'No se pudieron obtener las notificaciones activas'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($notificaciones, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * API para actualizar las notificaciones activas de asistencia del grupo predeterminado.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    #[Route('/api/actualizar-notificaciones-activas', name: 'actualizar_notificaciones_activas', methods: ['POST'])]
+    public function actualizarNotificacionesActivas(Request $request): JsonResponse
+    {
+        $datos = json_decode($request->getContent(), true);
+
+        if (!$datos || !isset($datos['faltas_tardanzas'], $datos['permisos'], $datos['vacaciones'], $datos['marcacion'])) {
+            return $this->json(['error' => 'Datos inválidos'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $grupoPredeterminado = $this->grupoRepository->findOneBy([
+            'grp_nombre' => 'Predeterminado'
+        ]);
+
+        $configuracion = $this->configuracionAsistenciaRepository->findOneBy([
+            'cas_grupo' => $grupoPredeterminado
+        ]);
+
+        if (!$configuracion) {
+            return $this->json(['error' => 'Configuración no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $estado = $this->configuracionAsistenciaFunciones->actualizarNotificacionesActivas($configuracion->getId(), $datos);
+
+        if ($estado !== 'Ok') {
+            return $this->json(['error' => $estado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json(['message' => 'Notificaciones activas actualizadas correctamente'], JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * API para obtener la configuración de trabajo (área, puesto, modalidad, horario predeterminado) del grupo predeterminado.
+     *
+     * @return JsonResponse
+     */
+    #[Route('/api/obtener-configuracion-trabajo', name: 'obtener_configuracion_trabajo', methods: ['GET'])]
+    public function obtenerConfiguracionTrabajo(): JsonResponse
+    {
+        $grupoPredeterminado = $this->grupoRepository->findOneBy([
+            'grp_nombre' => 'Predeterminado'
+        ]);
+
+        $configuracion = $this->configuracionAsistenciaRepository->findOneBy([
+            'cas_grupo' => $grupoPredeterminado
+        ]);
+
+        if (!$configuracion) {
+            return $this->json(['error' => 'Configuración no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $datos = $this->configuracionAsistenciaFunciones->obtenerConfiguracionTrabajo($configuracion->getId());
+
+        if (!$datos) {
+            return $this->json(['error' => 'No se pudieron obtener los datos de configuración de trabajo'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($datos, JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * API para actualizar la configuración de trabajo (área, puesto, modalidad, horario predeterminado) del grupo predeterminado.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    #[Route('/api/actualizar-configuracion-trabajo', name: 'actualizar_configuracion_trabajo', methods: ['POST'])]
+    public function actualizarConfiguracionTrabajo(Request $request): JsonResponse
+    {
+        $datos = json_decode($request->getContent(), true);
+
+        if (!$datos || !isset($datos['area'], $datos['puesto'], $datos['modalidadTrabajo'], $datos['predeterminarHorario'])) {
+            return $this->json(['error' => 'Datos inválidos'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $grupoPredeterminado = $this->grupoRepository->findOneBy([
+            'grp_nombre' => 'Predeterminado'
+        ]);
+
+        $configuracion = $this->configuracionAsistenciaRepository->findOneBy([
+            'cas_grupo' => $grupoPredeterminado
+        ]);
+
+        if (!$configuracion) {
+            return $this->json(['error' => 'Configuración no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $estado = $this->configuracionAsistenciaFunciones->actualizarConfiguracionTrabajo($configuracion->getId(), $datos);
+
+        if ($estado !== 'Ok') {
+            return $this->json(['error' => $estado], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json(['message' => 'Configuración de trabajo actualizada correctamente'], JsonResponse::HTTP_OK);
+    }
 }

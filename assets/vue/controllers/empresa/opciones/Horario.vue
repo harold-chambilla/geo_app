@@ -54,12 +54,23 @@
     <div class="d-flex justify-content-center">
       <button @click="guardarDatos" class="btn btn-primary btn-lg mt-3">Guardar</button>
     </div>
+
+    <!-- Mostrar mensaje de éxito o error -->
+    <div v-if="registroExitosoConfiguracionTrabajo" class="alert alert-success mt-3">
+      {{ registroExitosoConfiguracionTrabajo }}
+    </div>
+    <div v-if="errorRegistroConfiguracionTrabajo" class="alert alert-danger mt-3">
+      {{ errorRegistroConfiguracionTrabajo }}
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { opcionesStore } from '../../../../store/empresa/opciones';
 
+// Inicializar el store y el estado local de los datos
+const store = opcionesStore();
 const data = ref({
   area: '',
   puesto: '',
@@ -67,17 +78,53 @@ const data = ref({
   predeterminarHorario: '',
 });
 
-const guardarDatos = () => {
-  const resultado = {
-    area: data.value.area,
-    puesto: data.value.puesto,
+const registroExitosoConfiguracionTrabajo = ref(null);
+const errorRegistroConfiguracionTrabajo = ref(null);
+
+// Función para cargar la configuración de trabajo al montar el componente
+const cargarConfiguracionTrabajo = async () => {
+  await store.fetchConfiguracionTrabajo();
+  if (store.configuracionTrabajo) {
+    data.value = {
+      area: store.configuracionTrabajo.area ? 'si' : 'no',
+      puesto: store.configuracionTrabajo.puesto ? 'si' : 'no',
+      modalidadTrabajo: store.configuracionTrabajo.modalidadTrabajo,
+      predeterminarHorario: store.configuracionTrabajo.predeterminarHorario ? 'si' : 'no',
+    };
+  } else if (store.errorConfiguracionTrabajo) {
+    errorRegistroConfiguracionTrabajo.value = store.errorConfiguracionTrabajo;
+  }
+};
+
+// Función para guardar los datos actualizados
+const guardarDatos = async () => {
+  const configuracion = {
+    area: data.value.area === 'si',
+    puesto: data.value.puesto === 'si',
     modalidadTrabajo: data.value.modalidadTrabajo,
-    predeterminarHorario: data.value.predeterminarHorario,
+    predeterminarHorario: data.value.predeterminarHorario === 'si',
   };
 
-  console.log("Datos guardados:", resultado);
+  await store.actualizarConfiguracionTrabajo(configuracion);
+
+  if (store.registroExitosoConfiguracionTrabajo) {
+    registroExitosoConfiguracionTrabajo.value = store.registroExitosoConfiguracionTrabajo;
+    errorRegistroConfiguracionTrabajo.value = null;
+  } else {
+    errorRegistroConfiguracionTrabajo.value = store.errorRegistroConfiguracionTrabajo;
+    registroExitosoConfiguracionTrabajo.value = null;
+  }
 };
+
+// Cargar configuración de trabajo al montar el componente
+onMounted(() => {
+  cargarConfiguracionTrabajo();
+});
 </script>
+
+<style scoped>
+/* Sin cambios adicionales en los estilos, todo se basa en Bootstrap */
+</style>
 
 
 
