@@ -147,4 +147,54 @@ class AreaFunciones
 
         return $estado; // Devolver el estado 'Ok' si todo fue exitoso
     }
+
+    public function obtenerEmpleadosPorAreaYPuesto(Empresa $empresa): array
+    {
+        // Obtener todas las áreas de la empresa
+        $areas = $empresa->getEmpAreas();
+        $resultado = [];
+
+        foreach ($areas as $area) {
+            $puestos = [];
+
+            foreach ($area->getAraPuestos() as $puesto) {
+                // Obtener los colaboradores asociados a este puesto
+                $colaboradores = [];
+                foreach ($puesto->getPstColaboradores() as $colaborador) {
+                    if (!$colaborador->isColEliminado()) {
+                        $colaboradores[] = [
+                            'id' => $colaborador->getId(),
+                            'nombre' => $colaborador->getColNombres(),
+                            'apellidos' => $colaborador->getColApellidos(),
+                            'dni' => $colaborador->getColDninit(),
+                            'correo' => $colaborador->getColCorreoelectronico(),
+                            'usuario' => $colaborador->getColNombreusuario(),
+                        ];
+                    }
+                }
+
+                // Añadir la información del puesto y sus colaboradores
+                if (!$puesto->isPstEliminado()) {
+                    $puestos[] = [
+                        'id' => $puesto->getId(),
+                        'nombre' => $puesto->getPstNombre(),
+                        'eliminado' => $puesto->isPstEliminado(),
+                        'colaboradores' => $colaboradores,
+                    ];
+                }
+            }
+
+            // Añadir la información del área y sus puestos
+            if (!$area->isAraEliminado()) {
+                $resultado[] = [
+                    'id' => $area->getId(),
+                    'nombre' => $area->getAraNombre(),
+                    'eliminado' => $area->isAraEliminado(),
+                    'puestos' => $puestos,
+                ];
+            }
+        }
+
+        return $resultado;
+    }
 }

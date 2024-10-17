@@ -49,5 +49,5 @@ class HorariosFunciones
             'estado' => $estado,
             'errores' => $errores
         ];
-    }
+    } 
 }
