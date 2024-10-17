@@ -6,7 +6,7 @@
 		<title>{% block title %}{% endblock %} - EasilyControl!</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-        <link rel="stylesheet" href="{{ asset('css/empresa/Menu/Menu.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/empresa/menu/menu.css') }}">
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -29,55 +29,55 @@
         <!-- Logo -->
         <li class="d-flex justify-content-center align-items-center" >
 
-                <img src="{{ asset('ico/empresa/Menu/ico_logo.png') }}" alt="" class="ico-logo" style=" width: 50px; height: 50px;">
+                <img src="{{ asset('ico/empresa/menu/ico_logo.png') }}" alt="" class="ico-logo" style=" width: 50px; height: 50px;">
         </li>
         </div>
         <!-- Menú Principal -->
         <div class="bottom-menu d-flex flex-column justify-content-center" style="height: 80%; background: #0057A4;" >
          <li class=" traslado dif-ico " style="width: 100px;">
             <a class="nav-link d-flex align-items-center"  href="{{ path('app_empresa_inicio_mostrar') }}" style="width: 100px; height: 20px;">
-                    <img src="{{ asset('ico/empresa/Menu/inicio.png') }}" alt="" class="icon">
+                    <img src="{{ asset('ico/empresa/menu/inicio.png') }}" alt="" class="icon">
                     <span class="ms-3">Home</span>
                 </a>
             </li>
               {% if habilitado %} 
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_asistencia_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/asistencia.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/asistencia.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Asistencia</span>
                 </a>
             </li>
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_permisos_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/permisos.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/permisos.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Permisos</span>
                 </a>
             </li>
             {% endif %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_empleados_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/empleados.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/empleados.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Empleados</span>
                 </a>
             </li>
             {% if habilitado %}
              <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_vacaciones_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/vacaiones.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/vacaiones.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Vacaciones</span>
                 </a>
             </li>
             {% endif %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_horario_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/horario.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/horario.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Horario</span>
                 </a>
             </li>
             {% if habilitado %}
               <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="" style="width: 100px; height: 20px;">
-                    <i > <img src="{{ asset('ico/empresa/Menu/reporte.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{ asset('ico/empresa/menu/reporte.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Reportes</span>
                 </a>
             </li>
@@ -88,13 +88,13 @@
         <div class="bottom-menu d-flex flex-column justify-content-center" style="height: 20%;background-color: #FFC107;">
              <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_opciones_mostrar') }}"style="width: 100px; height: 20px;">
-                    <i > <img src="{{asset('ico/empresa/Menu/configuracion.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{asset('ico/empresa/menu/configuracion.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Opciones</span>
                 </a>
             </li>
             <li class=" traslado dif-ico" style="width: 100px;">
                 <a class="nav-link d-flex align-items-center" href="{{ path('app_empresa_seguridad_desconectarse') }}" style="width: 100px; height: 20px;">
-                    <i > <img src="{{asset('ico/empresa/Menu/salida.png') }}" alt="" class="icon"></i>
+                    <i > <img src="{{asset('ico/empresa/menu/salida.png') }}" alt="" class="icon"></i>
                     <span class="ms-3">Salir</span>
                 </a>
             </li>
