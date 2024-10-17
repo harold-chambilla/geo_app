@@ -65,6 +65,7 @@ import Notificaciones from './vue/controllers/empresa/opciones/Notificaciones.vu
 import Asistencia from './vue/controllers/empresa/opciones/Asistencia.vue';
 import OHorario from './vue/controllers/empresa/opciones/Horario.vue';
 import List_Sedes from './vue/controllers/test/List_Sedes.vue';
+import EHorario from './vue/controllers/empresa/horario/Horario.vue';    
 
 const marcado = createApp(Marcado);
 const app = createApp(App);
@@ -82,6 +83,7 @@ const permisos = createApp(Permisos);
 const notificaciones = createApp(Notificaciones);
 const asistencia = createApp(Asistencia);
 const ohorario = createApp(OHorario);
+const ehorario = createApp(EHorario);
 
 const listSedes = createApp(List_Sedes)
 
@@ -138,3 +140,6 @@ asistencia.mount('#asistencia');
 
 ohorario.use(pinia);
 ohorario.mount('#ohorario');
+
+ehorario.use(pinia);
+ehorario.mount('#ehorario');
