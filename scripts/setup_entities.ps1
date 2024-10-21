@@ -22,7 +22,7 @@ Write-Output "pms_estado`nstring`n`nno`npms_eliminado`nboolean`nno`nmotivo`nrela
 
 Write-Output "hot_diasemana`nstring`n`nno`nhot_fecha`ndate`nno`nhot_horaentrada`ntime`nno`nhot_horasalida`ntime`nno`nhot_tipojornada`nstring`n`nno`nhot_eliminado`nboolean`nno`ncolaborador`nrelation`nColaborador`nManyToOne`nno`n`n`n`n" | php bin/console make:entity HorarioTrabajo
 
-Write-Output "reg_tablaafectada`nstring`n`nno`nreg_campoafectado`nstring`n`nno`nreg_valoranterior`nstring`n`nno`nreg_valornuevo`nstring`n`nno`nreg_fecha`ndatetime`nno`ncolaborador`nrelation`nolaborador`nManyToOne`nno`n`n`n`n" | php bin/console make:entity RegistroCambios
+Write-Output "reg_tablaafectada`nstring`n`nno`nreg_campoafectado`nstring`n`nno`nreg_valoranterior`nstring`n`nno`nreg_valornuevo`nstring`n`nno`nreg_fecha`ndatetime`nno`n" | php bin/console make:entity RegistroCambios
 
 php bin/console make:migration
 
