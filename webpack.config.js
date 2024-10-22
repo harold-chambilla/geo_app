@@ -59,7 +59,11 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader((options) => {
+        options.sassOptions = {
+            quietDeps: true  // Suppress warnings from third-party dependencies like Bootstrap
+        };
+    })
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -76,3 +80,9 @@ Encore
 ;
 
 module.exports = Encore.getWebpackConfig();
+
+module.exports.ignoreWarnings = [
+    {
+        message: /legacy JS API is deprecated/,
+    },
+];
