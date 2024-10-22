@@ -12,7 +12,9 @@ Write-Output "pst_nombre`nstring`n`nno`npst_eliminado`nboolean`nno`narea`nrelati
 
 Write-Output "cas_tiempo_falta_horas`ninteger`nno`ncas_tolerancia_ingreso_minutos`ninteger`nno`ncas_permitir_foto`nboolean`nno`ncas_faltas_tardanzas`nboolean`nno`ncas_permisos`nboolean`nno`ncas_vacaciones`nboolean`nno`ncas_marcacion`nboolean`nno`ncas_modalidad`nstring`n`nno`ncas_area`nboolean`nno`ncas_puesto`nboolean`nno`ncas_predhorario`nboolean`nno`ncas_eliminado`nboolean`nno`ncas_estado`nstring`n`nno`ngrupo`nrelation`nGrupo`nManyToOne`nno`n`n`n`nsede`nrelation`nSede`nManyToOne`nno`n`n`n`npuesto`nrelation`nPuesto`nManyToOne`nno`n`n`n`n" | php bin/console make:entity ConfiguracionAsistencia
 
-Write-Output "yes`ncol_nombreusuario`nyes`ncol_nombres`nstring`n`nno`ncol_apellidos`nstring`n`nno`ncol_dninit`nstring`n`nno`ncol_fechainacimiento`ndate`nno`ncol_correoelecronico`nstring`n`nno`ncol_eliminado`nboolean`nno`ngrupo`nrelation`nGrupo`nManyToOne`nno`n`n`n`n" | php bin/console make:user Colaborador
+Write-Output "yes`ncol_nombreusuario`nyes`n" | php bin/console make:user Colaborador
+
+Write-Output "col_nombres`nstring`n`nno`ncol_apellidos`nstring`n`nno`ncol_dninit`nstring`n`nno`ncol_fechainacimiento`ndate`nno`ncol_correoelecronico`nstring`n`nno`ncol_eliminado`nboolean`nno`ngrupo`nrelation`nGrupo`nManyToOne`nno`n`n`n`n" | php bin/console make:entity Colaborador
 
 Write-Output "asi_fechaentrada`ndatetime`nno`nasi_fechasalida`ndatetime`nno`nasi_horaentrada`ntime`nno`nasi_horasalida`ntime`nno`nasi_fotoentrada`nstring`n`nno`nasi_fotosalida`nstring`n`nno`nasi_ubicacionentrada`nstring`n`nno`nasi_ubicacionsalida`nstring`n`nno`nasi_estadoentrada`nstring`n`nno`nasi_estadosalida`nstring`n`nno`nasi_notas`nstring`n`nno`nasi_eliminado`nboolean`nno`ncolaborador`nrelation`nColaborador`nManyToOne`nno`n`n`n`n" | php bin/console make:entity Asistencia
 
