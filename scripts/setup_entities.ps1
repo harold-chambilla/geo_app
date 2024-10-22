@@ -1,4 +1,4 @@
-cd "E:\Datos de los usuarios\mhuertasr\Documentos\GitHub\geo.ksperu.com"
+﻿cd "E:\Datos de los usuarios\mhuertasr\Documentos\GitHub\geo.ksperu.com"
 
 Write-Output "emp_ruc`nstring`n`nno`nemp_nombreempresa`nstring`n`nno`nemp_industria`nstring`n`nno`nemp_telefono`nstring`n`nno`nemp_cantidadempleados`ninteger`nno`nemp_eliminado`nboolean`nno`n" | php bin/console make:entity Empresa
 
