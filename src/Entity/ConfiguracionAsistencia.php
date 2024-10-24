@@ -64,6 +64,9 @@ class ConfiguracionAsistencia
     #[ORM\JoinColumn(nullable: false)]
     private ?Puesto $puesto = null;
 
+    #[ORM\Column]
+    private ?bool $cas_horasextras = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -257,6 +260,18 @@ class ConfiguracionAsistencia
     public function setPuesto(?Puesto $puesto): static
     {
         $this->puesto = $puesto;
+
+        return $this;
+    }
+
+    public function isCasHorasextras(): ?bool
+    {
+        return $this->cas_horasextras;
+    }
+
+    public function setCasHorasextras(bool $cas_horasextras): static
+    {
+        $this->cas_horasextras = $cas_horasextras;
 
         return $this;
     }

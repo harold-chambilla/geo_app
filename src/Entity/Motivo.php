@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MotivoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MotivoRepository::class)]
@@ -19,9 +21,16 @@ class Motivo
     #[ORM\Column]
     private ?bool $mtv_eliminado = null;
 
-    #[ORM\ManyToOne(inversedBy: 'motivo')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Permiso $permiso = null;
+    /**
+     * @var Collection<int, Permiso>
+     */
+    #[ORM\OneToMany(targetEntity: Permiso::class, mappedBy: 'motivo')]
+    private Collection $permisos;
+
+    public function __construct()
+    {
+        $this->permisos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,14 +61,32 @@ class Motivo
         return $this;
     }
 
-    public function getPermiso(): ?Permiso
+    /**
+     * @return Collection<int, Permiso>
+     */
+    public function getPermisos(): Collection
     {
-        return $this->permiso;
+        return $this->permisos;
     }
 
-    public function setPermiso(?Permiso $permiso): static
+    public function addPermiso(Permiso $permiso): static
     {
-        $this->permiso = $permiso;
+        if (!$this->permisos->contains($permiso)) {
+            $this->permisos->add($permiso);
+            $permiso->setMotivo($this);
+        }
+
+        return $this;
+    }
+
+    public function removePermiso(Permiso $permiso): static
+    {
+        if ($this->permisos->removeElement($permiso)) {
+            // set the owning side to null (unless already changed)
+            if ($permiso->getMotivo() === $this) {
+                $permiso->setMotivo(null);
+            }
+        }
 
         return $this;
     }

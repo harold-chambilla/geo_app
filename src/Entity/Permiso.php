@@ -21,20 +21,15 @@ class Permiso
     #[ORM\Column]
     private ?bool $pms_eliminado = null;
 
-    /**
-     * @var Collection<int, Motivo>
-     */
-    #[ORM\OneToMany(targetEntity: Motivo::class, mappedBy: 'permiso')]
-    private Collection $motivo;
-
     #[ORM\ManyToOne(inversedBy: 'permisos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Colaborador $colaborador = null;
 
-    public function __construct()
-    {
-        $this->motivo = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'permisos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Motivo $motivo = null;
+
+    public function __construct(){}
 
     public function getId(): ?int
     {
@@ -65,36 +60,6 @@ class Permiso
         return $this;
     }
 
-    /**
-     * @return Collection<int, Motivo>
-     */
-    public function getMotivo(): Collection
-    {
-        return $this->motivo;
-    }
-
-    public function addMotivo(Motivo $motivo): static
-    {
-        if (!$this->motivo->contains($motivo)) {
-            $this->motivo->add($motivo);
-            $motivo->setPermiso($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMotivo(Motivo $motivo): static
-    {
-        if ($this->motivo->removeElement($motivo)) {
-            // set the owning side to null (unless already changed)
-            if ($motivo->getPermiso() === $this) {
-                $motivo->setPermiso(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getColaborador(): ?Colaborador
     {
         return $this->colaborador;
@@ -103,6 +68,18 @@ class Permiso
     public function setColaborador(?Colaborador $colaborador): static
     {
         $this->colaborador = $colaborador;
+
+        return $this;
+    }
+
+    public function getMotivo(): ?Motivo
+    {
+        return $this->motivo;
+    }
+
+    public function setMotivo(?Motivo $motivo): static
+    {
+        $this->motivo = $motivo;
 
         return $this;
     }
