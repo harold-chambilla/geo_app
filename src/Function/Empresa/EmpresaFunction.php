@@ -224,7 +224,7 @@ class EmpresaFunction
             'emp_industria' => $empresa->getEmpIndustria(),
             'emp_telefono' => $empresa->getEmpTelefono(),
             'emp_cantidad_empleados' => $empresa->getEmpCantidadEmpleados(),
-            'emp_eliminado' => $empresa->getEmpEliminado(),
+            'emp_eliminado' => $empresa->isEmpEliminado(),
             'grupos' => [],
         ];
 
@@ -233,7 +233,7 @@ class EmpresaFunction
             $grupoData = [
                 'grp_nombre' => $grupo->getGrpNombre(),
                 'grp_descripcion' => $grupo->getGrpDescripcion(),
-                'grp_eliminado' => $grupo->getGrpEliminado(),
+                'grp_eliminado' => $grupo->isGrpEliminado(),
                 'colaboradores' => [],
                 'configuraciones_asistencia' => [],
             ];
@@ -243,10 +243,10 @@ class EmpresaFunction
                 $colaboradorData = [
                     'col_nombres' => $colaborador->getColNombres(),
                     'col_apellidos' => $colaborador->getColApellidos(),
-                    'col_dni' => $colaborador->getColDni(),
-                    'col_correo_electronico' => $colaborador->getColCorreoElectronico(),
-                    'col_fecha_nacimiento' => $colaborador->getColFechaNacimiento()->format('Y-m-d'),
-                    'col_eliminado' => $colaborador->getColEliminado(),
+                    'col_dni' => $colaborador->getColDninit(),
+                    'col_correo_electronico' => $colaborador->getColCorreoelecronico(),
+                    'col_fecha_nacimiento' => $colaborador->getColFechainacimiento()->format('Y-m-d'),
+                    'col_eliminado' => $colaborador->isColEliminado(),
                     'horarios_trabajo' => [],
                     'asistencias' => [],
                     'permisos' => [],
@@ -288,21 +288,21 @@ class EmpresaFunction
                 $configuracionData = [
                     'cas_tiempo_falta_horas' => $configuracion->getCasTiempoFaltaHoras(),
                     'cas_tolerancia_ingreso_minutos' => $configuracion->getCasToleranciaIngresoMinutos(),
-                    'cas_vacaciones' => $configuracion->getCasVacaciones(),
+                    'cas_vacaciones' => $configuracion->isCasVacaciones(),
                     'cas_estado' => $configuracion->getCasEstado(),
-                    'cas_eliminado' => $configuracion->getCasEliminado(),
+                    'cas_eliminado' => $configuracion->isCasEliminado(),
                     'sede' => [
                         'sed_nombre' => $configuracion->getSede()->getSedNombre(),
                         'sed_direccion' => $configuracion->getSede()->getSedDireccion(),
                         'sed_ubicacion' => $configuracion->getSede()->getSedUbicacion(),
-                        'sed_eliminado' => $configuracion->getSede()->getSedEliminado(),
+                        'sed_eliminado' => $configuracion->getSede()->isSedEliminado(),
                     ],
                     'puesto' => [
                         'pst_nombre' => $configuracion->getPuesto()->getPstNombre(),
-                        'pst_eliminado' => $configuracion->getPuesto()->getPstEliminado(),
+                        'pst_eliminado' => $configuracion->getPuesto()->isPstEliminado(),
                         'area' => [
                             'ara_nombre' => $configuracion->getPuesto()->getArea()->getAraNombre(),
-                            'ara_eliminado' => $configuracion->getPuesto()->getArea()->getAraEliminado(),
+                            'ara_eliminado' => $configuracion->getPuesto()->getArea()->isAraEliminado(),
                         ],
                     ],
                 ];

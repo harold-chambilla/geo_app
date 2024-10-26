@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap Icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <div class="d-flex">
+                <!-- Sidebar -->
+                <div class="bg-primary d-flex flex-column flex-shrink-0 p-3 min-vh-100" style="width: 80px;">
+                    <ul class="nav nav-pills flex-column mb-auto text-center">
+                        <li class="nav-item">
+                            <a href="index.html" class="nav-link text-white" aria-current="page">
+                                <i class="bi bi-house-door fs-4"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="empleados.html" class="nav-link text-white">
+                                <i class="bi bi-people fs-4"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="horario.html" class="nav-link text-white">
+                                <i class="bi bi-clock fs-4"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-pills flex-column text-center">
+                        <li>
+                            <a href="{{ path('app_empresa_opciones_inicio') }}" class="nav-link text-white">
+                                <i class="bi bi-gear fs-4"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="salir.html" class="nav-link text-white">
+                                <i class="bi bi-box-arrow-right fs-4"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Content -->
+                {% block content %}
+                    <div class="flex-grow-1 p-3">
+                        <div class="d-flex justify-content-center">
+                            <!-- Card Empleados Redireccionable -->
+                            <div class="card text-center m-2" style="width: 10rem; height: 6rem;">
+                                <a href="empleados.html" class="text-decoration-none text-dark">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Empleados</h5>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Card Horario Redireccionable -->
+                            <div class="card text-center m-2" style="width: 10rem; height: 6rem;">
+                                <a href="horario.html" class="text-decoration-none text-dark">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Horario</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </body>
+</html>
+

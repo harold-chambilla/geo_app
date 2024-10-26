@@ -9,3 +9,17 @@ const $ = require('jquery');
 require('bootstrap');
 
 registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));
+
+const pinia = createPinia();
+
+import EOEmpresa from "../assets/vue/controllers/empresa/opciones/empresa.vue";
+import EOArea from "../assets/vue/controllers/empresa/opciones/area.vue";
+
+const eoempresa = createApp(EOEmpresa);
+const eoarea = createApp(EOArea);
+
+eoempresa.use(pinia);
+eoempresa.mount('#eoempresa');
+
+eoarea.use(pinia);
+eoarea.mount('#eoarea');
