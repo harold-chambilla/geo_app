@@ -24,8 +24,8 @@ class Sede
     #[ORM\Column(length: 255)]
     private ?string $sed_direccion = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $sed_ubicacion = null;
+    #[ORM\Column]
+    private array $sed_ubicacion = [];
 
     #[ORM\Column]
     private ?bool $sed_eliminado = null;
@@ -82,18 +82,6 @@ class Sede
         return $this;
     }
 
-    public function getSedUbicacion(): ?string
-    {
-        return $this->sed_ubicacion;
-    }
-
-    public function setSedUbicacion(string $sed_ubicacion): static
-    {
-        $this->sed_ubicacion = $sed_ubicacion;
-
-        return $this;
-    }
-
     public function isSedEliminado(): ?bool
     {
         return $this->sed_eliminado;
@@ -132,6 +120,18 @@ class Sede
                 $configuracionAsistencia->setSede(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSedUbicacion(): array
+    {
+        return $this->sed_ubicacion;
+    }
+
+    public function setSedUbicacion(array $sed_ubicacion): static
+    {
+        $this->sed_ubicacion = $sed_ubicacion;
 
         return $this;
     }
