@@ -28,5 +28,21 @@ export const useOpcionesStore = defineStore('opcionesStore', {
                 this.loading = false;
             }
         },
+        async registrarSede(sede) {
+            try {
+                let formData = new FormData();
+        // formData.append('sedeId', sede.id);
+        formData.append('sed_nombre', sede.empresaNombre);
+        formData.append('latitud', sede.latitude);
+        formData.append('longitud', sede.longitude);
+        formData.append('sed_direccion', sede.direccion);
+        formData.append('sed_pais', sede.pais); 
+              const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
+              this.sedes.push(response.data); // Actualizar el estado con la nueva sede
+              console.log('Sede registrada exitosamente:', response.data);
+            } catch (error) {
+              console.error('Error al registrar la sede:', error);
+            }
+          }
     },
 });
