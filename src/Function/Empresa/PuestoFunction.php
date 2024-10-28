@@ -61,7 +61,7 @@ class PuestoFunction
     {
         // Buscar el puesto por su ID
         $puesto = $this->entityManager->getRepository(Puesto::class)->find($puestoId);
-        if (!$puesto || $puesto->getPstEliminado()) {
+        if (!$puesto || $puesto->isPstEliminado()) {
             throw new \Exception('puesto no encontrado o está eliminado');
         }
 

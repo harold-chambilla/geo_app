@@ -31,18 +31,141 @@ export const useOpcionesStore = defineStore('opcionesStore', {
         async registrarSede(sede) {
             try {
                 let formData = new FormData();
-        // formData.append('sedeId', sede.id);
-        formData.append('sed_nombre', sede.empresaNombre);
-        formData.append('latitud', sede.latitude);
-        formData.append('longitud', sede.longitude);
-        formData.append('sed_direccion', sede.direccion);
-        formData.append('sed_pais', sede.pais); 
-              const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
-              this.sedes.push(response.data); // Actualizar el estado con la nueva sede
-              console.log('Sede registrada exitosamente:', response.data);
+                // formData.append('sedeId', sede.id);
+                formData.append('sed_nombre', sede.empresaNombre);
+                formData.append('latitud', sede.latitude);
+                formData.append('longitud', sede.longitude);
+                formData.append('sed_direccion', sede.direccion);
+                formData.append('sed_pais', sede.pais); 
+                  const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
+                  this.sedes.push(response.data); // Actualizar el estado con la nueva sede
+                  console.log('Sede registrada exitosamente:', response.data);
             } catch (error) {
-              console.error('Error al registrar la sede:', error);
+                console.error('Error al registrar la sede:', error);
             }
-          }
+        },
+
+        // Acción para crear un área
+        async crearArea(empresaId, areaData) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.post(`/empresa/opciones/api/crear-area/${empresaId}`, areaData);
+                if (response.data.status === 'success') {
+                    this.areas.push(response.data.data);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al crear el área';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para obtener todas las áreas de una empresa
+        async fetchAreas(empresaId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.get(`/empresa/opciones/api/obtener-areas/${empresaId}`);
+                if (response.data.status === 'success') {
+                    this.areas = response.data.data;
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al obtener las áreas';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para obtener un área por su ID
+        async fetchArea(areaId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.get(`/empresa/opciones/api/obtener-area/${areaId}`);
+                if (response.data.status === 'success') {
+                    return response.data.data; // Retorna el área específica
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al obtener el área';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para eliminar un área
+        async eliminarArea(areaId) {
+            try {
+                const response = await axios.delete(`/empresa/opciones/api/eliminar-area/${areaId}`);
+                if (response.data.status === 'success') {
+                    this.areas = this.areas.filter(area => area.ara_id !== areaId);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al eliminar el área';
+            }
+        },
+
+        // Acción para crear un puesto en un área específica
+        async crearPuesto(areaId, puestoData) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.post(`/empresa/opciones/api/crear-puesto/${areaId}`, puestoData);
+                if (response.data.status === 'success') {
+                    this.puestos.push(response.data.data);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al crear el puesto';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para obtener un puesto por su ID
+        async fetchPuesto(puestoId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.get(`/empresa/opciones/api/obtener-puesto/${puestoId}`);
+                if (response.data.status === 'success') {
+                    return response.data.data; // Retorna el puesto específico
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al obtener el puesto';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para eliminar un puesto
+        async eliminarPuesto(puestoId) {
+            try {
+                const response = await axios.delete(`/empresa/opciones/api/eliminar-puesto/${puestoId}`);
+                if (response.data.status === 'success') {
+                    this.puestos = this.puestos.filter(puesto => puesto.pst_id !== puestoId);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al eliminar el puesto';
+            }
+        },
     },
 });

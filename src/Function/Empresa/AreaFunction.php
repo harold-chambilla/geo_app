@@ -19,7 +19,6 @@ class AreaFunction
         $this->entityManager = $entityManager;
     }
 
-    // Función para registrar un área y asociarla a un nuevo puesto "Sistema"
     public function registrarArea(int $empresaId, array $areaData): array
     {
         // Buscar la empresa por su ID
@@ -28,23 +27,31 @@ class AreaFunction
             throw new \Exception('empresa no encontrada');
         }
 
-        // Buscar el grupo "General" de la empresa
+        // Asegurarse de que el grupo "general" existe en la empresa, o crearlo si no existe
         $grupo = $this->entityManager->getRepository(Grupo::class)->findOneBy([
             'empresa' => $empresa,
             'grp_nombre' => 'general',
         ]);
+
         if (!$grupo) {
-            throw new \Exception('grupo "general" no encontrado en esta empresa');
+            // Crear el grupo "general" si no se encuentra
+            $grupo = new Grupo();
+            $grupo->setGrpNombre('general');
+            $grupo->setGrpDescripcion('Grupo general creado automáticamente');
+            $grupo->setGrpEliminado(false);
+            $grupo->setEmpresa($empresa);
+            $this->entityManager->persist($grupo);
         }
 
-        // Verificar si ya existe un área con el mismo nombre vinculada a la empresa
+        // Verificar si ya existe un área con el mismo nombre en la empresa
         $areaExistente = $this->entityManager->getRepository(Area::class)->createQueryBuilder('a')
-            ->join('a.puesto', 'p')
+            ->join('a.puestos', 'p')
             ->join('p.configuracionAsistencias', 'ca')
-            ->where('ca.grupo = :grupo')
-            ->andWhere('a.araNombre = :nombre')
-            ->andWhere('a.araEliminado = false')
-            ->setParameter('grupo', $grupo)
+            ->join('ca.grupo', 'g')
+            ->where('g.empresa = :empresa')
+            ->andWhere('a.ara_nombre = :nombre')
+            ->andWhere('a.ara_eliminado = false')
+            ->setParameter('empresa', $empresa)
             ->setParameter('nombre', $areaData['ara_nombre'])
             ->getQuery()
             ->getOneOrNullResult();
@@ -53,17 +60,17 @@ class AreaFunction
             throw new \Exception('ya existe un área con el mismo nombre en esta empresa');
         }
 
-        // Buscar la configuración de asistencia con estado "Sistema" vinculada al grupo
-        $configuracionSistema = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->findOneBy([
-            'grupo' => $grupo,
-            'cas_estado' => 'sistema',
-        ]);
-        if (!$configuracionSistema) {
-            throw new \Exception('configuración de asistencia con estado "sistema" no encontrada en este grupo');
-        }
+        // Buscar la sede principal asociada a cualquier configuración de asistencia en estado "sistema"
+        $sedePrincipal = $this->entityManager->getRepository(Sede::class)->createQueryBuilder('s')
+            ->join('s.configuracionAsistencias', 'ca')
+            ->join('ca.grupo', 'g')
+            ->where('g.empresa = :empresa')
+            ->andWhere('ca.cas_estado = :estado')
+            ->setParameter('empresa', $empresa)
+            ->setParameter('estado', 'sistema')
+            ->getQuery()
+            ->getOneOrNullResult();
 
-        // Obtener la sede principal a través de la configuración de asistencia con estado "Sistema"
-        $sedePrincipal = $configuracionSistema->getSede();
         if (!$sedePrincipal) {
             throw new \Exception('sede principal no encontrada para la empresa');
         }
@@ -75,7 +82,7 @@ class AreaFunction
 
         $this->entityManager->persist($area);
 
-        // Crear un nuevo puesto "Sistema" para el área y la configuración de asistencia
+        // Crear un nuevo puesto "Sistema" para el área
         $puestoSistema = new Puesto();
         $puestoSistema->setPstNombre('sistema');
         $puestoSistema->setPstEliminado(false);
@@ -102,7 +109,7 @@ class AreaFunction
         $configuracionAsistencia->setGrupo($grupo);
         $configuracionAsistencia->setSede($sedePrincipal);
         $configuracionAsistencia->setPuesto($puestoSistema);
-        
+
         $this->entityManager->persist($configuracionAsistencia);
         $this->entityManager->flush();
 
@@ -125,11 +132,11 @@ class AreaFunction
 
         // Buscar todas las áreas asociadas a la empresa a través de puestos y configuraciones de asistencia
         $areas = $this->entityManager->getRepository(Area::class)->createQueryBuilder('a')
-            ->join('a.puesto', 'p')
-            ->join('p.configuracionAsistencias', 'ca')
-            ->join('ca.grupo', 'g')
-            ->where('g.empresa = :empresa')
-            ->andWhere('a.ara_eliminado = false')
+            ->join('a.puestos', 'p') // Relación en Puesto con Area
+            ->join('p.configuracionAsistencias', 'ca') // Relación en Configuración de Asistencia con Puesto
+            ->join('ca.grupo', 'g') // Relación en Grupo con Configuración de Asistencia
+            ->where('g.empresa = :empresa') // Filtrar por empresa a través del grupo
+            ->andWhere('a.ara_eliminado = false') // Solo áreas no eliminadas
             ->setParameter('empresa', $empresa)
             ->getQuery()
             ->getResult();
@@ -139,8 +146,9 @@ class AreaFunction
 
         foreach ($areas as $area) {
             $areaId = $area->getId();
+
             if (!in_array($areaId, array_column($areasUnicas, 'ara_id'))) {
-                $areasUnicas[] = [
+                $areaData = [
                     'ara_id' => $area->getId(),
                     'ara_nombre' => $area->getAraNombre(),
                     'puestos' => [],
@@ -148,35 +156,19 @@ class AreaFunction
 
                 // Obtener todos los puestos relacionados con el área
                 foreach ($area->getPuestos() as $puesto) {
-                    $areasUnicas[array_key_last($areasUnicas)]['puestos'][] = [
-                        'pst_nombre' => $puesto->getPstNombre(),
-                    ];
+                    if (!$puesto->isPstEliminado()) { // Solo incluir puestos no eliminados
+                        $areaData['puestos'][] = [
+                            'pst_id' => $puesto->getId(),
+                            'pst_nombre' => $puesto->getPstNombre(),
+                        ];
+                    }
                 }
+
+                $areasUnicas[] = $areaData;
             }
         }
 
         return $areasUnicas;
-    }
-
-    // Función para editar los datos de un área
-    public function editarArea(int $areaId, array $nuevosDatos): array
-    {
-        // Buscar el área por su ID
-        $area = $this->entityManager->getRepository(Area::class)->find($areaId);
-        if (!$area) {
-            throw new \Exception('area no encontrada');
-        }
-
-        // Actualizar los datos del área
-        $area->setAraNombre($nuevosDatos['ara_nombre'] ?? $area->getAraNombre());
-
-        // Guardar los cambios en la base de datos
-        $this->entityManager->flush();
-
-        return [
-            'ara_id' => $area->getId(),
-            'ara_nombre' => $area->getAraNombre(),
-        ];
     }
 
     // Función para eliminar un área (cambio de estado lógico)
@@ -193,6 +185,35 @@ class AreaFunction
 
         // Guardar los cambios en la base de datos
         $this->entityManager->flush();
+    }
+
+    // Función para obtener un área por su ID
+    public function obtenerAreaPorId(int $areaId): array
+    {
+        // Buscar el área por su ID
+        $area = $this->entityManager->getRepository(Area::class)->find($areaId);
+        if (!$area || $area->isAraEliminado()) {
+            throw new \Exception('Área no encontrada o está eliminada');
+        }
+
+        // Preparar la estructura de datos del área
+        $areaData = [
+            'ara_id' => $area->getId(),
+            'ara_nombre' => $area->getAraNombre(),
+            'puestos' => [],
+        ];
+
+        // Obtener todos los puestos relacionados con el área
+        foreach ($area->getPuestos() as $puesto) {
+            if (!$puesto->isPstEliminado()) {
+                $areaData['puestos'][] = [
+                    'pst_id' => $puesto->getId(),
+                    'pst_nombre' => $puesto->getPstNombre(),
+                ];
+            }
+        }
+
+        return $areaData;
     }
 }
 

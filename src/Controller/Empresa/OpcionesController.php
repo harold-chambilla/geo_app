@@ -3,11 +3,13 @@
 namespace App\Controller\Empresa;
 
 use App\Entity\Sede;
+use App\Function\Empresa\AreaFunction;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Function\Empresa\EmpresaFunction;
+use App\Function\Empresa\PuestoFunction;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 class OpcionesController extends AbstractController
 {
     public function __construct(
-        private EmpresaFunction $empresaFunction
+        private EmpresaFunction $empresaFunction,
+        private AreaFunction $areaFunction,
+        private PuestoFunction $puestoFunction
     ){}
 
     #[Route('/', name: 'inicio')]
@@ -78,5 +82,91 @@ class OpcionesController extends AbstractController
             'sed_direccion' => $sede->getSedDireccion(),
             'sed_ubicacion' => $sede->getSedUbicacion()
         ], JsonResponse::HTTP_CREATED);
+    }
+
+    // API para crear un área
+    #[Route('/api/crear-area/{empresaId}', name: 'crear_area', methods: ['POST'])]
+    public function crearArea(int $empresaId, Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            $area = $this->areaFunction->registrarArea($empresaId, $data);
+            return $this->json(['status' => 'success', 'data' => $area], JsonResponse::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para obtener todas las áreas de una empresa
+    #[Route('/api/obtener-areas/{empresaId}', name: 'obtener_areas', methods: ['GET'])]
+    public function obtenerAreas(int $empresaId): JsonResponse
+    {
+        try {
+            $areas = $this->areaFunction->obtenerAreas($empresaId);
+            return $this->json(['status' => 'success', 'data' => $areas]);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para obtener un área por su ID
+    #[Route('/api/obtener-area/{areaId}', name: 'obtener_area', methods: ['GET'])]
+    public function obtenerArea(int $areaId): JsonResponse
+    {
+        try {
+            $area = $this->areaFunction->obtenerAreaPorId($areaId);
+            return $this->json(['status' => 'success', 'data' => $area]);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para eliminar un área
+    #[Route('/api/eliminar-area/{areaId}', name: 'eliminar_area', methods: ['DELETE'])]
+    public function eliminarArea(int $areaId): JsonResponse
+    {
+        try {
+            $this->areaFunction->borrarArea($areaId);
+            return $this->json(['status' => 'success', 'message' => 'Área eliminada exitosamente']);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para crear un puesto en un área
+    #[Route('/api/crear-puesto/{areaId}', name: 'crear_puesto', methods: ['POST'])]
+    public function crearPuesto(int $areaId, Request $request): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            $puesto = $this->puestoFunction->registrarPuesto($areaId, $data);
+            return $this->json(['status' => 'success', 'data' => $puesto], JsonResponse::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para obtener un puesto por su ID
+    #[Route('/api/obtener-puesto/{puestoId}', name: 'obtener_puesto', methods: ['GET'])]
+    public function obtenerPuesto(int $puestoId): JsonResponse
+    {
+        try {
+            $puesto = $this->puestoFunction->obtenerPuestoPorId($puestoId);
+            return $this->json(['status' => 'success', 'data' => $puesto]);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para eliminar un puesto
+    #[Route('/api/eliminar-puesto/{puestoId}', name: 'eliminar_puesto', methods: ['DELETE'])]
+    public function eliminarPuesto(int $puestoId): JsonResponse
+    {
+        try {
+            $this->puestoFunction->borrarPuesto($puestoId);
+            return $this->json(['status' => 'success', 'message' => 'Puesto eliminado exitosamente']);
+        } catch (\Exception $e) {
+            return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
     }
 }

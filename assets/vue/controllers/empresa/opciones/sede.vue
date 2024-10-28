@@ -17,7 +17,7 @@
         <div class="tab-content">
             <!-- Empresa Tab -->
             <div class="tab-pane fade show active" id="empresa" role="tabpanel" aria-labelledby="empresa-tab">
-                <empresa></empresa>
+                <eoempresa></eoempresa>
                 <!-- Sucursales -->
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
@@ -51,7 +51,7 @@
 
             <!-- Personal Tab -->
             <div class="tab-pane fade" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-                <div id="eoarea"></div> 
+                <eoarea></eoarea> 
             </div>
 
             <!-- Sistema Tab -->
@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
-import empresa from './empresa.vue';
+import eoempresa from './empresa.vue';
+import eoarea from './area.vue';
 import sedeRegistro from './sedeRegistro.vue';
 </script>
