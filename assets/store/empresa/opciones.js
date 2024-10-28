@@ -4,6 +4,7 @@ import axios from 'axios';
 export const useOpcionesStore = defineStore('opcionesStore', {
     state: () => ({
         empresa: null,
+        motivos: [], // Nueva propiedad para almacenar los motivos
         loading: false,
         error: null,
     }),
@@ -165,6 +166,57 @@ export const useOpcionesStore = defineStore('opcionesStore', {
                 }
             } catch (error) {
                 this.error = error.message || 'Error al eliminar el puesto';
+            }
+        },
+
+                // Acción para registrar un motivo
+        async registrarMotivo(empresaId, motivoData) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.post(`/empresa/opciones/api/registrar-motivo/${empresaId}`, motivoData);
+                if (response.data.status === 'success') {
+                    this.motivos.push(response.data.data); // Añadir el nuevo motivo al estado
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al registrar el motivo';
+            } finally {
+                this.loading = false;
+            }
+        },
+        // Acción para obtener todos los motivos de una empresa
+        async fetchMotivos(empresaId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.get(`/empresa/opciones/api/obtener-motivos/${empresaId}`);
+                if (response.data.status === 'success') {
+                    this.motivos = response.data.data; // Asignar los motivos al estado
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al obtener los motivos';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Acción para eliminar un motivo
+        async eliminarMotivo(motivoId) {
+            try {
+                const response = await axios.delete(`/empresa/opciones/api/eliminar-motivo/${motivoId}`);
+                if (response.data.status === 'success') {
+                    this.motivos = this.motivos.filter(motivo => motivo.mtv_id !== motivoId); // Remover el motivo eliminado
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al eliminar el motivo';
             }
         },
     },

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Function\Empresa\EmpresaFunction;
+use App\Function\Empresa\MotivoFunction;
 use App\Function\Empresa\PuestoFunction;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,8 @@ class OpcionesController extends AbstractController
     public function __construct(
         private EmpresaFunction $empresaFunction,
         private AreaFunction $areaFunction,
-        private PuestoFunction $puestoFunction
+        private PuestoFunction $puestoFunction,
+        private MotivoFunction $motivoFunction
     ){}
 
     #[Route('/', name: 'inicio')]
@@ -167,6 +169,59 @@ class OpcionesController extends AbstractController
             return $this->json(['status' => 'success', 'message' => 'Puesto eliminado exitosamente']);
         } catch (\Exception $e) {
             return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/api/registrar-motivo/{empresaId}', name: 'registrar_motivo', methods: ['POST'])]
+    public function registrarMotivo(int $empresaId, Request $request): JsonResponse
+    {
+        try {
+            $motivoData = json_decode($request->getContent(), true);
+            $motivo = $this->motivoFunction->registrarMotivo($empresaId, $motivoData);
+
+            return $this->json([
+                'status' => 'success',
+                'data' => $motivo,
+            ], JsonResponse::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/api/obtener-motivos/{empresaId}', name: 'obtener_motivos', methods: ['GET'])]
+    public function obtenerMotivos(int $empresaId): JsonResponse
+    {
+        try {
+            $motivos = $this->motivoFunction->obtenerMotivos($empresaId);
+            return $this->json([
+                'status' => 'success',
+                'data' => $motivos,
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/api/eliminar-motivo/{motivoId}', name: 'eliminar_motivo', methods: ['DELETE'])]
+    public function eliminarMotivo(int $motivoId): JsonResponse
+    {
+        try {
+            $this->motivoFunction->borrarMotivo($motivoId);
+            return $this->json([
+                'status' => 'success',
+                'message' => 'Motivo eliminado exitosamente',
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

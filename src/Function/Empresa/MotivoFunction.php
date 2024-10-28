@@ -18,22 +18,12 @@ class MotivoFunction
         $this->entityManager = $entityManager;
     }
 
-    // Función para registrar un nuevo motivo y luego crear un permiso con estado "Sistema"
     public function registrarMotivo(int $empresaId, array $motivoData): array
     {
         // Buscar la empresa por su ID
         $empresa = $this->entityManager->getRepository(Empresa::class)->find($empresaId);
         if (!$empresa) {
-            throw new \Exception('empresa no encontrada');
-        }
-
-        // Buscar el grupo "General" de la empresa
-        $grupo = $this->entityManager->getRepository(Grupo::class)->findOneBy([
-            'empresa' => $empresa,
-            'grp_nombre' => 'general',
-        ]);
-        if (!$grupo) {
-            throw new \Exception('grupo "general" no encontrado en esta empresa');
+            throw new \Exception('Empresa no encontrada');
         }
 
         // Verificar si ya existe un motivo con el mismo nombre
@@ -43,31 +33,29 @@ class MotivoFunction
         ]);
 
         if ($motivoExistente) {
-            throw new \Exception('ya existe un motivo con el mismo nombre');
+            throw new \Exception('Ya existe un motivo con el mismo nombre');
         }
 
         // Crear el nuevo motivo
         $motivo = new Motivo();
         $motivo->setMtvNombre($motivoData['mtv_nombre']);
         $motivo->setMtvEliminado(false);
-
         $this->entityManager->persist($motivo);
+        $this->entityManager->flush(); // Guardar el motivo antes de continuar
 
-        // Guardar el nuevo motivo en la base de datos
-        $this->entityManager->flush();
-
-        // Buscar al colaborador con rol Superadministrador
+        // Buscar al colaborador con rol Superadministrador en todos los grupos de la empresa
         $colaboradorSuperadmin = $this->entityManager->getRepository(Colaborador::class)->createQueryBuilder('c')
+            ->innerJoin('c.grupo', 'g') // Relación con grupo
             ->where('c.roles LIKE :role')
-            ->andWhere('c.colEliminado = false')
-            ->andWhere('c.empresa = :empresa')
+            ->andWhere('c.col_eliminado = false')
+            ->andWhere('g.empresa = :empresa') // Filtro por empresa a través del grupo
             ->setParameter('role', '%ROLE_SUPERADMIN%')
             ->setParameter('empresa', $empresa)
             ->getQuery()
             ->getOneOrNullResult();
 
         if (!$colaboradorSuperadmin) {
-            throw new \Exception('No se encontró un colaborador con rol de superadministrador en la empresa.');
+            throw new \Exception('No se encontró un colaborador con rol de Superadministrador en la empresa');
         }
 
         // Verificar si ya existe un permiso con estado "Sistema" vinculado al colaborador
@@ -126,7 +114,7 @@ class MotivoFunction
             $motivosData[] = [
                 'mtv_id' => $motivo->getId(),
                 'mtv_nombre' => $motivo->getMtvNombre(),
-                'mtv_eliminado' => $motivo->getMtvEliminado(),
+                'mtv_eliminado' => $motivo->isMtvEliminado(),
             ];
         }
 
@@ -154,17 +142,29 @@ class MotivoFunction
         ];
     }
 
-    // Función para eliminar un motivo (cambio de estado lógico)
     public function borrarMotivo(int $motivoId): void
     {
         // Buscar el motivo por su ID
         $motivo = $this->entityManager->getRepository(Motivo::class)->find($motivoId);
         if (!$motivo) {
-            throw new \Exception('motivo no encontrado');
+            throw new \Exception('Motivo no encontrado');
         }
 
         // Marcar el motivo como eliminado
         $motivo->setMtvEliminado(true);
+
+        // Buscar el permiso asociado con el motivo que tenga estado "sistema"
+        $permisoSistema = $this->entityManager->getRepository(Permiso::class)->findOneBy([
+            'motivo' => $motivo,
+            'pms_estado' => 'sistema',
+            'pms_eliminado' => false,
+        ]);
+
+        // Si existe un permiso con estado "sistema", marcarlo como eliminado
+        if ($permisoSistema) {
+            $permisoSistema->setPmsEliminado(true);
+            $this->entityManager->persist($permisoSistema);
+        }
 
         // Guardar los cambios en la base de datos
         $this->entityManager->flush();

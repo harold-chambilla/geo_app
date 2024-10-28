@@ -276,7 +276,7 @@ class EmpresaFunction
                     $colaboradorData['permisos'][] = [
                         'pms_estado' => $permiso->getPmsEstado(),
                         'pms_motivo' => $permiso->getMotivo()->getMtvNombre(),
-                        'pms_eliminado' => $permiso->getPmsEliminado(),
+                        'pms_eliminado' => $permiso->isPmsEliminado(),
                     ];
                 }
 

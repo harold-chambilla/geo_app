@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container"> 
         <!-- Título con icono -->
         <div class="d-flex align-items-center mt-4 mb-3">
-            <i class="bi bi-briefcase-fill fs-3 text-primary"></i>
+            <i class="bi bi-briefcase-fill fs-3" style="color: #003366;"></i>
             <h5 class="ms-2 mb-0 fw-bold">Área y puesto</h5>
         </div>
 
@@ -64,6 +64,11 @@
                 </ul>
             </div>
         </div>
+
+        <!-- Notificaciones -->
+        <div v-if="notification.message" :class="['alert', notification.type === 'success' ? 'alert-success' : 'alert-danger']" role="alert">
+            {{ notification.message }}
+        </div>
     </div>
 </template>
 
@@ -78,6 +83,21 @@ const nuevoPuesto = ref('');
 const areaSeleccionadaId = ref(null);
 const puestos = ref([]);
 
+// Notificación para mostrar mensajes de éxito o error
+const notification = ref({
+    message: '',
+    type: 'success'
+});
+
+// Función para mostrar notificación
+function showNotification(message, type = 'success') {
+    notification.value.message = message;
+    notification.value.type = type;
+    setTimeout(() => {
+        notification.value.message = '';
+    }, 3000); // Desaparece en 3 segundos
+}
+
 // Obtener todas las áreas de la empresa en la carga inicial
 onMounted(() => {
     const empresaId = 1; // ID de la empresa
@@ -85,42 +105,65 @@ onMounted(() => {
 });
 
 // Función para agregar una nueva área
-function agregarArea() {
+async function agregarArea() {
     const empresaId = 1; // ID de la empresa
     if (nuevaArea.value.trim() === '') return;
-    opcionesStore.crearArea(empresaId, { ara_nombre: nuevaArea.value }).then(() => {
+    try {
+        await opcionesStore.crearArea(empresaId, { ara_nombre: nuevaArea.value });
+        showNotification("Área agregada correctamente", 'success');
         nuevaArea.value = '';
-    });
+    } catch (error) {
+        showNotification("Error al agregar el área", 'error');
+    }
 }
 
 // Función para eliminar un área
-function eliminarArea(areaId) {
-    opcionesStore.eliminarArea(areaId);
+async function eliminarArea(areaId) {
+    try {
+        await opcionesStore.eliminarArea(areaId);
+        showNotification("Área eliminada correctamente", 'success');
+        
+        // Resetear área seleccionada y lista de puestos
+        areaSeleccionadaId.value = null;
+        puestos.value = [];
+    } catch (error) {
+        showNotification("Error al eliminar el área", 'error');
+    }
 }
 
 // Cargar puestos de un área específica
-function cargarPuestos() {
+async function cargarPuestos() {
     if (areaSeleccionadaId.value) {
-        opcionesStore.fetchArea(areaSeleccionadaId.value).then((data) => {
+        try {
+            const data = await opcionesStore.fetchArea(areaSeleccionadaId.value);
             puestos.value = data.puestos; // Asignar los puestos específicos del área seleccionada
-        });
+        } catch (error) {
+            showNotification("Error al cargar los puestos", 'error');
+        }
     }
 }
 
 // Función para agregar un nuevo puesto al área seleccionada
-function agregarPuesto() {
+async function agregarPuesto() {
     if (!areaSeleccionadaId.value || nuevoPuesto.value.trim() === '') return;
-    opcionesStore.crearPuesto(areaSeleccionadaId.value, { pst_nombre: nuevoPuesto.value }).then(() => {
+    try {
+        await opcionesStore.crearPuesto(areaSeleccionadaId.value, { pst_nombre: nuevoPuesto.value });
+        showNotification("Puesto agregado correctamente", 'success');
         nuevoPuesto.value = '';
         cargarPuestos(); // Recargar la lista de puestos
-    });
+    } catch (error) {
+        showNotification("Error al agregar el puesto", 'error');
+    }
 }
 
 // Función para eliminar un puesto
-function eliminarPuesto(puestoId) {
-    opcionesStore.eliminarPuesto(puestoId).then(() => {
+async function eliminarPuesto(puestoId) {
+    try {
+        await opcionesStore.eliminarPuesto(puestoId);
+        showNotification("Puesto eliminado correctamente", 'success');
         cargarPuestos(); // Recargar la lista de puestos
-    });
+    } catch (error) {
+        showNotification("Error al eliminar el puesto", 'error');
+    }
 }
 </script>
-
