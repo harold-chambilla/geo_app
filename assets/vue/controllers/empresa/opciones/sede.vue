@@ -52,7 +52,8 @@
             <!-- Personal Tab -->
             <div class="tab-pane fade" id="personal" role="tabpanel" aria-labelledby="personal-tab">
                 <eoarea></eoarea>
-                <eopermiso></eopermiso> 
+                <eopermiso></eopermiso>
+                <eoasistencia></eoasistencia> 
             </div>
 
             <!-- Sistema Tab -->
@@ -66,5 +67,6 @@
 import eoempresa from './empresa.vue';
 import eoarea from './area.vue';
 import eopermiso from './permiso.vue';
+import eoasistencia from './asistencia.vue';
 import sedeRegistro from './sedeRegistro.vue';
 </script>

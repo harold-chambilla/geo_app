@@ -4,6 +4,7 @@ namespace App\Controller\Empresa;
 
 use App\Entity\Sede;
 use App\Function\Empresa\AreaFunction;
+use App\Function\Empresa\ConfiguracionAsistenciaFunction;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,8 @@ class OpcionesController extends AbstractController
         private EmpresaFunction $empresaFunction,
         private AreaFunction $areaFunction,
         private PuestoFunction $puestoFunction,
-        private MotivoFunction $motivoFunction
+        private MotivoFunction $motivoFunction,
+        private ConfiguracionAsistenciaFunction $configuracionAsistenciaFunction
     ){}
 
     #[Route('/', name: 'inicio')]
@@ -216,6 +218,68 @@ class OpcionesController extends AbstractController
             return $this->json([
                 'status' => 'success',
                 'message' => 'Motivo eliminado exitosamente',
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // Nueva API para obtener configuración de asistencia "sistema" de una empresa
+    #[Route('/api/obtener-configuracion-sistema/{empresaId}', name: 'obtener_configuracion_sistema', methods: ['GET'])]
+    public function obtenerConfiguracionSistema(int $empresaId): JsonResponse
+    {
+        try {
+            $configuracion = $this->configuracionAsistenciaFunction->obtenerConfiguracionAsistencia(null, $empresaId);
+            return $this->json([
+                'status' => 'success',
+                'data' => $configuracion,
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
+    // API para modificar configuración de asistencia "sistema" de una empresa o configuraciones vinculadas a un área
+    #[Route('/api/editar-configuracion-sistema', name: 'editar_configuracion_sistema', methods: ['PUT'])]
+    public function editarConfiguracionSistema(Request $request): JsonResponse
+    {
+        try {
+            $nuevosDatos = json_decode($request->getContent(), true);
+            $areaId = $nuevosDatos['area_id'] ?? null;
+            $empresaId = $nuevosDatos['empresa_id'] ?? null;
+
+            // Validar que uno de los dos IDs esté presente, pero no ambos
+            if ($areaId && $empresaId) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'No se puede enviar ambos: area_id y empresa_id. Use solo uno.',
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+
+            if (!$areaId && !$empresaId) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'Debe proporcionar area_id o empresa_id para la operación.',
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+
+            // Llamar a la función para editar la configuración, especificando el área o la empresa
+            $configuracionActualizada = $this->configuracionAsistenciaFunction->editarConfiguracionAsistencia(
+                $nuevosDatos,
+                $empresaId,
+                null,
+                $areaId
+            );
+
+            return $this->json([
+                'status' => 'success',
+                'data' => $configuracionActualizada,
             ]);
         } catch (\Exception $e) {
             return $this->json([

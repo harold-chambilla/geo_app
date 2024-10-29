@@ -2,6 +2,7 @@
 
 namespace App\Function\Empresa;
 
+use App\Entity\Area;
 use App\Entity\ConfiguracionAsistencia;
 use App\Entity\Grupo;
 use App\Entity\Sede;
@@ -89,14 +90,34 @@ class ConfiguracionAsistenciaFunction
         ];
     }
 
-    // Función para obtener una configuración de asistencia específica
-    public function obtenerConfiguracionAsistencia(int $configId): array
+    // Función para obtener una configuración de asistencia específica o la configuración con estado "sistema" por empresa
+    public function obtenerConfiguracionAsistencia(int $configId = null, int $empresaId = null): array
     {
-        $configuracion = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->find($configId);
-        if (!$configuracion) {
-            throw new \Exception('Configuración de asistencia no encontrada.');
+        if ($configId) {
+            // Buscar la configuración de asistencia por ID
+            $configuracion = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->find($configId);
+            if (!$configuracion) {
+                throw new \Exception('Configuración de asistencia no encontrada.');
+            }
+        } elseif ($empresaId) {
+            // Buscar la configuración de asistencia con estado "sistema" en cualquier grupo de la empresa
+            $configuracion = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->createQueryBuilder('ca')
+                ->join('ca.grupo', 'g')
+                ->where('g.empresa = :empresa')
+                ->andWhere('ca.cas_estado = :estado')
+                ->setParameter('empresa', $empresaId)
+                ->setParameter('estado', 'sistema')
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (!$configuracion) {
+                throw new \Exception('Configuración de asistencia con estado "sistema" no encontrada en la empresa.');
+            }
+        } else {
+            throw new \Exception('Se requiere el configId o el empresaId para obtener la configuración de asistencia.');
         }
 
+        // Retornar los datos de la configuración
         return [
             'cas_tiempo_falta_horas' => $configuracion->getCasTiempoFaltaHoras(),
             'cas_tolerancia_ingreso_minutos' => $configuracion->getCasToleranciaIngresoMinutos(),
@@ -117,30 +138,69 @@ class ConfiguracionAsistenciaFunction
         ];
     }
 
-    // Función para editar una configuración de asistencia existente
-    public function editarConfiguracionAsistencia(int $configId, array $nuevosDatos): array
+
+    // Función para editar configuración de asistencia por configId, empresa con estado "sistema" o por área
+    public function editarConfiguracionAsistencia(array $nuevosDatos, int $empresaId = null, int $configId = null, int $areaId = null): array
     {
-        $configuracion = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->find($configId);
-        if (!$configuracion) {
-            throw new \Exception('Configuración de asistencia no encontrada.');
+        if ($configId) {
+            // Buscar la configuración por ID
+            $configuracion = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->find($configId);
+            if (!$configuracion) {
+                throw new \Exception('Configuración de asistencia no encontrada.');
+            }
+            $configuraciones = [$configuracion];
+        } elseif ($empresaId) {
+            // Buscar configuración de asistencia con estado "sistema" en cualquier grupo de la empresa
+            $configuracionSistema = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->createQueryBuilder('ca')
+                ->join('ca.grupo', 'g')
+                ->where('g.empresa = :empresa')
+                ->andWhere('ca.cas_estado = :estado')
+                ->setParameter('empresa', $empresaId)
+                ->setParameter('estado', 'sistema')
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (!$configuracionSistema) {
+                throw new \Exception('Configuración de asistencia con estado "sistema" no encontrada en la empresa.');
+            }
+            $configuraciones = [$configuracionSistema];
+        } elseif ($areaId) {
+            // Buscar todas las configuraciones de asistencia de los puestos asociados al área
+            $area = $this->entityManager->getRepository(Area::class)->find($areaId);
+            if (!$area) {
+                throw new \Exception('Área no encontrada.');
+            }
+
+            $configuraciones = [];
+            foreach ($area->getPuestos() as $puesto) {
+                foreach ($puesto->getConfiguracionAsistencias() as $confAsistencia) {
+                    $configuraciones[] = $confAsistencia;
+                }
+            }
+        } else {
+            throw new \Exception('Se requiere el configId, empresaId o areaId para editar la configuración de asistencia.');
         }
 
-        $configuracion->setCasTiempoFaltaHoras($nuevosDatos['cas_tiempo_falta_horas'] ?? $configuracion->getCasTiempoFaltaHoras());
-        $configuracion->setCasToleranciaIngresoMinutos($nuevosDatos['cas_tolerancia_ingreso_minutos'] ?? $configuracion->getCasToleranciaIngresoMinutos());
-        $configuracion->setCasPermitirFoto($nuevosDatos['cas_permitir_foto'] ?? $configuracion->isCasPermitirFoto());
-        $configuracion->setCasHorasextras($nuevosDatos['cas_horas_extras'] ?? $configuracion->isCasHorasextras());
-        $configuracion->setCasFaltasTardanzas($nuevosDatos['cas_faltas_tardanzas'] ?? $configuracion->isCasFaltasTardanzas());
-        $configuracion->setCasPermisos($nuevosDatos['cas_permisos'] ?? $configuracion->isCasPermisos());
-        $configuracion->setCasVacaciones($nuevosDatos['cas_vacaciones'] ?? $configuracion->isCasVacaciones());
-        $configuracion->setCasMarcacion($nuevosDatos['cas_marcacion'] ?? $configuracion->isCasMarcacion());
-        $configuracion->setCasModalidad($nuevosDatos['cas_modalidad'] ?? $configuracion->getCasModalidad());
-        $configuracion->setCasPredhorario($nuevosDatos['cas_predhorario'] ?? $configuracion->isCasPredhorario());
-        $configuracion->setCasArea($nuevosDatos['cas_area'] ?? $configuracion->isCasArea());
-        $configuracion->setCasPuesto($nuevosDatos['cas_puesto'] ?? $configuracion->isCasPuesto());
-        $configuracion->setCasEstado($nuevosDatos['cas_estado'] ?? $configuracion->getCasEstado());
+        // Actualizar cada configuración de asistencia seleccionada con los valores proporcionados
+        foreach ($configuraciones as $configuracion) {
+            $configuracion->setCasTiempoFaltaHoras($nuevosDatos['cas_tiempo_falta_horas'] ?? $configuracion->getCasTiempoFaltaHoras());
+            $configuracion->setCasToleranciaIngresoMinutos($nuevosDatos['cas_tolerancia_ingreso_minutos'] ?? $configuracion->getCasToleranciaIngresoMinutos());
+            $configuracion->setCasPermitirFoto($nuevosDatos['cas_permitir_foto'] ?? $configuracion->isCasPermitirFoto());
+            $configuracion->setCasHorasextras($nuevosDatos['cas_horas_extras'] ?? $configuracion->isCasHorasextras());
+            $configuracion->setCasFaltasTardanzas($nuevosDatos['cas_faltas_tardanzas'] ?? $configuracion->isCasFaltasTardanzas());
+            $configuracion->setCasPermisos($nuevosDatos['cas_permisos'] ?? $configuracion->isCasPermisos());
+            $configuracion->setCasVacaciones($nuevosDatos['cas_vacaciones'] ?? $configuracion->isCasVacaciones());
+            $configuracion->setCasMarcacion($nuevosDatos['cas_marcacion'] ?? $configuracion->isCasMarcacion());
+            $configuracion->setCasModalidad($nuevosDatos['cas_modalidad'] ?? $configuracion->getCasModalidad());
+            $configuracion->setCasPredhorario($nuevosDatos['cas_predhorario'] ?? $configuracion->isCasPredhorario());
+            $configuracion->setCasArea($nuevosDatos['cas_area'] ?? $configuracion->isCasArea());
+            $configuracion->setCasPuesto($nuevosDatos['cas_puesto'] ?? $configuracion->isCasPuesto());
+        }
 
         $this->entityManager->flush();
 
+        // Retornar los datos de la primera configuración para propósitos de respuesta
+        $configuracion = $configuraciones[0];
         return [
             'cas_tiempo_falta_horas' => $configuracion->getCasTiempoFaltaHoras(),
             'cas_tolerancia_ingreso_minutos' => $configuracion->getCasToleranciaIngresoMinutos(),

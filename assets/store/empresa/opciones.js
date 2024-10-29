@@ -4,7 +4,9 @@ import axios from 'axios';
 export const useOpcionesStore = defineStore('opcionesStore', {
     state: () => ({
         empresa: null,
+        areas: [], // Asegúrate de que `areas` esté inicializado como un array vacío
         motivos: [], // Nueva propiedad para almacenar los motivos
+        configuracionAsistencia: null, // Almacena la configuración de asistencia del sistema o de un área
         loading: false,
         error: null,
     }),
@@ -219,5 +221,43 @@ export const useOpcionesStore = defineStore('opcionesStore', {
                 this.error = error.message || 'Error al eliminar el motivo';
             }
         },
+
+        // Obtener configuración de asistencia "sistema" de una empresa
+        async fetchConfiguracionSistema(empresaId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.get(`/empresa/opciones/api/obtener-configuracion-sistema/${empresaId}`);
+                if (response.data.status === 'success') {
+                    this.configuracionAsistencia = response.data.data;
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al obtener la configuración del sistema';
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Modificar configuración de asistencia "sistema" de una empresa o configuración de un área
+        async editarConfiguracionSistema(nuevosDatos) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await axios.put(`/empresa/opciones/api/editar-configuracion-sistema`, nuevosDatos);
+                if (response.data.status === 'success') {
+                    this.configuracionAsistencia = response.data.data;
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (error) {
+                this.error = error.message || 'Error al editar la configuración';
+            } finally {
+                this.loading = false;
+            }
+        }, 
     },
 });

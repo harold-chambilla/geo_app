@@ -121,13 +121,12 @@ class AreaFunction
         ];
     }
 
-    // Función para obtener todas las áreas vinculadas a la empresa (a través de puestos y configuraciones de asistencia)
     public function obtenerAreas(int $empresaId): array
     {
         // Buscar la empresa por su ID
         $empresa = $this->entityManager->getRepository(Empresa::class)->find($empresaId);
         if (!$empresa) {
-            throw new \Exception('empresa no encontrada');
+            throw new \Exception('Empresa no encontrada');
         }
 
         // Buscar todas las áreas asociadas a la empresa a través de puestos y configuraciones de asistencia
@@ -152,14 +151,25 @@ class AreaFunction
                     'ara_id' => $area->getId(),
                     'ara_nombre' => $area->getAraNombre(),
                     'puestos' => [],
+                    'horas_extras' => false, // Inicializar como false y actualizar si alguno permite horas extras
                 ];
 
                 // Obtener todos los puestos relacionados con el área
                 foreach ($area->getPuestos() as $puesto) {
                     if (!$puesto->isPstEliminado()) { // Solo incluir puestos no eliminados
+                        // Verificar si alguna configuración de asistencia del puesto permite horas extras
+                        $horasExtrasPermitidas = false;
+                        foreach ($puesto->getConfiguracionAsistencias() as $configuracionAsistencia) {
+                            if ($configuracionAsistencia->isCasHorasextras()) {
+                                $horasExtrasPermitidas = true;
+                                $areaData['horas_extras'] = true; // Marcar el área como que permite horas extras
+                            }
+                        }
+
                         $areaData['puestos'][] = [
                             'pst_id' => $puesto->getId(),
                             'pst_nombre' => $puesto->getPstNombre(),
+                            'horas_extras' => $horasExtrasPermitidas,
                         ];
                     }
                 }
