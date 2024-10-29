@@ -58,7 +58,8 @@
 
             <!-- Sistema Tab -->
             <div class="tab-pane fade" id="sistema" role="tabpanel" aria-labelledby="sistema-tab">
-                <p class="mt-4 fs-5">Configuraciones del sistema.</p>
+                <eonotificacion></eonotificacion>
+                <eohorario></eohorario>
             </div>
         </div>
 </template>
@@ -68,5 +69,7 @@ import eoempresa from './empresa.vue';
 import eoarea from './area.vue';
 import eopermiso from './permiso.vue';
 import eoasistencia from './asistencia.vue';
+import eonotificacion from './notificacion.vue';
+import eohorario from './horario.vue';
 import sedeRegistro from './sedeRegistro.vue';
 </script>
