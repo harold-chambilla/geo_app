@@ -4,7 +4,7 @@
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sedeModal">Agregar Sede</button>
   
       <!-- Modal de Bootstrap -->
-      <div class="modal fade" id="sedeModal" tabindex="-1" aria-labelledby="sedeModalLabel" aria-hidden="true">
+      <div class="modal fade" id="sedeModal" tabindex="-1" aria-labelledby="sedeModalLabel" aria-hidden="true" ref="sedeModal">
         <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -33,11 +33,11 @@
                       <input v-model="longitude" type="text" class="form-control" id="lngInput" placeholder="Ingresa la longitud">
                     </div>
                     <button class="btn btn-info" @click="actualizarMapa">Actualizar Mapa</button>
-                    <div class="mt-3">
+                    <!-- <div class="mt-3">
                       <p><strong>País:</strong> {{ country }}</p>
                       <p><strong>Dirección:</strong> {{ direccion }}</p>
                       <p><strong>Departamento:</strong> {{ departamento }}</p>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -62,6 +62,8 @@ import { useOpcionesStore } from '../../../../store/empresa/opciones';
   const direccion = ref('');
   const country = ref('');
   const departamento = ref('');
+  const sedeModal = ref(null);
+  import { Modal } from 'bootstrap';
   let map;
   let marker;
   
@@ -117,14 +119,16 @@ import { useOpcionesStore } from '../../../../store/empresa/opciones';
   
   // Guardar las coordenadas en el store de Pinia
   const saveCoordinates = () => {
-    opcionesStorage.saveCoordinates({
+    opcionesStorage.registrarSede({
       empresaNombre: nombreEmpresa.value,
       latitude: latitude.value,
       longitude: longitude.value,
       direccion: direccion.value,
       pais: country.value
     });
-  
+    const modalInstance = Modal.getInstance(sedeModal.value) || new Modal(sedeModal.value);
+  modalInstance.hide();
+
     // Limpiar campos
     nombreEmpresa.value = '';
     latitude.value = '';

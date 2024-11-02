@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Function\Empresa\EmpresaFunction;
 use App\Function\Empresa\MotivoFunction;
 use App\Function\Empresa\PuestoFunction;
+use App\Repository\SedeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,12 +55,12 @@ class OpcionesController extends AbstractController
     #[Route('/api/guardar/sede', name: 'guardar_sede', methods: ['POST'])]
     public function guardarSede(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $usuario = $this->getUser();
-        if (!$usuario) {
-            return new JsonResponse(['error' => 'Usuario no autenticado'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
+        // $usuario = $this->getUser();
+        // if (!$usuario) {
+        //     return new JsonResponse(['error' => 'Usuario no autenticado'], JsonResponse::HTTP_UNAUTHORIZED);
+        // }
     
-        $empresaId = $request->request->get('empresaId');
+        // $empresaId = $request->request->get('empresaId');
         $nombre = $request->request->get('sed_nombre');
         $pais = $request->request->get('sed_pais');
         $direccion = $request->request->get('sed_direccion');
@@ -74,17 +75,21 @@ class OpcionesController extends AbstractController
         $sede->setSedNombre($nombre);
         $sede->setSedPais($pais);
         $sede->setSedDireccion($direccion);
-        // $sede->setSedUbicacion([$latitud, $longitud]); // Guardar como array [latitud, longitud]
+        $sede->setSedUbicacion([$latitud, $longitud]); // Guardar como array [latitud, longitud]
+        $sede->setSedEliminado(0);
     
         $entityManager->persist($sede);
         $entityManager->flush();
     
-        return new JsonResponse([
-            'sed_id' => $sede->getId(),
-            'sed_nombre' => $sede->getSedNombre(),
-            'sed_pais' => $sede->getSedPais(),
-            'sed_direccion' => $sede->getSedDireccion(),
-            'sed_ubicacion' => $sede->getSedUbicacion()
+        return $this->json([
+            'success' => 'Sede creada con éxito',
+            'sede' => [
+                'id' => $sede->getId(),
+                'sed_nombre' => $sede->getSedNombre(),
+                'sed_pais' => $sede->getSedPais(),
+                'sed_direccion' => $sede->getSedDireccion(),
+                'sed_ubicacion' => $sede->getSedUbicacion()
+            ]
         ], JsonResponse::HTTP_CREATED);
     }
 
@@ -99,6 +104,56 @@ class OpcionesController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route('/api/listar/sedes', name: 'api_sedes_list', methods: ['GET'])]
+    public function listarSedes(SedeRepository $sedeRepository): JsonResponse
+    {
+        // Obtener sedes que no estén eliminadas
+        $sedes = $sedeRepository->findBy(['sed_eliminado' => false]);
+
+        $dataSedes = [];
+        foreach ($sedes as $sede) {
+            $dataSedes[] = [
+                'id' => $sede->getId(),
+                'sed_nombre' => $sede->getSedNombre(),
+                'sed_pais' => $sede->getSedPais(),
+                'sed_direccion' => $sede->getSedDireccion(), 
+                'sed_ubicacion' => $sede->getSedUbicacion()
+            ];
+        }     
+
+        return $this->json([
+            // 'success' => 'Estado de eliminación cambiado',
+            'sede' => $dataSedes
+        ], JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/sedes/{id}/eliminar', name: 'api_sedes_toggle_eliminado', methods: ['PATCH'])]
+    public function toggleEliminado(int $id, SedeRepository $sedeRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $sede = $sedeRepository->find($id);
+
+        if (!$sede) {
+            return new JsonResponse(['error' => 'Sede no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Cambiar el estado de sed_eliminado
+        $sede->setSedEliminado(!$sede->isSedEliminado());
+        $entityManager->persist($sede);
+        $entityManager->flush();
+
+        return $this->json([
+            'success' => 'Estado de eliminación cambiado',
+            'sede' => [
+                'id' => $sede->getId(),
+                'sed_nombre' => $sede->getSedNombre(),
+                'sed_pais' => $sede->getSedPais(),
+                'sed_direccion' => $sede->getSedDireccion(), 
+                'sed_ubicacion' => $sede->getSedUbicacion(),
+                'sed_eliminado' => $sede->isSedEliminado() 
+            ]  
+        ], JsonResponse::HTTP_OK);
     }
 
     // API para obtener todas las áreas de una empresa

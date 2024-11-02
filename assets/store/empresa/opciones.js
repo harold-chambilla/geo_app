@@ -9,7 +9,11 @@ export const useOpcionesStore = defineStore('opcionesStore', {
         configuracionAsistencia: null, // Almacena la configuración de asistencia del sistema o de un área
         loading: false,
         error: null,
+        sedes: []
     }),
+    getters: {
+        GETSEDES(state) { return state.sedes },
+    },
     actions: {
         // Acción para obtener la información de la empresa desde la API usando GET
         async fetchEmpresa(empresaId) {
@@ -39,14 +43,41 @@ export const useOpcionesStore = defineStore('opcionesStore', {
                 formData.append('latitud', sede.latitude);
                 formData.append('longitud', sede.longitude);
                 formData.append('sed_direccion', sede.direccion);
-                formData.append('sed_pais', sede.pais); 
-                  const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
-                  this.sedes.push(response.data); // Actualizar el estado con la nueva sede
-                  console.log('Sede registrada exitosamente:', response.data);
+                formData.append('sed_pais', sede.pais);
+                const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
+                // this.sedes = response.data;
+                // console.log('dataaaa: ', response.data)
+                  this.sedes.push(response.data.sede); // Actualizar el estado con la nueva sede
             } catch (error) {
                 console.error('Error al registrar la sede:', error);
             }
         },
+        async listEliminado(id) {
+            try {
+                const response = await axios.patch(`/empresa/opciones/api/sedes/${id}/eliminar`);
+                //   this.sedes = response.data;
+                // this.sedes = this.sedes.filter(sede => !sede.sed_eliminado);
+                const updatedSede = response.data.sede;
+
+                // Filtrar la sede eliminada del array de sedes en el store
+                this.sedes = this.sedes.filter(sede => sede.id !== updatedSede.id || !updatedSede.sed_eliminado);
+
+                // Eliminar la sede de la lista si está eliminada
+                // this.sedes = this.sedes.filter(s => s.id !== updatedSede.id || !updatedSede.sed_eliminado);
+                //   this.fetchSedes();  // Recargar el listado después de cambiar el estado
+            } catch (error) {
+                console.error('Error al cambiar el estado de eliminación:', error);
+            }
+        },
+        async listSedes() {
+            try {
+                const response = await axios.get('/empresa/opciones/api/listar/sedes');
+                this.sedes = response.data.sede;
+            } catch (error) {
+                console.error('Error al obtener sedes:', error);
+            }
+        },
+
 
         // Acción para crear un área
         async crearArea(empresaId, areaData) {
@@ -171,7 +202,7 @@ export const useOpcionesStore = defineStore('opcionesStore', {
             }
         },
 
-                // Acción para registrar un motivo
+        // Acción para registrar un motivo
         async registrarMotivo(empresaId, motivoData) {
             this.loading = true;
             this.error = null;
@@ -258,6 +289,6 @@ export const useOpcionesStore = defineStore('opcionesStore', {
             } finally {
                 this.loading = false;
             }
-        }, 
+        },
     },
 });
