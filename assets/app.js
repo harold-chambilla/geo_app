@@ -14,8 +14,13 @@ const pinia = createPinia();
 
 
 import EOSede from './vue/controllers/empresa/opciones/sede.vue';
+import EEEmpleados from './vue/controllers/empresa/empleados/empleados.vue';
 
-const eosede = createApp(EOSede)
+const eosede = createApp(EOSede);
+const eeempleados = createApp(EEEmpleados);
 
 eosede.use(pinia);
 eosede.mount('#eosede');
+
+eeempleados.use(pinia);
+eeempleados.mount('#eeempleados');

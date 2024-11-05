@@ -29,12 +29,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="empleados.html" class="nav-link text-white">
+                            <a href="{{ path('app_empresa_empleados_inicio') }}" class="nav-link text-white">
                                 <i class="bi bi-people fs-4"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="horario.html" class="nav-link text-white">
+                            <a href="{{ path('app_empresa_horario_inicio') }}" class="nav-link text-white">
                                 <i class="bi bi-clock fs-4"></i>
                             </a>
                         </li>
@@ -46,7 +46,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="salir.html" class="nav-link text-white">
+                            <a href="#" class="nav-link text-white">
                                 <i class="bi bi-box-arrow-right fs-4"></i>
                             </a>
                         </li>
@@ -54,29 +54,7 @@
                 </div>
 
                 <!-- Content -->
-                {% block content %}
-                    <div class="flex-grow-1 p-3">
-                        <div class="d-flex justify-content-center">
-                            <!-- Card Empleados Redireccionable -->
-                            <div class="card text-center m-2" style="width: 10rem; height: 6rem;">
-                                <a href="empleados.html" class="text-decoration-none text-dark">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Empleados</h5>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Card Horario Redireccionable -->
-                            <div class="card text-center m-2" style="width: 10rem; height: 6rem;">
-                                <a href="horario.html" class="text-decoration-none text-dark">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Horario</h5>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endblock %}
+                {% block content %}{% endblock %}
             </div>
         {% endblock %}
     </body>
