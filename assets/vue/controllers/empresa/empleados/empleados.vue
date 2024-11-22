@@ -1,5 +1,4 @@
-<template>
- 
+<template> 
         <!-- Tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -13,7 +12,7 @@
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link fw-bold" id="sistema-tab" data-bs-toggle="tab" data-bs-target="#sistema" type="button" role="tab" aria-controls="sistema" aria-selected="false">
+                <button class="nav-link fw-bold" id="sistema-tab" data-bs-toggle="tab" data-bs-target="#historial" type="button" role="tab" aria-controls="sistema" aria-selected="false">
                     Historial
                 </button>
             </li>
@@ -23,13 +22,20 @@
         <div class="tab-content">
             <!-- Empresa Tab -->
             <div class="tab-pane fade show active" id="registro" role="tabpanel" aria-labelledby="registro-tab">
+                <eeregistro></eeregistro> 
             </div>
 
             <div class="tab-pane fade" id="excel" role="tabpanel" aria-labelledby="excel-tab">
+                <eemasivo></eemasivo> 
             </div> 
 
             <div class="tab-pane fade" id="historial" role="tabpanel" aria-labelledby="historial-tab">
+                <eehistorial></eehistorial>
             </div>
         </div>
 </template>
-<script setup></script>
+<script setup>
+    import eeregistro from './registro.vue';
+    import eemasivo from './masivo.vue';
+    import eehistorial from './historial.vue';
+</script>

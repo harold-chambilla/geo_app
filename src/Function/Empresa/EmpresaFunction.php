@@ -54,8 +54,12 @@ class EmpresaFunction
         $this->entityManager->persist($grupo);
 
         // Crear colaborador por defecto (Administrador de la empresa)
+        
+        $rucPrefix = substr($empresa->getEmpRuc(), 0, 4); // Obtener los primeros 4 caracteres del RUC
+        $nombreUsuario = $rucPrefix . '_' . $empresaData['superadmin_username']; // Formar el nombre de usuario
+        
         $colaborador = new Colaborador();
-        $colaborador->setColNombreUsuario($empresaData['superadmin_username']);
+        $colaborador->setColNombreUsuario($nombreUsuario);
         $colaborador->setColNombres($empresaData['superadmin_nombres']);
         $colaborador->setColApellidos($empresaData['superadmin_apellidos']);
         $colaborador->setColDninit($empresaData['superadmin_dni']);
