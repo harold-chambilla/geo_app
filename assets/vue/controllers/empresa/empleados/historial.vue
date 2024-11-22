@@ -116,6 +116,7 @@
       </div>
     </div>
 
+    <!-- Modal Confirmar Eliminación -->
     <div
       class="modal fade"
       id="modalEliminar"
@@ -123,27 +124,18 @@
       aria-labelledby="modalEliminarLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modalEliminarLabel">Confirmar Eliminación</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             ¿Está seguro de que desea eliminar al colaborador
             <strong>{{ colaboradorSeleccionado?.nombre_usuario }}</strong>?
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancelar
             </button>
             <button
@@ -152,13 +144,14 @@
               @click="confirmarEliminacion"
               data-bs-dismiss="modal"
             >
-              Confirmar
+              Eliminar
             </button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Modal Editar -->
     <div
       class="modal fade"
       id="modalEditar"
@@ -178,6 +171,10 @@
             ></button>
           </div>
           <div class="modal-body">
+            <div v-if="alertaVisible" class="alert alert-success alert-dismissible fade show" role="alert">
+              {{ mensajeAlerta }}
+              <button type="button" class="btn-close" @click="cerrarAlerta" aria-label="Close"></button>
+            </div>
             <form @submit.prevent="guardarEdicion">
               <div class="row">
                 <div class="col-md-6">
@@ -316,6 +313,13 @@ const elementosPorPagina = 10;
 const columnaOrdenada = ref('');
 const ordenAscendente = ref(true);
 
+const alertaVisible = ref(false);
+const mensajeAlerta = ref('');
+
+const cerrarAlerta = () => {
+  alertaVisible.value = false;
+};
+
 const recargarColaboradores = async () => {
   try {
     await empleadosStore.fetchColaboradores(1);
@@ -422,7 +426,8 @@ const guardarEdicion = async () => {
     };
     await empleadosStore.modificarColaborador(payload);
     recargarColaboradores();
-    console.log("Colaborador modificado correctamente.");
+    mensajeAlerta.value = "Colaborador modificado correctamente.";
+    alertaVisible.value = true;
   } catch (error) {
     console.error("Error al modificar colaborador:", error.message);
   }
