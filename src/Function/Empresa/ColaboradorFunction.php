@@ -256,9 +256,24 @@ class ColaboradorFunction
             throw new \Exception('Colaborador no encontrado.');
         }
 
+        // Obtener y validar la empresa
+        $empresa = $colaborador->getGrupo()->getEmpresa();
+        if (!$empresa) {
+            throw new \Exception('Empresa no encontrada.');
+        }
+
+        // Obtener los primeros 4 números del RUC de la empresa
+        $ruc = $empresa->getEmpRuc();
+        if (strlen($ruc) < 4) {
+            throw new \Exception('El RUC de la empresa no es válido.');
+        }
+        $rucPrefix = substr($ruc, 0, 4);
+
+
         // Actualizar campos del colaborador
         if (isset($datosNuevos['col_nombreusuario'])) {
-            $colaborador->setColNombreusuario($datosNuevos['col_nombreusuario']);
+            $nombreUsuario = $rucPrefix . '_' . $datosNuevos['col_nombreusuario'];
+            $colaborador->setColNombreusuario($nombreUsuario);
         }
         if (isset($datosNuevos['col_nombres'])) {
             $colaborador->setColNombres($datosNuevos['col_nombres']);
@@ -278,12 +293,11 @@ class ColaboradorFunction
         if (isset($datosNuevos['roles'])) {
             $colaborador->setRoles($datosNuevos['roles']);
         }
-
-        if (isset($datosNuevos['password'])){
+        if (isset($datosNuevos['password'])) {
             $colaborador->setPassword(password_hash($datosNuevos['password'], PASSWORD_BCRYPT)); // Contraseña cifrada
         }
 
-        // Actualizar grupo si el puesto cambia
+        // Actualizar grupo si el puesto o la sede cambian
         if (isset($datosNuevos['puesto_id']) || isset($datosNuevos['sede_id'])) {
             $puesto = $this->entityManager->getRepository(Puesto::class)->find($datosNuevos['puesto_id']);
             $sede = $this->entityManager->getRepository(Sede::class)->find($datosNuevos['sede_id']);
@@ -292,17 +306,64 @@ class ColaboradorFunction
                 throw new \Exception('Puesto o sede no encontrado.');
             }
 
+            // Buscar configuración de asistencia para el puesto y la sede
             $configAsistencia = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->findOneBy([
                 'puesto' => $puesto,
                 'sede' => $sede,
                 'cas_estado' => 'puesto',
             ]);
 
-            if (!$configAsistencia) {
-                throw new \Exception('Configuración de asistencia no encontrada para el puesto y la sede especificados.');
+            // Obtener configuración de asistencia "sistema" de la empresa
+            $configAsistenciaSistema = $this->entityManager->getRepository(ConfiguracionAsistencia::class)->createQueryBuilder('ca')
+                ->join('ca.grupo', 'g')
+                ->where('g.empresa = :empresa')
+                ->andWhere('ca.cas_estado = :estado')
+                ->setParameter('empresa', $empresa)
+                ->setParameter('estado', 'sistema')
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (!$configAsistenciaSistema) {
+                throw new \Exception('No se encontró una configuración de asistencia con estado "sistema" para la empresa.');
             }
 
-            $colaborador->setGrupo($configAsistencia->getGrupo());
+            // Determinar el grupo a usar o crear uno nuevo si no existe configuración de asistencia
+            if ($configAsistencia) {
+                // Configuración encontrada: usar el grupo asociado
+                $colaborador->setGrupo($configAsistencia->getGrupo());
+            } else {
+                // Crear un nuevo grupo
+                $grupoNuevo = new Grupo();
+                $grupoNuevo->setGrpNombre($puesto->getPstNombre()); // Nombre del grupo igual al puesto
+                $grupoNuevo->setGrpDescripcion('Grupo con la configuración del puesto ' . $puesto->getPstNombre());
+                $grupoNuevo->setGrpEliminado(false);
+                $grupoNuevo->setEmpresa($empresa);
+                $this->entityManager->persist($grupoNuevo);
+
+                // Crear una nueva configuración de asistencia
+                $configAsistenciaNueva = new ConfiguracionAsistencia();
+                $configAsistenciaNueva->setCasTiempoFaltaHoras($configAsistenciaSistema->getCasTiempoFaltaHoras());
+                $configAsistenciaNueva->setCasToleranciaIngresoMinutos($configAsistenciaSistema->getCasToleranciaIngresoMinutos());
+                $configAsistenciaNueva->setCasPermitirFoto($configAsistenciaSistema->isCasPermitirFoto());
+                $configAsistenciaNueva->setCasHorasextras($configAsistenciaSistema->isCasHorasextras());
+                $configAsistenciaNueva->setCasFaltasTardanzas($configAsistenciaSistema->isCasFaltasTardanzas());
+                $configAsistenciaNueva->setCasPermisos($configAsistenciaSistema->isCasPermisos());
+                $configAsistenciaNueva->setCasVacaciones($configAsistenciaSistema->isCasVacaciones());
+                $configAsistenciaNueva->setCasMarcacion($configAsistenciaSistema->isCasMarcacion());
+                $configAsistenciaNueva->setCasModalidad($configAsistenciaSistema->getCasModalidad());
+                $configAsistenciaNueva->setCasArea($configAsistenciaSistema->isCasArea());
+                $configAsistenciaNueva->setCasPuesto($configAsistenciaSistema->isCasPuesto());
+                $configAsistenciaNueva->setCasPredhorario($configAsistenciaSistema->isCasPredhorario());
+                $configAsistenciaNueva->setCasEliminado(false);
+                $configAsistenciaNueva->setCasEstado('puesto');
+                $configAsistenciaNueva->setPuesto($puesto);
+                $configAsistenciaNueva->setSede($sede);
+                $configAsistenciaNueva->setGrupo($grupoNuevo);
+                $this->entityManager->persist($configAsistenciaNueva);
+
+                // Asignar el nuevo grupo
+                $colaborador->setGrupo($grupoNuevo);
+            }
         }
 
         // Guardar cambios

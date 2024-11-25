@@ -4,15 +4,21 @@
       <table class="table align-middle">
         <thead>
           <tr>
-            <th @click="ordenarPor('colaborador_id')" role="button" class="text-center">
-              ID
-              <span v-if="columnaOrdenada === 'colaborador_id'" class="ms-2">
+            <th @click="ordenarPor('numeracion')" role="button" class="text-center">
+              #
+              <span v-if="columnaOrdenada === 'numeracion'" class="ms-2">
                 <i :class="ordenAscendente ? 'bi bi-arrow-up' : 'bi bi-arrow-down'"></i>
               </span>
             </th>
-            <th @click="ordenarPor('nombre_usuario')" role="button">
-              Nombre de Usuario
-              <span v-if="columnaOrdenada === 'nombre_usuario'" class="ms-2">
+            <th @click="ordenarPor('empresa')" role="button">
+              Empresa
+              <span v-if="columnaOrdenada === 'empresa'" class="ms-2">
+                <i :class="ordenAscendente ? 'bi bi-arrow-up' : 'bi bi-arrow-down'"></i>
+              </span>
+            </th>
+            <th @click="ordenarPor('usuario')" role="button">
+              Usuario
+              <span v-if="columnaOrdenada === 'usuario'" class="ms-2">
                 <i :class="ordenAscendente ? 'bi bi-arrow-up' : 'bi bi-arrow-down'"></i>
               </span>
             </th>
@@ -57,8 +63,9 @@
         </thead>
         <tbody>
           <tr v-for="colaborador in colaboradoresPaginados" :key="colaborador.colaborador_id">
-            <td class="text-center">{{ colaborador.colaborador_id }}</td>
-            <td>{{ colaborador.nombre_usuario }}</td>
+            <td class="text-center">{{ colaborador.numeracion }}</td>
+            <td>{{ colaborador.empresa }}</td>
+            <td>{{ colaborador.usuario }}</td>
             <td>{{ colaborador.nombres }}</td>
             <td>{{ colaborador.apellidos }}</td>
             <td>{{ colaborador.dni }}</td>
@@ -132,7 +139,7 @@
           </div>
           <div class="modal-body">
             ¿Está seguro de que desea eliminar al colaborador
-            <strong>{{ colaboradorSeleccionado?.nombre_usuario }}</strong>?
+            <strong>{{ colaboradorSeleccionado?.usuario }}</strong>?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -218,6 +225,14 @@
                     </select>
                   </div>
                   <div class="mb-3">
+                    <label class="form-label fw-semibold">Rol</label>
+                    <select class="form-select" v-model="colaboradorSeleccionado.rol" required>
+                      <option value="ROLE_COLABORADOR">Colaborador</option>
+                      <option value="ROLE_ADMIN">Administrador</option>
+                      <option value="ROLE_SUPERADMIN">Superadministrador</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
                     <label class="form-label fw-semibold">Contraseña</label>
                     <input
                       type="password"
@@ -233,7 +248,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="colaboradorSeleccionado.nombre_usuario"
+                      v-model="colaboradorSeleccionado.usuario"
                       required
                     />
                   </div>
@@ -312,9 +327,8 @@ const paginaActual = ref(1);
 const elementosPorPagina = 10;
 const columnaOrdenada = ref('');
 const ordenAscendente = ref(true);
-
 const alertaVisible = ref(false);
-const mensajeAlerta = ref('');
+const mensajeAlerta = ref("");
 
 const cerrarAlerta = () => {
   alertaVisible.value = false;
@@ -323,7 +337,15 @@ const cerrarAlerta = () => {
 const recargarColaboradores = async () => {
   try {
     await empleadosStore.fetchColaboradores(1);
-    colaboradores.value = empleadosStore.getColaboradores || [];
+    colaboradores.value = empleadosStore.getColaboradores.map((colaborador, index) => {
+      const [empresa, usuario] = colaborador.nombre_usuario.split('_');
+      return {
+        ...colaborador,
+        empresa,
+        usuario,
+        numeracion: index + 1,
+      };
+    });
   } catch (error) {
     console.error("Error al recargar colaboradores.");
   }
@@ -380,17 +402,18 @@ const puestosFiltrados = computed(() => {
 const abrirModalEditar = (colaborador) => {
   colaboradorSeleccionado.value = {
     ...colaborador,
+    usuario: colaborador.usuario,
     fecha_nacimiento: colaborador.fecha_nacimiento
       ? colaborador.fecha_nacimiento.split("T")[0]
       : "",
+    rol: colaborador.roles?.[0] || "ROLE_COLABORADOR",
   };
-  const area = empleadosStore.getAreas.find((a) =>
-    a.puestos.some((p) => p.pst_nombre === colaborador.puesto)
-  );
-  areaSeleccionada.value = area?.ara_id || null;
-  puestoSeleccionado.value =
-    area?.puestos.find((p) => p.pst_nombre === colaborador.puesto)?.pst_id ||
-    null;
+  areaSeleccionada.value = empleadosStore.getAreas.find((area) =>
+    area.puestos.some((puesto) => puesto.pst_nombre === colaborador.puesto)
+  )?.ara_id;
+  puestoSeleccionado.value = empleadosStore.getAreas
+    .find((area) => area.ara_id === areaSeleccionada.value)
+    ?.puestos.find((puesto) => puesto.pst_nombre === colaborador.puesto)?.pst_id;
   sedeSeleccionada.value = empleadosStore.getSedes.find(
     (sede) => sede.sed_nombre === colaborador.sede
   )?.sed_id;
@@ -404,7 +427,6 @@ const confirmarEliminacion = async () => {
   try {
     await empleadosStore.eliminarColaborador(colaboradorSeleccionado.value.colaborador_id);
     recargarColaboradores();
-    console.log("Colaborador eliminado correctamente.");
   } catch (error) {
     console.error("Error al eliminar colaborador:", error.message);
   }
@@ -414,7 +436,7 @@ const guardarEdicion = async () => {
   try {
     const payload = {
       colaborador_id: colaboradorSeleccionado.value.colaborador_id,
-      col_nombreusuario: colaboradorSeleccionado.value.nombre_usuario,
+      col_nombreusuario: colaboradorSeleccionado.value.usuario,
       col_nombres: colaboradorSeleccionado.value.nombres,
       col_apellidos: colaboradorSeleccionado.value.apellidos,
       col_dninit: colaboradorSeleccionado.value.dni,
@@ -423,11 +445,12 @@ const guardarEdicion = async () => {
       sede_id: sedeSeleccionada.value,
       puesto_id: puestoSeleccionado.value,
       password: colaboradorSeleccionado.value.password || null,
+      roles: [colaboradorSeleccionado.value.rol],
     };
     await empleadosStore.modificarColaborador(payload);
-    recargarColaboradores();
     mensajeAlerta.value = "Colaborador modificado correctamente.";
     alertaVisible.value = true;
+    recargarColaboradores();
   } catch (error) {
     console.error("Error al modificar colaborador:", error.message);
   }
