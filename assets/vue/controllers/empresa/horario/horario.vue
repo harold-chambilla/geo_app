@@ -137,16 +137,16 @@
                 <label class="fw-bold">Modalidad:</label>
                 <div class="d-flex gap-3">
                   <div class="form-check">
-                    <input type="radio" id="presencial" class="form-check-input" value="Presencial" v-model="workMode" />
-                    <label for="presencial" class="form-check-label">Presencial</label>
+                    <input class="form-check-input" type="radio" id="presencial" value="Presencial" v-model="workMode" />
+                    <label class="form-check-label" for="presencial">Presencial</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" id="remoto" class="form-check-input" value="Remoto" v-model="workMode" />
-                    <label for="remoto" class="form-check-label">Remoto</label>
+                    <input class="form-check-input" type="radio" id="remoto" value="Remoto" v-model="workMode" />
+                    <label class="form-check-label" for="remoto">Remoto</label>
                   </div>
                 </div>
               </div>
-              <div class="mb-3">
+              <div v-if="showRestDay" class="mb-3">
                 <label class="fw-bold">Descanso:</label>
                 <select v-model="restDay" class="form-select">
                   <option value="">Seleccionar...</option>
@@ -203,6 +203,7 @@ const hasSchedule = (weekIndex, dayIndex, employeeName) => {
 
 const modalInstance = ref(null);
 const modalTitle = ref("");
+const showRestDay = ref(true);
 const showApplyAll = ref(false);
 const startTime = ref("");
 const endTime = ref("");
@@ -249,6 +250,9 @@ const openMassiveModal = (type, context) => {
 
   currentEmployee.value = employee?.name || "";
 
+  // Control "Descanso" visibility
+  showRestDay.value = !["day", "date", "employeeDay"].includes(type);
+
   // Load existing schedule data if available
   currentScheduleKey = `${weekIndex || 0}-${day?.date || 0}-${employee?.name || "all"}`;
   const existingSchedule = schedules.value[currentScheduleKey];
@@ -278,7 +282,7 @@ const saveSchedule = () => {
     endTime: endTime.value,
     workHours: workHours.value,
     workMode: workMode.value,
-    restDay: restDay.value,
+    restDay: showRestDay.value ? restDay.value : null,
   };
   console.log("Horarios guardados:", schedules.value);
   modalInstance.value.hide();
@@ -346,4 +350,3 @@ onMounted(() => {
   cursor: pointer;
 }
 </style>
-
