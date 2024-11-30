@@ -87,7 +87,7 @@
                       v-if="hasSchedule(weekIndex, dayIndex, employee.name)"
                       class="badge bg-primary text-white"
                     >
-                      09:00 - 18:30
+                      {{ schedules.value[`${weekIndex}-${day.date}-${employee.name}`]?.workHours }}
                     </div>
                     <div v-else class="text-secondary small">Sin horario</div>
                   </td>
@@ -137,12 +137,12 @@
                 <label class="fw-bold">Modalidad:</label>
                 <div class="d-flex gap-3">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="presencial" value="Presencial" v-model="workMode" />
-                    <label class="form-check-label" for="presencial">Presencial</label>
+                    <input type="radio" id="presencial" class="form-check-input" value="Presencial" v-model="workMode" />
+                    <label for="presencial" class="form-check-label">Presencial</label>
                   </div>
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="remoto" value="Remoto" v-model="workMode" />
-                    <label class="form-check-label" for="remoto"> Remoto</label>
+                    <input type="radio" id="remoto" class="form-check-input" value="Remoto" v-model="workMode" />
+                    <label for="remoto" class="form-check-label">Remoto</label>
                   </div>
                 </div>
               </div>
@@ -179,6 +179,7 @@ const currentMonth = ref(currentDate.value.getMonth());
 const selectedArea = ref("");
 const selectedPuesto = ref("");
 const currentEmployee = ref("");
+const schedules = ref({});
 
 const employees = ref([
   { name: "Angel Benavides", area: "1", puesto: "1" },
@@ -196,18 +197,20 @@ const filteredEmployees = computed(() => {
 });
 
 const hasSchedule = (weekIndex, dayIndex, employeeName) => {
-  return weekIndex === 1 && dayIndex === 3 && employeeName === "Angel Benavides";
+  const key = `${weekIndex}-${dayIndex}-${employeeName}`;
+  return schedules.value[key];
 };
 
 const modalInstance = ref(null);
 const modalTitle = ref("");
 const showApplyAll = ref(false);
-const startTime = ref("08:00");
-const endTime = ref("18:00");
-const workHours = ref("8 horas");
-const workMode = ref("Presencial");
+const startTime = ref("");
+const endTime = ref("");
+const workHours = ref("");
+const workMode = ref("");
 const restDay = ref("");
 const applyToAll = ref(false);
+let currentScheduleKey = "";
 
 const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 const daysOfWeekOptions = [...daysOfWeek, "Sábado y Domingo"];
@@ -243,7 +246,24 @@ const openMassiveModal = (type, context) => {
   } else if (type === "employeeWeek") {
     modalTitle.value = `Semana ${weekIndex + 1} - ${employee.name}`;
   }
+
   currentEmployee.value = employee?.name || "";
+
+  // Load existing schedule data if available
+  currentScheduleKey = `${weekIndex || 0}-${day?.date || 0}-${employee?.name || "all"}`;
+  const existingSchedule = schedules.value[currentScheduleKey];
+  if (existingSchedule) {
+    startTime.value = existingSchedule.startTime;
+    endTime.value = existingSchedule.endTime;
+    workMode.value = existingSchedule.workMode;
+    restDay.value = existingSchedule.restDay;
+  } else {
+    startTime.value = "08:00";
+    endTime.value = "18:00";
+    workMode.value = "Presencial";
+    restDay.value = "";
+  }
+
   showApplyAll.value = ["employeeWeek", "employeeDay"].includes(type);
   if (!modalInstance.value) {
     modalInstance.value = new Modal(document.getElementById("scheduleModal"));
@@ -252,15 +272,32 @@ const openMassiveModal = (type, context) => {
 };
 
 const saveSchedule = () => {
-  console.log("Horario guardado:", { startTime, endTime, workMode, restDay, applyToAll });
+  calculateWorkHours();
+  schedules.value[currentScheduleKey] = {
+    startTime: startTime.value,
+    endTime: endTime.value,
+    workHours: workHours.value,
+    workMode: workMode.value,
+    restDay: restDay.value,
+  };
+  console.log("Horarios guardados:", schedules.value);
   modalInstance.value.hide();
 };
 
 const calculateWorkHours = () => {
-  const [startHour, startMinute] = startTime.value.split(":").map(Number);
-  const [endHour, endMinute] = endTime.value.split(":").map(Number);
-  const totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
-  workHours.value = `${Math.floor(totalMinutes / 60)} horas ${totalMinutes % 60} minutos`;
+  if (startTime.value && endTime.value) {
+    const [startHour, startMinute] = startTime.value.split(":").map(Number);
+    const [endHour, endMinute] = endTime.value.split(":").map(Number);
+    const totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+
+    if (totalMinutes > 0) {
+      workHours.value = `${Math.floor(totalMinutes / 60)} horas ${totalMinutes % 60} minutos`;
+    } else {
+      workHours.value = "Horas inválidas";
+    }
+  } else {
+    workHours.value = "";
+  }
 };
 
 const getCalendarDays = (year, month) => {
@@ -309,3 +346,4 @@ onMounted(() => {
   cursor: pointer;
 }
 </style>
+
