@@ -36,6 +36,9 @@ class HorarioTrabajo
     #[ORM\JoinColumn(nullable: false)]
     private ?Colaborador $colaborador = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $hot_descanso = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,18 @@ class HorarioTrabajo
     public function setColaborador(?Colaborador $colaborador): static
     {
         $this->colaborador = $colaborador;
+
+        return $this;
+    }
+
+    public function getHotDescanso(): ?string
+    {
+        return $this->hot_descanso;
+    }
+
+    public function setHotDescanso(string $hot_descanso): static
+    {
+        $this->hot_descanso = $hot_descanso;
 
         return $this;
     }

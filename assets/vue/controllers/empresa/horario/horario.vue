@@ -170,8 +170,11 @@
 </template>
 
 <script setup>
+import { useHorarioStore } from '@/store/empresa/horario';
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
+
+const horarioStore = useHorarioStore();
 
 const currentDate = ref(new Date());
 const currentYear = ref(currentDate.value.getFullYear());
@@ -350,3 +353,4 @@ onMounted(() => {
   cursor: pointer;
 }
 </style>
+
