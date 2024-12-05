@@ -210,6 +210,9 @@ class ColaboradorFunction
                 'puesto' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
                     ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getPuesto()->getPstNombre()
                     : null,
+                'area' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
+                    ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getPuesto()->getArea()->getAraNombre()
+                    : null,
                 'sede' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
                     ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getSede()->getSedNombre()
                     : null,
@@ -237,6 +240,9 @@ class ColaboradorFunction
                     'grupo' => $colaborador->getGrupo() ? $colaborador->getGrupo()->getGrpNombre() : null,
                     'puesto' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
                         ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getPuesto()->getPstNombre()
+                        : null,
+                    'area' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
+                        ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getPuesto()->getArea()->getAraNombre()
                         : null,
                     'sede' => $colaborador->getGrupo() && $colaborador->getGrupo()->getConfiguracionAsistencias()->first()
                         ? $colaborador->getGrupo()->getConfiguracionAsistencias()->first()->getSede()->getSedNombre()

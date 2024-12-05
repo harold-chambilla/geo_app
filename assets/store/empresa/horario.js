@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useOpcionesStore = defineStore("opcionesStore", {
+export const useHorarioStore = defineStore("horarioStore", {
   state: () => ({
     empresa: null,
     areas: [],

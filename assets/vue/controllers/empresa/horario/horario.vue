@@ -16,16 +16,21 @@
       </div>
       <div class="card-body">
         <div class="d-flex gap-2 mb-3">
-          <select class="form-select form-select-sm w-auto" v-model="selectedArea">
-            <option value="">Área</option>
-            <option value="1">Área 1</option>
-            <option value="2">Área 2</option>
-          </select>
-          <select class="form-select form-select-sm w-auto" v-model="selectedPuesto">
-            <option value="">Puesto</option>
-            <option value="1">Puesto 1</option>
-            <option value="2">Puesto 2</option>
-          </select>
+            <!-- Selector de Áreas -->
+            <select class="form-select form-select-sm w-auto" v-model="selectedArea" @change="updatePuestos">
+              <option value="">Área</option>
+              <option v-for="area in filteredAreas" :key="area.ara_id" :value="area.ara_nombre">
+                {{ area.ara_nombre }}
+              </option>
+            </select>
+  
+            <!-- Selector de Puestos -->
+            <select class="form-select form-select-sm w-auto" v-model="selectedPuesto">
+              <option value="">Puesto</option>
+              <option v-for="puesto in filteredPuestos" :key="puesto.pst_id" :value="puesto.pst_nombre">
+                {{ puesto.pst_nombre }}
+              </option>
+            </select>
         </div>
         <div class="table-responsive">
           <table class="table table-bordered text-center table-sm w-100">
@@ -75,7 +80,7 @@
                     class="align-middle bg-light text-center text-secondary small cursor-pointer"
                     @click="openMassiveModal('employeeWeek', { weekIndex, employee })"
                   >
-                    {{ employee.name }}
+                    {{ employee.nombres }} {{ employee.apellidos }}
                   </td>
                   <td
                     v-for="(day, dayIndex) in week"
@@ -84,10 +89,10 @@
                     @click="openMassiveModal('employeeDay', { day, weekIndex, employee, monthName })"
                   >
                     <div
-                      v-if="hasSchedule(weekIndex, dayIndex, employee.name)"
+                      v-if="hasSchedule(weekIndex, dayIndex, employee.nombres + ' ' + employee.apellidos)"
                       class="badge bg-primary text-white"
                     >
-                      {{ schedules.value[`${weekIndex}-${day.date}-${employee.name}`]?.workHours }}
+                      {{ schedules.value[`${weekIndex}-${day.date}-${employee.nombres + ' ' + employee.apellidos}`]?.workHours }}
                     </div>
                     <div v-else class="text-secondary small">Sin horario</div>
                   </td>
@@ -183,20 +188,31 @@ const selectedArea = ref("");
 const selectedPuesto = ref("");
 const currentEmployee = ref("");
 const schedules = ref({});
+const employees = ref([]);
 
-const employees = ref([
-  { name: "Angel Benavides", area: "1", puesto: "1" },
-  { name: "Fiorela Ruiz", area: "1", puesto: "2" },
-  { name: "Carlos Vega", area: "2", puesto: "1" },
-  { name: "Lucía Gómez", area: "2", puesto: "2" },
-]);
+const filteredAreas = computed(() => {
+  return horarioStore.areas.filter((area) => area.ara_nombre.toLowerCase() !== "sistema");
+});
+
+const filteredPuestos = computed(() => {
+  const area = horarioStore.areas.find((area) => area.ara_nombre == selectedArea.value);
+  return area
+    ? area.puestos.filter((puesto) => puesto.pst_nombre.toLowerCase() !== "sistema")
+    : [];
+});
+
+const updatePuestos = () => {
+  selectedPuesto.value = "";
+};
 
 const filteredEmployees = computed(() => {
-  return employees.value.filter((employee) => {
-    const matchesArea = selectedArea.value ? employee.area === selectedArea.value : true;
-    const matchesPuesto = selectedPuesto.value ? employee.puesto === selectedPuesto.value : true;
+  const filtered = employees.value.filter((employee) => {
+    const matchesArea = selectedArea.value ? employee.area === selectedArea.value : true; // Comparando con el nombre del área
+    const matchesPuesto = selectedPuesto.value ? employee.puesto === selectedPuesto.value : true; // Comparando con el nombre del puesto
     return matchesArea && matchesPuesto;
   });
+
+  return filtered;
 });
 
 const hasSchedule = (weekIndex, dayIndex, employeeName) => {
@@ -246,12 +262,14 @@ const openMassiveModal = (type, context) => {
   } else if (type === "week") {
     modalTitle.value = `Semana ${weekIndex + 1}`;
   } else if (type === "employeeDay") {
-    modalTitle.value = `Día: ${day.date} de ${monthName} - ${employee.name}`;
+    modalTitle.value = `Día: ${day.date} de ${monthName} - ${employee.nombres + " " + employee.apellidos}`;
   } else if (type === "employeeWeek") {
-    modalTitle.value = `Semana ${weekIndex + 1} - ${employee.name}`;
+    modalTitle.value = `Semana ${weekIndex + 1} - ${employee.nombres + " " + employee.apellidos}`;
   }
 
-  currentEmployee.value = employee?.name || "";
+  currentEmployee.value = employee?.nombres && employee?.apellidos 
+    ? `${employee.nombres} ${employee.apellidos}`
+    : "";
 
   // Control "Descanso" visibility
   showRestDay.value = !["day", "date", "employeeDay"].includes(type);
@@ -345,6 +363,14 @@ const getCalendarDays = (year, month) => {
 
 onMounted(() => {
   modalInstance.value = new Modal(document.getElementById("scheduleModal"));
+  horarioStore.fetchAreas(1); 
+  horarioStore.fetchColaboradores(1)
+    .then(() => {
+      employees.value = horarioStore.colaboradores;
+    })
+    .catch((error) => {
+      console.error("Error al obtener los colaboradores:", error);
+    });
 });
 </script>
 
