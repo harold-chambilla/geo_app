@@ -52,7 +52,7 @@ class HorarioController extends AbstractController
             if (in_array($tipo_registro, ['mes', 'semana'], true)) {
                 $required_fields = array_merge($required_fields, ['dia_inicio', 'dia_fin']);
             } elseif ($tipo_registro === 'dia') {
-                $required_fields[] = 'fecha';
+                $required_fields[] = 'fechas';
             }
 
             foreach ($required_fields as $field) {
@@ -65,10 +65,10 @@ class HorarioController extends AbstractController
             }
 
             $data['tipo_jornada'] = $data['tipo_jornada'] ?? 'presencial';
-            if (!in_array($data['tipo_jornada'], ['presencial', 'remota', 'descanso', 'no laborable'], true)) {
+            if (!in_array($data['tipo_jornada'], ['presencial', 'remoto', 'descanso', 'no laborable'], true)) {
                 return $this->json([
                     'status' => 'error',
-                    'message' => 'el tipo de jornada debe ser "presencial", "remota", "descanso" o "no laborable".',
+                    'message' => 'el tipo de jornada debe ser "presencial", "remoto", "descanso" o "no laborable".',
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
 
