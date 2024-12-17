@@ -114,9 +114,28 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button v-if="idHorarioSelected !== null" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true" ref="confirmDeleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás seguro de que deseas eliminar este horario? Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" @click="confirmarEliminacion">Eliminar</button>
         </div>
       </div>
     </div>
@@ -125,7 +144,7 @@
 
 <script setup>
 import { useHorarioStore } from '@/store/empresa/horario';
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, shallowRef,  computed, onMounted, watch } from "vue";
 import { Modal } from "bootstrap";
 
 const horarioStore = useHorarioStore();
@@ -206,6 +225,7 @@ const fetchHorarios = async () => {
 
       // Guardar los datos del horario en schedules.value
       acc[key] = {
+        id: horario.id,
         hora_entrada: horario.hora_entrada,
         hora_salida: horario.hora_salida,
         jornada: horario.tipo_jornada,
@@ -232,11 +252,13 @@ const showRestDay = ref(true);
 const showApplyAll = ref(false);
 const startTime = ref("");
 const endTime = ref("");
+const idHorarioSelected = ref(null);
 const workHours = ref("");
 const workMode = ref("");
 const restDay = ref("");
 const applyToAll = ref(false);
 let currentScheduleKey = "";
+let scheduleKey = "";
 
 const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 const daysOfWeekOptions = [...daysOfWeek, "Sábado y Domingo"];
@@ -259,6 +281,12 @@ const changeMonth = (offset) => {
 
 const openMassiveModal = (type, context) => {
   const { day, weekIndex, employee } = context || {};
+
+  // Verificar si schedules está vacío y cargarlo
+  if (!schedules.value || Object.keys(schedules.value).length === 0) {
+    console.warn("Schedules está vacío. Cargando datos...");
+    fetchHorarios();
+  }
 
   // Ajustar el mes para casos donde el día no pertenece al mes actual
   let adjustedMonthIndex = currentMonth.value; // Inicialmente asignar al mes actual
@@ -297,6 +325,14 @@ const openMassiveModal = (type, context) => {
     modalTitle.value = `Semana ${weekIndex + 1}`;
     currentScheduleKey = `week-${weekIndex}`;
   } else if (type === "employeeDay") {
+    const dayOfMonth = String(day.date); // Día con formato 01, 02, etc.
+    const normalizedMonthName = adjustedMonthName.charAt(0).toUpperCase() + adjustedMonthName.slice(1).toLowerCase(); // Capitaliza el nombre del mes
+    const employeeName = `${employee.nombres} ${employee.apellidos}`; // Nombre completo del empleado
+    const year = currentYear.value; // Año actual
+    
+    //modalTitle.value = `Día: ${day.date} de ${normalizedMonthName} - ${employeeName}`;
+    scheduleKey = `${year}-${normalizedMonthName}-${dayOfMonth}-${employeeName}`;
+    
     modalTitle.value = `Día: ${day.date} de ${adjustedMonthName} - ${employee.nombres} ${employee.apellidos}`;
     currentScheduleKey = `employeeDay-${day.date}-${adjustedMonthName}-${employee.colaborador_id}`;
   } else if (type === "employeeWeek") {
@@ -315,18 +351,22 @@ const openMassiveModal = (type, context) => {
   showRestDay.value = !["day", "date", "employeeDay"].includes(type);
 
   // Cargar un horario existente si está disponible
-  const existingSchedule = schedules.value[currentScheduleKey];
+  const existingSchedule = schedules.value[scheduleKey];
   if (existingSchedule) {
+    idHorarioSelected.value = existingSchedule.id;
     startTime.value = existingSchedule.hora_entrada;
     endTime.value = existingSchedule.hora_salida;
-    workMode.value = existingSchedule.jornada;
+    workMode.value = capitalize(existingSchedule.jornada);
     restDay.value = existingSchedule.restDay || "";
   } else {
+    idHorarioSelected.value = null;
     startTime.value = "08:00";
     endTime.value = "18:00";
     workMode.value = "Presencial";
     restDay.value = "";
   }
+
+  calculateWorkHours();
 
   // Determinar si se muestra la opción de "Aplicar a todo"
   showApplyAll.value = ["employeeWeek", "employeeDay"].includes(type);
@@ -336,6 +376,11 @@ const openMassiveModal = (type, context) => {
     modalInstance.value = new Modal(document.getElementById("scheduleModal"));
   }
   modalInstance.value.show();
+};
+
+const capitalize = (str) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 const generateWeeksInMonth = (year, month) => {
@@ -615,8 +660,58 @@ const getCalendarDays = (year, month) => {
   return days;
 };
 
+const confirmDeleteModal = ref(null);
+const currentHorarioId = ref(null);
+
+const abrirModalEliminar = (horarioId) => {
+  // Verificar si el modal principal está activo y ocultarlo
+  if (modalInstance.value) {
+    modalInstance.value.hide();
+  }
+
+  // Inicializar el modal de confirmación si no está inicializado
+  if (confirmDeleteModal.value) {
+    confirmDeleteModal.value = new Modal(document.getElementById("confirmDeleteModal"), {
+      backdrop: 'static', // Hacer que el backdrop sea estático
+      keyboard: false,    // Evitar que se cierre con el teclado
+    });
+  }
+
+  // Guardar el horario seleccionado y mostrar el modal de confirmación
+  currentHorarioId.value = horarioId;
+  confirmDeleteModal.value.show();
+};
+
+// Función para confirmar y eliminar
+const confirmarEliminacion = async () => {
+  if (!currentHorarioId.value) {
+    console.error("No se ha seleccionado un horario para eliminar.");
+    return;
+  }
+
+  try {
+    await horarioStore.eliminarHorario(currentHorarioId.value);
+    console.log("Horario eliminado exitosamente.");
+    confirmDeleteModal.value.hide();
+    fetchHorarios(); // Recargar los horarios
+  } catch (error) {
+    console.error("Error al eliminar el horario:", error);
+  }
+};
+
 onMounted(() => {
-  modalInstance.value = new Modal(document.getElementById("scheduleModal"));
+  // Modal principal
+  const scheduleModalElement = document.getElementById("scheduleModal");
+  if (scheduleModalElement) {
+    modalInstance.value = new Modal(scheduleModalElement);
+  }
+
+  // Modal de confirmación
+  const confirmDeleteModalElement = document.getElementById("confirmDeleteModal");
+  if (confirmDeleteModalElement) {
+    confirmDeleteModal.value = new Modal(confirmDeleteModalElement);
+  }
+
   horarioStore.fetchAreas(empresaId.value); 
   horarioStore.fetchColaboradores(empresaId.value)
     .then(() => {

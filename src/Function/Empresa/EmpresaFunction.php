@@ -268,10 +268,11 @@ class EmpresaFunction
                 // Obtener las asistencias del colaborador
                 foreach ($colaborador->getAsistencias() as $asistencia) {
                     $colaboradorData['asistencias'][] = [
-                        'asi_fecha' => $asistencia->getAsiFecharegistro()->format('Y-m-d'),
+                        'asi_fecha_entrada' => $asistencia->getAsiFechaentrada()->format('Y-m-d'),
+                        'asi_fecha_salida' => $asistencia->getAsiFechasalida()->format('Y-m-d'),  
                         'asi_hora_entrada' => $asistencia->getAsiHoraentrada()->format('H:i'),
                         'asi_hora_salida' => $asistencia->getAsiHorasalida()->format('H:i'),
-                        'asi_eliminado' => $asistencia->getAsiEliminado(),
+                        'asi_eliminado' => $asistencia->isAsiEliminado(),
                     ];
                 }
 
