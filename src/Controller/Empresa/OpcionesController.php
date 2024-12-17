@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Function\Empresa\EmpresaFunction;
 use App\Function\Empresa\MotivoFunction;
 use App\Function\Empresa\PuestoFunction;
+use App\Function\Empresa\SedeFunction;
 use App\Repository\SedeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ class OpcionesController extends AbstractController
         private AreaFunction $areaFunction,
         private PuestoFunction $puestoFunction,
         private MotivoFunction $motivoFunction,
+        private SedeFunction $sedeFunction,
         private ConfiguracionAsistenciaFunction $configuracionAsistenciaFunction
     ){}
 
@@ -154,6 +156,25 @@ class OpcionesController extends AbstractController
                 'sed_eliminado' => $sede->isSedEliminado() 
             ]  
         ], JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/obtener-sedes/{empresaId}', name: 'obtener_sedes', methods: ['GET'])]
+    public function obtenerSedes(int $empresaId): JsonResponse
+    {
+        try {
+            // Llamar a la función para obtener las sedes
+            $sedes = $this->sedeFunction->obtenerSedes($empresaId);
+
+            return $this->json([
+                'status' => 'success',
+                'data' => $sedes,
+            ], JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return $this->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
     }
 
     // API para obtener todas las áreas de una empresa

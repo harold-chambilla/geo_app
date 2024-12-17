@@ -58,14 +58,15 @@ class MotivoFunction
             throw new \Exception('No se encontró un colaborador con rol de Superadministrador en la empresa');
         }
 
-        // Verificar si ya existe un permiso con estado "Sistema" vinculado al colaborador
+        // Verificar si ya existe un permiso con estado "Sistema" para el motivo actual
         $permisoSistema = $this->entityManager->getRepository(Permiso::class)->findOneBy([
             'colaborador' => $colaboradorSuperadmin,
             'pms_estado' => 'sistema',
+            'motivo' => $motivo,
             'pms_eliminado' => false,
         ]);
 
-        // Si no existe el permiso, lo creamos y lo vinculamos al motivo
+        // Si no existe el permiso "sistema" para el motivo, lo creamos y lo vinculamos al motivo
         if (!$permisoSistema) {
             $permisoSistema = new Permiso();
             $permisoSistema->setPmsEstado('sistema');

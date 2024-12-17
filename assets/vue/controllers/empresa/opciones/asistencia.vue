@@ -59,7 +59,7 @@
                             <ul v-else class="list-group">
                                 <li v-for="area in selectedAreas" :key="area.ara_id" class="list-group-item d-flex justify-content-between align-items-center">
                                     {{ area.ara_nombre }}
-                                    <button v-if="area.ara_nombre !== 'sistema'" class="btn btn-danger btn-sm" @click="eliminarAreaHorasExtra(area.ara_id)">
+                                    <button v-if="area.ara_nombre.toLowerCase() !== 'sistema'" class="btn btn-danger btn-sm" @click="eliminarAreaHorasExtra(area.ara_id)">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </li>
@@ -118,12 +118,12 @@ onMounted(async () => {
     await opcionesStore.fetchAreas(empresaId);
 
     configuracionGeneral.value = { ...opcionesStore.configuracionAsistencia };
-    selectedAreas.value = opcionesStore.areas.filter(area => area.horas_extras);
+    selectedAreas.value = opcionesStore.areas.filter(area => area.horas_extras && area.ara_nombre.toLowerCase() !== 'sistema');
 });
 
-// Computed para obtener las áreas sin horas extras activadas
+// Computed para obtener las áreas sin horas extras activadas y sin el área "Sistema"
 const areasSinHorasExtras = computed(() => {
-    return opcionesStore.areas.filter(area => !area.horas_extras);
+    return opcionesStore.areas.filter(area => !area.horas_extras && area.ara_nombre.toLowerCase() !== 'sistema');
 });
 
 // Agregar un área para activar horas extras
@@ -142,7 +142,7 @@ function agregarAreaHorasExtra() {
 // Eliminar un área de la lista de horas extras y registrar el cambio
 function eliminarAreaHorasExtra(areaId) {
     const area = selectedAreas.value.find(area => area.ara_id === areaId);
-    if (area && area.ara_nombre !== 'Sistema') { // Evita eliminar si es "Sistema"
+    if (area && area.ara_nombre.toLowerCase() !== 'sistema') { // Evita eliminar si es "Sistema"
         areasParaEliminar.value.push(area); // Agregar al temporal para eliminar
         selectedAreas.value = selectedAreas.value.filter(area => area.ara_id !== areaId);
         areasParaAgregar.value = areasParaAgregar.value.filter(a => a.ara_id !== areaId); // Remover de la lista de agregados si está
@@ -172,4 +172,3 @@ async function guardarConfiguracion() {
     }
 }
 </script>
-

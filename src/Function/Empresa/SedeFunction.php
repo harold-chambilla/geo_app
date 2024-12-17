@@ -132,7 +132,7 @@ class SedeFunction
         foreach ($configuracionesAsistencia as $configuracion) {
             $sede = $configuracion->getSede();
 
-            if ($sede && !$sede->getSedEliminado() && !in_array($sede->getId(), array_column($sedesUnicas, 'sed_id'))) {
+            if ($sede && !$sede->isSedEliminado() && !in_array($sede->getId(), array_column($sedesUnicas, 'sed_id'))) {
                 $sedesUnicas[] = [
                     'sed_id' => $sede->getId(),
                     'sed_nombre' => $sede->getSedNombre(),
