@@ -554,6 +554,9 @@ const saveSchedule = () => {
   try {
     horarioStore.registrarHorario(horarioData);
     console.log("Horario registrado exitosamente.");
+
+    fetchHorarios();
+
     modalInstance.value.hide();
   } catch (error) {
     console.error("Error al registrar el horario:", error);
