@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button v-if="idHorarioSelected !== null" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
+            <button v-if="idHorarioSelected !== null && idHorarioSelected.length > 0" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>
           </div>
@@ -257,7 +257,8 @@ const showRestDay = ref(true);
 const showApplyAll = ref(false);
 const startTime = ref("");
 const endTime = ref("");
-const idHorarioSelected = ref(null);
+const idHorarioSelected = ref([]);
+const horariosSeleccionados = ref([]);
 const workHours = ref("");
 const workMode = ref("");
 const restDay = ref("");
@@ -355,16 +356,119 @@ const openMassiveModal = (type, context) => {
   // Solo mostrar el campo "Descanso" en acciones específicas
   showRestDay.value = !["day", "date", "employeeDay"].includes(type);
 
+// Identificar los IDs de horarios para rangos de fechas y empleados seleccionados
+let dateRanges = [];
+let employees = [];
+
+// Determinar los rangos de fechas y empleados según el tipo
+if (type === "employeeWeek") {
+  // Rango de fechas basado en la semana seleccionada
+  const selectedWeek = generateWeeksInMonth(currentYear.value, currentMonth.value)[weekIndex];
+  dateRanges = selectedWeek.map((day) => day.date);
+  employees = [employee]
+} else if (type === "employeeDay") {
+  const dayOfWeek = new Date(
+    currentYear.value,
+    adjustedMonthIndex,
+    day.date
+  ).toLocaleDateString("es-PE", { weekday: "long" });
+
+  dateRanges = generateWeeksInMonth(currentYear.value, currentMonth.value)
+    .flat()
+    .filter((d) => d.dayOfWeek === dayOfWeek)
+    .map((d) => d.date);
+
+  employees = [employee];
+} else if (type === "date") {
+  // Ajustar el mes para casos donde el día no pertenece al mes actual
+  let adjustedMonthIndex = currentMonth.value; // Inicialmente asignar al mes actual
+  let adjustedMonthName = monthNames[currentMonth.value]; // Nombre del mes actual
+
+  if (day?.date) {
+    if (!day.isCurrentMonth) {
+      if (weekIndex === 0 && day.date > 15) {
+        // Si está en la primera semana y el día es mayor a 15, pertenece al mes anterior
+        adjustedMonthIndex = currentMonth.value - 1 < 0 ? 11 : currentMonth.value - 1;
+        adjustedMonthName = monthNames[adjustedMonthIndex];
+      } else if (weekIndex > 0 && day.date < 7) {
+        // Si no está en la primera semana y el día es menor a 7, pertenece al mes siguiente
+        adjustedMonthIndex = currentMonth.value + 1 > 11 ? 0 : currentMonth.value + 1;
+        adjustedMonthName = monthNames[adjustedMonthIndex];
+      }
+    }
+  }
+
+  // Crear fecha completa en formato 'YYYY-MM-DD'
+  const formattedDate = `${currentYear.value}-${String(adjustedMonthIndex + 1).padStart(2, '0')}-${String(day.date).padStart(2, '0')}`;
+  dateRanges = [formattedDate];
+
+  //console.log("Rangos de fechas seleccionados (date):", dateRanges);
+
+  employees = filteredEmployees.value;
+} else if (type === "day") {
+  // Todos los días de la semana seleccionada en el mes
+  const dayIndex = daysOfWeek.indexOf(day);
+  dateRanges = generateWeeksInMonth(currentYear.value, currentMonth.value)
+        .flat()
+        .filter((day) => day.dayOfWeek.toLowerCase() === daysOfWeek[dayIndex].toLowerCase())
+        .map((day) => day.date);
+
+  employees = filteredEmployees.value;
+} else if (type === "week") {
+  // Rango completo de una semana específica
+  const selectedWeek = generateWeeksInMonth(currentYear.value, currentMonth.value)[weekIndex];
+  dateRanges = selectedWeek.map((day) => day.date);
+  employees = filteredEmployees.value;
+} else if (type === "month") {
+  // Todo el mes
+  dateRanges = generateWeeksInMonth(currentYear.value, currentMonth.value)
+    .flat()
+    .map((day) => day.date);
+  employees = filteredEmployees.value;
+}
+
+  // Obtener los IDs de horarios para las fechas y empleados
+  horariosSeleccionados.value = [];
+
+  dateRanges.forEach((date) => {
+    employees.forEach((emp) => {
+      const fecha = new Date(date + 'T00:00:00'); // Asegura que la fecha esté en el formato adecuado
+      const dateInLimaTimezone = new Intl.DateTimeFormat('es-PE', {
+        timeZone: 'America/Lima',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }).formatToParts(fecha);
+
+      // Extraer las partes de la fecha
+      const day = parseInt(dateInLimaTimezone.find((part) => part.type === "day").value, 10);
+      const monthName = capitalize(dateInLimaTimezone.find((part) => part.type === "month").value);
+      const year = dateInLimaTimezone.find((part) => part.type === "year").value;
+
+      // Construir la clave del horario
+      const key = `${year}-${monthName}-${day}-${emp.nombres} ${emp.apellidos}`;
+      //console.log(key);
+
+      // Verificar si existe el horario y agregarlo
+      if (schedules.value[key]?.id) {
+        horariosSeleccionados.value.push(schedules.value[key].id);
+      }
+    });
+  });
+
+  // Si hay horarios seleccionados, se muestran
+  //console.log("Horarios seleccionados:", horariosSeleccionados.value);
+
   // Cargar un horario existente si está disponible
   const existingSchedule = schedules.value[scheduleKey];
   if (existingSchedule) {
-    idHorarioSelected.value = existingSchedule.id;
+    idHorarioSelected.value = horariosSeleccionados.value;
     startTime.value = existingSchedule.hora_entrada;
     endTime.value = existingSchedule.hora_salida;
     workMode.value = capitalize(existingSchedule.jornada);
     restDay.value = existingSchedule.restDay || "";
   } else {
-    idHorarioSelected.value = null;
+    idHorarioSelected.value = horariosSeleccionados.value;
     startTime.value = "08:00";
     endTime.value = "18:00";
     workMode.value = "Presencial";
@@ -666,7 +770,7 @@ const getCalendarDays = (year, month) => {
 };
 
 const confirmDeleteModal = ref(null);
-const currentHorarioId = ref(null);
+const currentHorarioId = ref([]);
 
 const abrirModalEliminar = (horarioId) => {
   // Verificar si el modal principal está activo y ocultarlo
@@ -689,20 +793,24 @@ const abrirModalEliminar = (horarioId) => {
 
 // Función para confirmar y eliminar
 const confirmarEliminacion = async () => {
-  if (!currentHorarioId.value) {
-    console.error("No se ha seleccionado un horario para eliminar.");
+  if (!currentHorarioId.value || currentHorarioId.value.length === 0) {
+    console.error("No se han seleccionado horarios para eliminar.");
     return;
   }
 
   try {
-    await horarioStore.eliminarHorario(currentHorarioId.value);
-    console.log("Horario eliminado exitosamente.");
+    for (const horarioId of currentHorarioId.value) {
+      await horarioStore.eliminarHorario(horarioId); // Eliminar cada ID
+      console.log(`Horario ${horarioId} eliminado exitosamente.`);
+    }
+
     confirmDeleteModal.value.hide();
     fetchHorarios(); // Recargar los horarios
   } catch (error) {
-    console.error("Error al eliminar el horario:", error);
+    console.error("Error al eliminar los horarios:", error);
   }
 };
+
 
 onMounted(() => {
   // Modal principal

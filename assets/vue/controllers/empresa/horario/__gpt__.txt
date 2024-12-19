@@ -1,0 +1,6 @@
+modificaremos este boton 
+            <button v-if="idHorarioSelected !== null" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>
+de guardar debe decir guardar y si idHorarioSelected difretne de null entonces no llamara a saveSchedel sino a otra funcioon abrirModalModficar que al guardse ese mdoal si llamara a save shcel, este mdoal que se abrira debe de moostrar una advertencia fuerte indicando que los cambios afectaran a un grupo seleccionado
+
