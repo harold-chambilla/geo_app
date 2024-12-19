@@ -46,7 +46,12 @@
                   <td class="align-middle bg-light text-center text-secondary small cursor-pointer" @click="openMassiveModal('employeeWeek', { weekIndex, employee })">{{ employee.nombres }} {{ employee.apellidos }}</td>
                   <td v-for="(day, dayIndex) in week" :key="'employee-day-' + dayIndex" class="align-middle bg-white cursor-pointer" @click="openMassiveModal('employeeDay', { day, weekIndex, employee, monthName })">
                     <div v-if="hasSchedule(currentYear, day.isCurrentMonth ? monthName : day.date < calendar[0][0].date ? monthNames[currentMonth - 1 < 0 ? 11 : currentMonth - 1] : monthNames[currentMonth + 1 > 11 ? 0 : currentMonth + 1], day.date, employee.nombres + ' ' + employee.apellidos)">
-                      <div class="badge bg-primary text-white">
+                      <div 
+                        :class="{
+                          'badge bg-primary text-white': hasSchedule(currentYear, day.isCurrentMonth ? monthName : day.date < calendar[0][0].date ? monthNames[currentMonth - 1 < 0 ? 11 : currentMonth - 1] : monthNames[currentMonth + 1 > 11 ? 0 : currentMonth + 1], day.date, employee.nombres + ' ' + employee.apellidos).jornada !== 'remoto',
+                          'badge bg-warning text-dark': hasSchedule(currentYear, day.isCurrentMonth ? monthName : day.date < calendar[0][0].date ? monthNames[currentMonth - 1 < 0 ? 11 : currentMonth - 1] : monthNames[currentMonth + 1 > 11 ? 0 : currentMonth + 1], day.date, employee.nombres + ' ' + employee.apellidos).jornada === 'remoto'
+                        }"
+                      >
                         {{ hasSchedule(currentYear, day.isCurrentMonth ? monthName : day.date < calendar[0][0].date ? monthNames[currentMonth - 1 < 0 ? 11 : currentMonth - 1] : monthNames[currentMonth + 1 > 11 ? 0 : currentMonth + 1], day.date, employee.nombres + ' ' + employee.apellidos).hora_entrada }} - {{ hasSchedule(currentYear, day.isCurrentMonth ? monthName : day.date < calendar[0][0].date ? monthNames[currentMonth - 1 < 0 ? 11 : currentMonth - 1] : monthNames[currentMonth + 1 > 11 ? 0 : currentMonth + 1], day.date, employee.nombres + ' ' + employee.apellidos).hora_salida }}
                       </div>
                     </div>
