@@ -709,6 +709,7 @@ const saveSchedule = () => {
     horarioStore.registrarHorario(horarioData);
     console.log("Horario registrado exitosamente.");
 
+    schedules.value = {};
     fetchHorarios();
 
     modalInstance.value.hide();
