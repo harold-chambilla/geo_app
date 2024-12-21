@@ -86,16 +86,18 @@ class HorarioTrabajoFunction
         while ($fecha_inicio <= $fecha_fin) {
             if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
                 foreach ($colaboradores as $colaborador) {
-                    if (!$this->existeHorario($colaborador, $fecha_inicio)) {
-                        $registros[] = $this->crearHorario(
-                            $colaborador,
-                            clone $fecha_inicio,
-                            $hora_entrada,
-                            $hora_salida,
-                            $descanso_normalizado,
-                            $tipo_jornada
-                        );
+                    $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
+                    if ($horario_existente) {
+                        $this->eliminarHorarioLogico($horario_existente->getId());
                     }
+                    $registros[] = $this->crearHorario(
+                        $colaborador,
+                        clone $fecha_inicio,
+                        $hora_entrada,
+                        $hora_salida,
+                        $descanso_normalizado,
+                        $tipo_jornada
+                    );
                 }
             }
             $fecha_inicio->modify('+1 day');
@@ -116,24 +118,26 @@ class HorarioTrabajoFunction
         while ($fecha_inicio <= $fecha_fin) {
             if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
                 foreach ($colaboradores as $colaborador) {
-                    if (!$this->existeHorario($colaborador, $fecha_inicio)) {
-                        $registros[] = $this->crearHorario(
-                            $colaborador,
-                            clone $fecha_inicio,
-                            $hora_entrada,
-                            $hora_salida,
-                            $descanso_normalizado,
-                            $tipo_jornada
-                        );
+                    $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
+                    if ($horario_existente) {
+                        $this->eliminarHorarioLogico($horario_existente->getId());
                     }
+                    $registros[] = $this->crearHorario(
+                        $colaborador,
+                        clone $fecha_inicio,
+                        $hora_entrada,
+                        $hora_salida,
+                        $descanso_normalizado,
+                        $tipo_jornada
+                    );
                 }
             }
             $fecha_inicio->modify('+1 day');
         }
     
         return $registros;
-    }    
-
+    }
+    
     private function registrarPorDia(array $colaborador_ids, string $hora_entrada, string $hora_salida, array $fechas, string $tipo_jornada, string $descanso): array
     {
         $colaboradores = $this->obtenerColaboradores($colaborador_ids);
@@ -143,29 +147,31 @@ class HorarioTrabajoFunction
             $fecha_registro = new \DateTime($fecha);
     
             foreach ($colaboradores as $colaborador) {
-                if (!$this->existeHorario($colaborador, $fecha_registro)) {
-                    $registros[] = $this->crearHorario(
-                        $colaborador,
-                        $fecha_registro,
-                        $hora_entrada,
-                        $hora_salida,
-                        $descanso, // Se incluye el descanso aunque no afecta la lógica
-                        $tipo_jornada
-                    );
+                $horario_existente = $this->existeHorario($colaborador, $fecha_registro);
+                if ($horario_existente) {
+                    $this->eliminarHorarioLogico($horario_existente->getId());
                 }
+                $registros[] = $this->crearHorario(
+                    $colaborador,
+                    $fecha_registro,
+                    $hora_entrada,
+                    $hora_salida,
+                    $descanso,
+                    $tipo_jornada
+                );
             }
         }
     
         return $registros;
-    }    
+    }
     
     private function registrarPorColaborador(
-        array $colaborador_ids, 
-        array $fechas, 
-        string $hora_entrada, 
-        string $hora_salida, 
-        string $descanso, 
-        string $tipo_jornada, 
+        array $colaborador_ids,
+        array $fechas,
+        string $hora_entrada,
+        string $hora_salida,
+        string $descanso,
+        string $tipo_jornada,
         bool $aplicar_a_todo
     ): array {
         $colaboradores = $this->obtenerColaboradores($colaborador_ids);
@@ -175,8 +181,7 @@ class HorarioTrabajoFunction
             foreach ($colaboradores as $colaborador) {
                 foreach ($fechas as $rango) {
                     if (is_array($rango) && count($rango) === 2) {
-                        // Caso: aplicar_a_todo con rangos de fechas (semana)
-                        [$dia_inicio, $dia_fin] = $rango; // Desestructurar el rango
+                        [$dia_inicio, $dia_fin] = $rango;
                         $registros = array_merge($registros, $this->registrarPorSemana(
                             [$colaborador->getId()],
                             $hora_entrada,
@@ -187,27 +192,29 @@ class HorarioTrabajoFunction
                             $tipo_jornada
                         ));
                     } elseif (is_string($rango)) {
-                        // Caso: aplicar_a_todo con fechas individuales
-                        $registros = array_merge($registros, $this->registrarPorDia(
-                            [$colaborador->getId()],
+                        $fecha_registro = new \DateTime($rango);
+                        $horario_existente = $this->existeHorario($colaborador, $fecha_registro);
+                        if ($horario_existente) {
+                            $this->eliminarHorarioLogico($horario_existente->getId());
+                        }
+                        $registros[] = $this->crearHorario(
+                            $colaborador,
+                            $fecha_registro,
                             $hora_entrada,
                             $hora_salida,
-                            [$rango],
-                            $tipo_jornada,
-                            $descanso
-                        ));
+                            $descanso,
+                            $tipo_jornada
+                        );
                     } else {
                         throw new \InvalidArgumentException('Formato incorrecto en el array de fechas para aplicar_a_todo.');
                     }
                 }
             }
         } else {
-            // Caso: Sin aplicar_a_todo
             foreach ($colaboradores as $colaborador) {
                 foreach ($fechas as $fecha) {
                     if (is_array($fecha) && count($fecha) === 2) {
-                        // Registro por semana
-                        [$dia_inicio, $dia_fin] = $fecha; // Desestructurar el rango
+                        [$dia_inicio, $dia_fin] = $fecha;
                         $registros = array_merge($registros, $this->registrarPorSemana(
                             [$colaborador->getId()],
                             $hora_entrada,
@@ -218,15 +225,19 @@ class HorarioTrabajoFunction
                             $tipo_jornada
                         ));
                     } elseif (is_string($fecha)) {
-                        // Registro por día
-                        $registros = array_merge($registros, $this->registrarPorDia(
-                            [$colaborador->getId()],
+                        $fecha_registro = new \DateTime($fecha);
+                        $horario_existente = $this->existeHorario($colaborador, $fecha_registro);
+                        if ($horario_existente) {
+                            $this->eliminarHorarioLogico($horario_existente->getId());
+                        }
+                        $registros[] = $this->crearHorario(
+                            $colaborador,
+                            $fecha_registro,
                             $hora_entrada,
                             $hora_salida,
-                            [$fecha],
-                            $tipo_jornada,
-                            $descanso
-                        ));
+                            $descanso,
+                            $tipo_jornada
+                        );
                     } else {
                         throw new \InvalidArgumentException('Formato incorrecto en el array de fechas.');
                     }
@@ -248,6 +259,7 @@ class HorarioTrabajoFunction
         return $colaboradores;
     }
 
+    /*
     private function existeHorario(Colaborador $colaborador, \DateTime $fecha): bool
     {
         $horario_existente = $this->entityManager->getRepository(HorarioTrabajo::class)->findOneBy([
@@ -258,6 +270,17 @@ class HorarioTrabajoFunction
 
         return $horario_existente !== null;
     }
+    */
+
+    private function existeHorario(Colaborador $colaborador, \DateTime $fecha)
+    {
+        return $this->entityManager->getRepository(HorarioTrabajo::class)->findOneBy([
+            'colaborador' => $colaborador,
+            'hot_fecha' => $fecha,
+            'hot_eliminado' => false,
+        ]);
+    }
+
 
     private function crearHorario(Colaborador $colaborador, \DateTime $fecha, string $hora_entrada, string $hora_salida, string $descanso, string $tipo_jornada): array
     {

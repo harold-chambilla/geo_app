@@ -121,7 +121,8 @@
           <div class="modal-footer">
             <button v-if="idHorarioSelected !== null && idHorarioSelected.length > 0" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>
+            <!--<button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>-->
+            <button type="button" class="btn btn-primary" @click="idHorarioSelected !== null && idHorarioSelected.length > 0 ? abrirModalModificar() : saveSchedule()">Guardar</button>
           </div>
         </div>
       </div>
@@ -141,6 +142,27 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-danger" @click="confirmarEliminacion">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true" ref="warningModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="warningModalLabel">Advertencia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>Advertencia:</strong> Los cambios realizados afectarán a todos los horarios seleccionados en el grupo.
+            ¿Está seguro de continuar?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" @click="confirmarModificacion">Confirmar y Guardar</button>
         </div>
       </div>
     </div>
@@ -709,10 +731,9 @@ const saveSchedule = () => {
     horarioStore.registrarHorario(horarioData);
     console.log("Horario registrado exitosamente.");
 
-    schedules.value = {};
-    fetchHorarios();
-
     modalInstance.value.hide();
+
+    fetchHorarios();
   } catch (error) {
     console.error("Error al registrar el horario:", error);
   }
@@ -812,6 +833,29 @@ const confirmarEliminacion = async () => {
   }
 };
 
+const warningModal = ref(null);
+
+const abrirModalModificar = () => {
+  // Verificar si el modal principal está activo y ocultarlo
+  if (modalInstance.value) {
+    modalInstance.value.hide();
+  }
+
+  // Inicializar y mostrar el modal de advertencia
+  if (warningModal.value) {
+    warningModal.value = new Modal(document.getElementById("warningModal"), {
+      backdrop: "static",
+      keyboard: false,
+    });
+  }
+  warningModal.value.show();
+};
+
+const confirmarModificacion = () => {
+  // Llamar a saveSchedule y cerrar el modal de advertencia
+  saveSchedule();
+  warningModal.value.hide();
+};
 
 onMounted(() => {
   // Modal principal
@@ -824,6 +868,11 @@ onMounted(() => {
   const confirmDeleteModalElement = document.getElementById("confirmDeleteModal");
   if (confirmDeleteModalElement) {
     confirmDeleteModal.value = new Modal(confirmDeleteModalElement);
+  }
+
+  const warningModalElement = document.getElementById("warningModal");
+  if (warningModalElement) {
+    warningModal.value = new Modal(warningModalElement);
   }
 
   horarioStore.fetchAreas(empresaId.value); 
