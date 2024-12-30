@@ -70,7 +70,11 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header d-flex flex-column align-items-start">
-            <h5 class="modal-title text-primary" id="scheduleModalLabel">{{ modalTitle }}</h5>
+            <h5 class="modal-title text-primary d-inline-flex align-items-center" id="scheduleModalLabel">{{ modalTitle }}
+              <div v-if="isLoading" class="spinner-grow text-primary ms-1 me-2" role="status" style="width: 1rem; height: 1rem;">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </h5>
             <small class="text-secondary">
               Área: {{ selectedArea || "Todos" }}, Puesto: {{ selectedPuesto || "Todos" }}, Personal: {{ currentEmployee || "Todos" }}
             </small>
@@ -118,8 +122,12 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button v-if="idHorarioSelected !== null && idHorarioSelected.length > 0" type="button" class="btn btn-danger me-auto" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
+          <div class="modal-footer d-flex align-items-center">
+            <div class="progress me-auto" style="flex: 0 0 50%; max-width: 40%;">
+              <div class="progress-bar" role="progressbar" :style="{ width: `${progress}%` }" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+            </div>
+
+            <button v-if="idHorarioSelected !== null && idHorarioSelected.length > 0" type="button" class="btn btn-danger" @click="abrirModalEliminar(idHorarioSelected)" title="Eliminar Horario"><i class="bi bi-trash"></i></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <!--<button type="button" class="btn btn-primary" @click="saveSchedule">Aceptar</button>-->
             <button type="button" class="btn btn-primary" @click="idHorarioSelected !== null && idHorarioSelected.length > 0 ? abrirModalModificar() : saveSchedule()">Guardar</button>
@@ -133,13 +141,21 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+          <h5 class="modal-title text-danger d-inline-flex align-items-center" id="confirmDeleteModalLabel">
+            Confirmar Eliminación
+            <div v-if="isLoading" class="spinner-grow text-danger ms-1 me-2" role="status" style="width: 1rem; height: 1rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           ¿Estás seguro de que deseas eliminar este horario? Esta acción no se puede deshacer.
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer d-flex align-items-center">
+          <div class="progress me-auto" style="flex: 0 0 50%; max-width: 30%;">
+            <div class="progress-bar bg-danger" role="progressbar" :style="{ width: `${progress}%` }" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+          </div>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-danger" @click="confirmarEliminacion">Eliminar</button>
         </div>
@@ -151,7 +167,12 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger" id="warningModalLabel">Advertencia</h5>
+          <h5 class="modal-title text-danger d-inline-flex align-items-center" id="warningModalLabel">
+            Advertencia
+            <div v-if="isLoading" class="spinner-grow text-danger ms-1 me-2" role="status" style="width: 1rem; height: 1rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -160,7 +181,10 @@
             ¿Está seguro de continuar?
           </p>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer d-flex align-items-center">
+          <div class="progress me-auto" style="flex: 0 0 50%; max-width: 30%;">
+            <div class="progress-bar bg-danger" role="progressbar" :style="{ width: `${progress}%` }" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+          </div>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-danger" @click="confirmarModificacion">Confirmar y Guardar</button>
         </div>
@@ -185,6 +209,8 @@ const currentEmployee = ref("");
 const schedules = ref({});
 const employees = ref([]);
 const empresaId = ref(1);
+const progress = ref(0);
+const isLoading = ref(false);
 
 const filteredAreas = computed(() => {
   return horarioStore.areas.filter((area) => area.ara_nombre.toLowerCase() !== "sistema");
@@ -262,7 +288,7 @@ const fetchHorarios = async () => {
       return acc;
     }, {});
 
-    console.log("Horarios obtenidos:", schedules.value);
+    //console.log("Horarios obtenidos:", schedules.value);
   } catch (error) {
     console.error("Error al obtener horarios:", error);
   }
@@ -308,6 +334,7 @@ const changeMonth = (offset) => {
 };
 
 const openMassiveModal = (type, context) => {
+  progress.value = 0;
   const { day, weekIndex, employee } = context || {};
 
   // Verificar si schedules está vacío y cargarlo
@@ -546,13 +573,14 @@ const generateWeeksInMonth = (year, month) => {
   return weeks;
 };
 
-const saveSchedule = () => {
+const saveSchedule = async () => {
   if (!startTime.value || !endTime.value) {
     console.error("Faltan datos obligatorios para guardar el horario.");
     return;
   }
 
   calculateWorkHours();
+  progress.value = 0;
 
   let horarioData;
   const [keyType, ...keyDetails] = currentScheduleKey.split("-");
@@ -727,13 +755,19 @@ const saveSchedule = () => {
       return;
   }
 
+  progress.value = 10;
+
   try {
-    horarioStore.registrarHorario(horarioData);
-    console.log("Horario registrado exitosamente.");
+    isLoading.value = true;
+    await horarioStore.registrarHorario(horarioData);
+    isLoading.value = false;
+    //console.log("Horario registrado exitosamente.");
 
     modalInstance.value.hide();
+    progress.value = 90;
 
-    fetchHorarios();
+    await fetchHorarios();
+    progress.value = 100;
   } catch (error) {
     console.error("Error al registrar el horario:", error);
   }
@@ -795,6 +829,7 @@ const confirmDeleteModal = ref(null);
 const currentHorarioId = ref([]);
 
 const abrirModalEliminar = (horarioId) => {
+  progress.value = 0;
   // Verificar si el modal principal está activo y ocultarlo
   if (modalInstance.value) {
     modalInstance.value.hide();
@@ -815,19 +850,38 @@ const abrirModalEliminar = (horarioId) => {
 
 // Función para confirmar y eliminar
 const confirmarEliminacion = async () => {
+  progress.value = 10;
   if (!currentHorarioId.value || currentHorarioId.value.length === 0) {
     console.error("No se han seleccionado horarios para eliminar.");
     return;
   }
 
+  progress.value = 20;
   try {
+    isLoading.value = true;
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     for (const horarioId of currentHorarioId.value) {
       await horarioStore.eliminarHorario(horarioId); // Eliminar cada ID
-      console.log(`Horario ${horarioId} eliminado exitosamente.`);
+
+      const progressPerItem = parseFloat((60 / currentHorarioId.value.length).toFixed(2));
+      progress.value = parseFloat((progress.value + progressPerItem).toFixed(2));
+      
+      // Añadir un retraso de 200 ms antes de la siguiente iteración
+      await sleep(200);
+
+      // console.log(`Horario ${horarioId} eliminado exitosamente.`);
+    }
+    isLoading.value = false;
+
+    await fetchHorarios();
+    progress.value = 90;
+    
+    if (confirmDeleteModal.value) {
+      confirmDeleteModal.value = Modal.getInstance(document.getElementById("confirmDeleteModal"));
     }
 
     confirmDeleteModal.value.hide();
-    fetchHorarios(); // Recargar los horarios
+    progress.value = 100;
   } catch (error) {
     console.error("Error al eliminar los horarios:", error);
   }
@@ -836,6 +890,7 @@ const confirmarEliminacion = async () => {
 const warningModal = ref(null);
 
 const abrirModalModificar = () => {
+  progress.value = 0;
   // Verificar si el modal principal está activo y ocultarlo
   if (modalInstance.value) {
     modalInstance.value.hide();
@@ -851,10 +906,18 @@ const abrirModalModificar = () => {
   warningModal.value.show();
 };
 
-const confirmarModificacion = () => {
+const confirmarModificacion = async () => {
   // Llamar a saveSchedule y cerrar el modal de advertencia
-  saveSchedule();
-  warningModal.value.hide();
+  isLoading.value = true;
+  await saveSchedule();
+  isLoading.value = false;
+  progress.value = 90;
+
+  if (warningModal.value) {
+    warningModal.value = Modal.getInstance(document.getElementById("warningModal"));
+    warningModal.value.hide();
+  }
+  progress.value = 100;
 };
 
 onMounted(() => {

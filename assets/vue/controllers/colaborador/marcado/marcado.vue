@@ -1,10 +1,7 @@
 <template>
     <div class="container vh-100 d-flex flex-column align-items-center justify-content-center">
-      <!-- Hora actual -->
-      <div class="mb-4 text-center">
-        <h2 class="fw-bold text-primary">{{ currentHour }}</h2>
-      </div>
-  
+      <reloj />
+
       <!-- Mapa -->
       <div class="card shadow" style="width: 300px; border-radius: 20px; overflow: hidden;">
         <div id="map" style="height: 300px;"></div>
@@ -33,14 +30,7 @@
   
   <script setup>
   import { ref, onMounted } from "vue";
-  
-  // Hora actual
-  const currentHour = ref("");
-  
-  const updateHour = () => {
-    const now = new Date();
-    currentHour.value = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
-  };
+  import reloj from "./reloj.vue";
   
   // Funciones de marcar
   const marcarEntrada = () => {
@@ -71,9 +61,6 @@
   };
   
   onMounted(() => {
-    updateHour();
-    setInterval(updateHour, 60000); // Actualizar la hora cada minuto
-  
     // Cargar el mapa
     const googleMapsScript = document.createElement("script");
     googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap`;

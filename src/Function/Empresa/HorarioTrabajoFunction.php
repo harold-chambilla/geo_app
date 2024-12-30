@@ -53,6 +53,7 @@ class HorarioTrabajoFunction
             'Viernes' => 'Viernes',
             'Sábado' => 'Sábado',
             'Domingo' => 'Domingo',
+            'Sábado y Domingo' => 'Sábado y Domingo'
         ];
     
         return $dias_semana[$descanso] ?? ucfirst(strtolower($descanso));
@@ -63,16 +64,20 @@ class HorarioTrabajoFunction
         $dias_descanso = [];
         $fecha_temp = clone $fecha_inicio;
     
+        // Dividir los días de descanso usando " y " como separador
+        $dias_descanso_lista = array_map('trim', explode(' y ', $descanso));
+    
         while ($fecha_temp <= $fecha_fin) {
             $dia_actual = $this->normalizarDiaDescanso($fecha_temp->format('l'));
-            if ($dia_actual === $descanso) {
+            // Verificar si el día actual está en la lista de días de descanso
+            if (in_array($dia_actual, $dias_descanso_lista, true)) {
                 $dias_descanso[] = $fecha_temp->format('Y-m-d');
             }
             $fecha_temp->modify('+1 day');
         }
     
         return $dias_descanso;
-    }
+    }       
     
     private function registrarPorMes(array $colaborador_ids, string $hora_entrada, string $hora_salida, string $dia_inicio, string $dia_fin, string $descanso, string $tipo_jornada): array
     {
@@ -84,12 +89,14 @@ class HorarioTrabajoFunction
         $dias_descanso = $this->obtenerDiasDeDescanso($fecha_inicio, $fecha_fin, $descanso_normalizado);
     
         while ($fecha_inicio <= $fecha_fin) {
-            if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
-                foreach ($colaboradores as $colaborador) {
-                    $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
-                    if ($horario_existente) {
-                        $this->eliminarHorarioLogico($horario_existente->getId());
-                    }
+            foreach ($colaboradores as $colaborador) {
+                $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
+                if ($horario_existente) {
+                    $this->eliminarHorarioLogico($horario_existente->getId());
+                }
+    
+                // Crear horario solo si no es día de descanso
+                if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
                     $registros[] = $this->crearHorario(
                         $colaborador,
                         clone $fecha_inicio,
@@ -116,12 +123,14 @@ class HorarioTrabajoFunction
         $dias_descanso = $this->obtenerDiasDeDescanso($fecha_inicio, $fecha_fin, $descanso_normalizado);
     
         while ($fecha_inicio <= $fecha_fin) {
-            if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
-                foreach ($colaboradores as $colaborador) {
-                    $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
-                    if ($horario_existente) {
-                        $this->eliminarHorarioLogico($horario_existente->getId());
-                    }
+            foreach ($colaboradores as $colaborador) {
+                $horario_existente = $this->existeHorario($colaborador, $fecha_inicio);
+                if ($horario_existente) {
+                    $this->eliminarHorarioLogico($horario_existente->getId());
+                }
+    
+                // Crear horario solo si no es día de descanso
+                if (!in_array($fecha_inicio->format('Y-m-d'), $dias_descanso)) {
                     $registros[] = $this->crearHorario(
                         $colaborador,
                         clone $fecha_inicio,
@@ -151,6 +160,8 @@ class HorarioTrabajoFunction
                 if ($horario_existente) {
                     $this->eliminarHorarioLogico($horario_existente->getId());
                 }
+    
+                // Crear horario sin excluir días de descanso (si corresponde)
                 $registros[] = $this->crearHorario(
                     $colaborador,
                     $fecha_registro,

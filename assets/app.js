@@ -12,9 +12,8 @@ registerVueControllerComponents(require.context('./vue/controllers', true, /\.vu
 
 const pinia = createPinia();
 
-
+// Importar los componentes de Vue - Empresa
 import EOSede from './vue/controllers/empresa/opciones/sede.vue';
-import Marcado from './vue/controllers/colaborador/marcado.vue';
 import EEEmpleados from './vue/controllers/empresa/empleados/empleados.vue';
 import EHHorario from './vue/controllers/empresa/horario/horario.vue';
 
@@ -23,14 +22,22 @@ const eeempleados = createApp(EEEmpleados);
 const ehhorario = createApp(EHHorario);
 
 eosede.use(pinia);
-eosede.mount('#eosede');
-
-const colaborador = createApp(Marcado);
-colaborador.use(pinia);
-colaborador.mount('#colaborador')
 eeempleados.use(pinia);
-eeempleados.mount('#eeempleados');
-
 ehhorario.use(pinia);
+
+eosede.mount('#eosede');
+eeempleados.mount('#eeempleados');
 ehhorario.mount('#ehhorario');
+
+// Importar los componentes de Vue - Colaborador
+
+import CMMarcado from './vue/controllers/colaborador/marcado/marcado.vue';
+
+const cmmarcado = createApp(CMMarcado);
+
+cmmarcado.use(pinia);
+
+cmmarcado.mount('#cmmarcado')
+
+
 
