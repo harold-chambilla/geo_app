@@ -2,7 +2,7 @@
     <div class="container vh-100 d-flex flex-column align-items-center justify-content-center">
       <reloj />
 
-      <!-- Mapa -->
+      <!-- Mapa revision -->
       <div class="card shadow" style="width: 300px; border-radius: 20px; overflow: hidden;">
         <div id="map" style="height: 300px;"></div>
         <div class="d-flex justify-content-around p-3">
