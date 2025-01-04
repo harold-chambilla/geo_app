@@ -58,6 +58,7 @@ const sedeModal = ref(null);
 import { Modal } from 'bootstrap';
 let map;
 let marker;
+
 // Instancia del store de Pinia
 const opcionesStorage = useOpcionesStore();
 // Inicializar el mapa
@@ -72,6 +73,7 @@ const initMap = () => {
         map: map
     });
 };
+
 // Actualizar el mapa con las coordenadas introducidas
 const actualizarMapa = async () => {
     const lat = parseFloat(latitude.value);
@@ -104,6 +106,7 @@ const obtenerComponenteDireccion = (components, type) => {
 // Guardar las coordenadas en el store de Pinia
 const saveCoordinates = () => {
     opcionesStorage.registrarSede({
+        empresaId: 1, // ID de la empresa
         empresaNombre: nombreEmpresa.value,
         latitude: latitude.value,
         longitude: longitude.value,

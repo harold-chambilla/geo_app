@@ -55,24 +55,34 @@ class OpcionesController extends AbstractController
     }
 
     #[Route('/api/guardar/sede', name: 'guardar_sede', methods: ['POST'])]
-    public function guardarSede(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function guardarSede(Request $request): JsonResponse
     {
         // $usuario = $this->getUser();
         // if (!$usuario) {
         //     return new JsonResponse(['error' => 'Usuario no autenticado'], JsonResponse::HTTP_UNAUTHORIZED);
         // }
     
-        // $empresaId = $request->request->get('empresaId');
+        $empresaId = $request->request->get('empresaId');
         $nombre = $request->request->get('sed_nombre');
         $pais = $request->request->get('sed_pais');
         $direccion = $request->request->get('sed_direccion');
         $latitud = $request->request->get('latitud');
         $longitud = $request->request->get('longitud');
+
+        $sedeData = [
+            'sed_nombre' => $nombre,
+            'sed_pais' => $pais,
+            'sed_direccion' => $direccion,
+            'sed_ubicacion' => [$latitud, $longitud]
+        ];
     
         if (!$nombre || !$pais || !$direccion || !$latitud || !$longitud) {
             return new JsonResponse(['error' => 'Datos insuficientes.'], JsonResponse::HTTP_BAD_REQUEST);
         }
-    
+
+        $sede = $this->sedeFunction->registrarSede($empresaId, $sedeData);
+        
+        /*         
         $sede = new Sede();
         $sede->setSedNombre($nombre);
         $sede->setSedPais($pais);
@@ -81,17 +91,12 @@ class OpcionesController extends AbstractController
         $sede->setSedEliminado(0);
     
         $entityManager->persist($sede);
-        $entityManager->flush();
+        $entityManager->flush(); 
+        */
     
         return $this->json([
             'success' => 'Sede creada con éxito',
-            'sede' => [
-                'id' => $sede->getId(),
-                'sed_nombre' => $sede->getSedNombre(),
-                'sed_pais' => $sede->getSedPais(),
-                'sed_direccion' => $sede->getSedDireccion(),
-                'sed_ubicacion' => $sede->getSedUbicacion()
-            ]
+            'sede' => $sede
         ], JsonResponse::HTTP_CREATED);
     }
 
@@ -132,8 +137,9 @@ class OpcionesController extends AbstractController
     }
 
     #[Route('/api/sedes/{id}/eliminar', name: 'api_sedes_toggle_eliminado', methods: ['PATCH'])]
-    public function toggleEliminado(int $id, SedeRepository $sedeRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function toggleEliminado(int $id): JsonResponse
     {
+    /*         
         $sede = $sedeRepository->find($id);
 
         if (!$sede) {
@@ -143,7 +149,7 @@ class OpcionesController extends AbstractController
         // Cambiar el estado de sed_eliminado
         $sede->setSedEliminado(!$sede->isSedEliminado());
         $entityManager->persist($sede);
-        $entityManager->flush();
+        $entityManager->flush(); 
 
         return $this->json([
             'success' => 'Estado de eliminación cambiado',
@@ -155,6 +161,17 @@ class OpcionesController extends AbstractController
                 'sed_ubicacion' => $sede->getSedUbicacion(),
                 'sed_eliminado' => $sede->isSedEliminado() 
             ]  
+        ], JsonResponse::HTTP_OK);
+    */
+
+
+        $this->sedeFunction->borrarSede($id);
+
+        $resultado = $this->sedeFunction->borrarSede($id);
+
+        return $this->json([
+            'status' => 'success',
+            'sede' => $resultado
         ], JsonResponse::HTTP_OK);
     }
 

@@ -39,6 +39,7 @@ export const useOpcionesStore = defineStore('opcionesStore', {
             try {
                 let formData = new FormData();
                 // formData.append('sedeId', sede.id);
+                formData.append('empresaId', sede.empresaId);
                 formData.append('sed_nombre', sede.empresaNombre);
                 formData.append('latitud', sede.latitude);
                 formData.append('longitud', sede.longitude);
@@ -47,7 +48,7 @@ export const useOpcionesStore = defineStore('opcionesStore', {
                 const response = await axios.post('/empresa/opciones/api/guardar/sede', formData);
                 // this.sedes = response.data;
                 // console.log('dataaaa: ', response.data)
-                  this.sedes.push(response.data.sede); // Actualizar el estado con la nueva sede
+                this.sedes.push(response.data.sede); // Actualizar el estado con la nueva sede
             } catch (error) {
                 console.error('Error al registrar la sede:', error);
             }

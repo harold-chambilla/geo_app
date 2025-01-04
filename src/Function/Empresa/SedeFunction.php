@@ -38,9 +38,9 @@ class SedeFunction
 
         // Buscar una sede existente vinculada a un grupo por nombre o ubicación
         $sedeExistente = $this->entityManager->getRepository(Sede::class)->createQueryBuilder('s')
-            ->join('s.configuracionesAsistencias', 'ca')
+            ->join('s.configuracionAsistencias', 'ca')
             ->where('ca.grupo = :grupo')
-            ->andWhere('s.sedNombre = :nombre OR s.sedUbicacion = :ubicacion')
+            ->andWhere('s.sed_nombre = :nombre OR s.sed_ubicacion IN (:ubicacion)')
             ->setParameter('grupo', $grupo)
             ->setParameter('nombre', $sedeData['sed_nombre'])
             ->setParameter('ubicacion', $sedeData['sed_ubicacion'])
@@ -102,7 +102,7 @@ class SedeFunction
         $this->entityManager->flush();
 
         return [
-            'sed_id' => $sede->getId(),
+            'id' => $sede->getId(),
             'sed_nombre' => $sede->getSedNombre(),
             'sed_pais' => $sede->getSedPais(),
             'sed_direccion' => $sede->getSedDireccion(),
@@ -174,10 +174,10 @@ class SedeFunction
     }
 
     // Función para eliminar una sede (cambio de estado lógico)
-    public function borrarSede(int $sedeId): void
+    public function borrarSede(int $sedeId): array
     {
         // Buscar la sede por su ID
-        $sede = $this->entityManager->getRepository(Sede::class)->find($sedeId);
+        $sede = $this->entityManager->getRepository(Sede::class)->find($sedeId); 
         if (!$sede) {
             throw new \Exception('sede no encontrada.');
         }
@@ -187,5 +187,14 @@ class SedeFunction
 
         // Guardar los cambios en la base de datos
         $this->entityManager->flush();
+
+        return [
+            'id' => $sede->getId(),
+            'sed_nombre' => $sede->getSedNombre(),
+            'sed_pais' => $sede->getSedPais(),
+            'sed_direccion' => $sede->getSedDireccion(),
+            'sed_ubicacion' => $sede->getSedUbicacion(),
+            'sed_eliminado' => $sede->isSedEliminado()
+        ];
     }
 }

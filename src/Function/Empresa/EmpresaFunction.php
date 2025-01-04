@@ -3,13 +3,17 @@
 namespace App\Function\Empresa;
 
 use App\Entity\Area;
+use App\Entity\Asistencia;
 use App\Entity\Empresa;
 use App\Entity\Colaborador;
 use App\Entity\Grupo;
 use App\Entity\ConfiguracionAsistencia;
+use App\Entity\HorarioTrabajo;
+use App\Entity\Permiso;
 use App\Entity\Sede;
 use App\Entity\Puesto;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 
 class EmpresaFunction
 {
@@ -216,7 +220,7 @@ class EmpresaFunction
     {
         // Obtener la empresa por ID
         $empresa = $this->entityManager->getRepository(Empresa::class)->find($empresaId);
-
+        
         if (!$empresa) {
             throw new \Exception('empresa no encontrada');
         }
