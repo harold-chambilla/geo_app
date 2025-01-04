@@ -3,6 +3,9 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useMarcadoStore } from '@/store/colaborador/marcado';
+
+const marcadoStore = useMarcadoStore();
 
 // Mapa
 let map;
