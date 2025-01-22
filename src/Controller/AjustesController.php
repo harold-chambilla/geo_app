@@ -14,6 +14,6 @@ class AjustesController extends AbstractController
     #[Route(name: 'reencaminar')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_colaborador_inicio_inicio');
+        return $this->redirectToRoute('app_colaborador_inicio_mostrar');
     }
 }
