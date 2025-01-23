@@ -117,6 +117,7 @@ onMounted(() => {
             latitude.value = coords.latitude;
             longitude.value = coords.longitude;
             exactitud.value = coords.accuracy;
+            await marcadoStore.setUbicacion(coords.latitude, coords.longitude, coords.accuracy);
             console.log("Initializing map with coordinates:", latitude.value, longitude.value);
 
             await marcadoStore.fetchSede(1); // Id de colaborador

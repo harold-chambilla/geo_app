@@ -30,6 +30,7 @@
     "dependencies": {
         "axios": "^1.7.7",
         "bootstrap-icons": "^1.11.3",
-        "pinia": "^2.2.4"
+        "pinia": "^2.2.4",
+        "pinia-plugin-persistedstate": "^4.2.0"
     }
 }

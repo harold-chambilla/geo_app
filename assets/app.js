@@ -4,6 +4,7 @@ import './styles/app.scss';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import piniaPersist from 'pinia-plugin-persistedstate';
 
 const $ = require('jquery');
 require('bootstrap');
@@ -11,6 +12,7 @@ require('bootstrap');
 registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));
 
 const pinia = createPinia();
+pinia.use(piniaPersist);
 
 // Importar los componentes de Vue - Empresa
 import EOSede from './vue/controllers/empresa/opciones/sede.vue';

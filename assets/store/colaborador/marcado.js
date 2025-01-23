@@ -7,6 +7,11 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     horario: null,
     status: null,
     error: null,
+    ubicacion: {
+      latitud: null,
+      longitud: null,
+      exactitud: null
+    }
   }),
 
   getters: {
@@ -14,6 +19,7 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     getHorario: (state) => state.horario,
     getStatus: (state) => state.status,
     getError: (state) => state.error,
+    getUbicacion: (state) => state.ubicacion
   },
 
   actions: {
@@ -58,5 +64,28 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.error = error.response?.data?.message || "Error al obtener horario";
       }
     },
+    setUbicacion(lat, lng, accuracy) {
+      this.ubicacion = {
+        latitud: lat,
+        longitud: lng,
+        exactitud: accuracy
+      };
+    },
+    clearUbicacion() {
+      this.ubicacion = {
+        latitud: null,
+        longitud: null,
+        exactitud: null
+      };
+    }
+  },
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        key: "marcadoStore",
+        storage: localStorage,
+      },
+    ],
   },
 });
