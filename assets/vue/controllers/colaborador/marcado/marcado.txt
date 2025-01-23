@@ -110,3 +110,11 @@
   }
   </style>
   
+
+      // Cargar el mapa
+    const googleMapsScript = document.createElement("script");
+    googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap`;
+    googleMapsScript.async = true;
+    googleMapsScript.defer = true;
+    window.initMap = initMap; // Vincular la función initMap
+    document.head.appendChild(googleMapsScript);

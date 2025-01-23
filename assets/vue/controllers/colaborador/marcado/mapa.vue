@@ -1,9 +1,18 @@
 <template>
-    <div id="map" class="w-100" style="height: 300px;"></div>
+    <div id="map" class="w-100" style="height: 300px;" loading="lazy"></div>
 </template>
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useMarcadoStore } from '@/store/colaborador/marcado';
+import edificioImg from '@img/colaborador/edificio-svg.png';
+import hombreImg from '@img/colaborador/hombre-svg.png';
+
+const googleMapsApiKey = 'AIzaSyBKG625KcwDUXUIvO0x22JMGYMV7DMqd7Q';
+const googleMapsScript = document.createElement('script');
+googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&libraries=places,geometry`;
+googleMapsScript.async = true;
+googleMapsScript.defer = true;
+document.head.appendChild(googleMapsScript);
 
 const marcadoStore = useMarcadoStore();
 
@@ -17,6 +26,7 @@ const exactitud = ref(0);
 const mapInitialized = ref(false);
 const verId = ref(null);
 const watchId = ref(null);
+const mapReady = ref(false);
 
 const watchCoordinates = () => {
   return new Promise((resolve, reject) => {
@@ -35,7 +45,7 @@ const watchCoordinates = () => {
   });
 };
 
-const initMap = (latitud, longitud, exact, sedes) => {
+const initMap = (latitud, longitud, exact, sede) => {
   if (!mapInitialized.value){
     const ubiActual = { lat: latitud, lng: longitud };
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -45,7 +55,8 @@ const initMap = (latitud, longitud, exact, sedes) => {
     const usuarioMarker = new google.maps.Marker({
       position: ubiActual,
       map: map,
-      title: "Aqui estoy!"
+      title: "Aqui estoy!",
+      icon: { url: hombreImg, scaledSize: new google.maps.Size(50, 50) }
     });
 
     new google.maps.Circle({
@@ -56,36 +67,35 @@ const initMap = (latitud, longitud, exact, sedes) => {
       fillOpacity: 0.35,
       map: map,
       center: ubiActual,
-      radius: 300
+      radius: 15
     });
 
     const bounds = new google.maps.LatLngBounds();
     bounds.extend(ubiActual);
 
-    sedes.forEach((sede) => {
-      const ubicacionSede = { lat: parseFloat(sede.latitud), lng: parseFloat(sede.longitud) };
+    const ubicacionSede = { lat: parseFloat(sede.sed_ubicacion[0]), lng: parseFloat(sede.sed_ubicacion[1]) };
 
-      if (!isNaN(ubicacionSede.lat) && !isNaN(ubicacionSede.lng)) {
-        new google.maps.Marker({
-          position: ubicacionSede,
-          map: map,
-          title: sede.nombre
-        });
+    if (!isNaN(ubicacionSede.lat) && !isNaN(ubicacionSede.lng)) {
+      new google.maps.Marker({
+        position: ubicacionSede,
+        map: map,
+        title: sede.sed_nombre,
+        icon: { url: edificioImg, scaledSize: new google.maps.Size(50, 50) }
+      });
 
-        new google.maps.Circle({
-          strokeColor: '#FF5733',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FFC300',
-          fillOpacity: 0.35,
-          map: map,
-          center: ubicacionSede,
-          radius: sede.radio
-        });
+      new google.maps.Circle({
+        strokeColor: '#FF5733',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FFC300',
+        fillOpacity: 0.35,
+        map: map,
+        center: ubicacionSede,
+        radius: 50 // agregar a la db respecto a la sedes
+      });
 
-        bounds.extend(ubicacionSede);
-      }
-    });
+      bounds.extend(ubicacionSede);
+    }
 
     map.fitBounds(bounds);
 
@@ -105,12 +115,16 @@ onMounted(() => {
           try {
             const coords = await watchCoordinates();
             latitude.value = coords.latitude;
-            latitude.value = coords.longitude;
+            longitude.value = coords.longitude;
             exactitud.value = coords.accuracy;
             console.log("Initializing map with coordinates:", latitude.value, longitude.value);
 
             await marcadoStore.fetchSede(1); // Id de colaborador
             console.log('sede: ', sede.value);
+
+            if (!mapInitialized.value && sede.value){
+              initMap(latitude.value, longitude.value, exactitud.value, sede.value);
+            }
           } catch (error) {
             console.error('Error al obtener las coordenadas o sedes:', error);
           }
@@ -119,4 +133,8 @@ onMounted(() => {
       }, 500);
     }
 });
+
+window.initMap = function() {
+  mapReady = true;
+};
 </script>

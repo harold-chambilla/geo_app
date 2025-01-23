@@ -54,6 +54,7 @@ class HorarioTrabajoFunction
         $horario = $this->entityManager->getRepository(HorarioTrabajo::class)->findOneBy([
             'colaborador' => $colaborador,
             'hot_fecha' => $fecha, // Se asume que la tabla tiene un campo "hor_fecha" con la fecha exacta
+            'hot_eliminado' => false,
         ]);
 
         if (!$horario) {

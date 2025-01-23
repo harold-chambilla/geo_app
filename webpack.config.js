@@ -80,6 +80,7 @@ Encore
     //.autoProvidejQuery()
     .addAliases({
         '@': path.resolve(__dirname, './assets'),
+        '@img': path.resolve(__dirname, './public/images'),
     })
 
     .configureDefinePlugin(options => {
