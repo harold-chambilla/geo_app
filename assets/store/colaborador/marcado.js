@@ -11,6 +11,10 @@ export const useMarcadoStore = defineStore("marcadoStore", {
       latitud: null,
       longitud: null,
       exactitud: null
+    },
+    distanciaSede: {
+      distancia: null,
+      dentroRadio: null
     }
   }),
 
@@ -19,7 +23,8 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     getHorario: (state) => state.horario,
     getStatus: (state) => state.status,
     getError: (state) => state.error,
-    getUbicacion: (state) => state.ubicacion
+    getUbicacion: (state) => state.ubicacion,
+    getDistanciaSede: (state) => state.distanciaSede
   },
 
   actions: {
@@ -76,6 +81,18 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         latitud: null,
         longitud: null,
         exactitud: null
+      };
+    },
+    setDistanciaSede(distancia, dentroRadio) {
+      this.distanciaSede = {
+        distancia: distancia,
+        dentroRadio: dentroRadio
+      };
+    },
+    clearDistanciaSede() {
+      this.distanciaSede = {
+        distancia: null,
+        dentroRadio: null
       };
     }
   },

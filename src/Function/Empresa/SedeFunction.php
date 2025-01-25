@@ -107,6 +107,7 @@ class SedeFunction
             'sed_pais' => $sede->getSedPais(),
             'sed_direccion' => $sede->getSedDireccion(),
             'sed_ubicacion' => $sede->getSedUbicacion(),
+            'sed_radio' => $sede->getSedRadio(),
         ];
     }
 
@@ -139,6 +140,7 @@ class SedeFunction
                     'sed_pais' => $sede->getSedPais(),
                     'sed_direccion' => $sede->getSedDireccion(),
                     'sed_ubicacion' => $sede->getSedUbicacion(),
+                    'sed_radio' => $sede->getSedRadio(),
                 ];
             }
         }
@@ -170,6 +172,7 @@ class SedeFunction
             'sed_pais' => $sede->getSedPais(),
             'sed_direccion' => $sede->getSedDireccion(),
             'sed_ubicacion' => $sede->getSedUbicacion(),
+            'sed_radio' => $sede->getSedRadio(),
         ];
     }
 
@@ -194,6 +197,7 @@ class SedeFunction
             'sed_pais' => $sede->getSedPais(),
             'sed_direccion' => $sede->getSedDireccion(),
             'sed_ubicacion' => $sede->getSedUbicacion(),
+            'sed_radio' => $sede->getSedRadio(),
             'sed_eliminado' => $sede->isSedEliminado()
         ];
     }

@@ -27,6 +27,8 @@ const mapInitialized = ref(false);
 const verId = ref(null);
 const watchId = ref(null);
 const mapReady = ref(false);
+const dist = ref(0);  
+const dentroRadio = ref(false);
 
 const watchCoordinates = () => {
   return new Promise((resolve, reject) => {
@@ -45,7 +47,7 @@ const watchCoordinates = () => {
   });
 };
 
-const initMap = (latitud, longitud, exact, sede) => {
+const initMap = (latitud, longitud, exact, sede, dist, dentroRadio) => {
   if (!mapInitialized.value){
     const ubiActual = { lat: latitud, lng: longitud };
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -91,7 +93,7 @@ const initMap = (latitud, longitud, exact, sede) => {
         fillOpacity: 0.35,
         map: map,
         center: ubicacionSede,
-        radius: 50 // agregar a la db respecto a la sedes
+        radius: sede.sed_radio // agregar a la db respecto a la sedes
       });
 
       bounds.extend(ubicacionSede);
@@ -105,6 +107,18 @@ const initMap = (latitud, longitud, exact, sede) => {
         navigator.geolocation.clearWatch(watchId.value);
       }
     });
+
+    dist = google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(ubiActual.lat, ubiActual.lng),
+      new google.maps.LatLng(ubicacionSede.lat, ubicacionSede.lng)
+    );
+
+    if (dist < sede.sed_radio) {
+      dentroRadio = true;
+    } else {
+      dentroRadio = false;
+    }
+    marcadoStore.setDistanciaSede(dist, dentroRadio);
   }
 };
 

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241203193017 extends AbstractMigration
+final class Version20250124231534 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -31,7 +31,7 @@ final class Version20241203193017 extends AbstractMigration
         $this->addSql('CREATE TABLE permiso (id INT AUTO_INCREMENT NOT NULL, pms_estado VARCHAR(255) NOT NULL, pms_eliminado TINYINT(1) NOT NULL, colaborador_id INT NOT NULL, motivo_id INT NOT NULL, INDEX IDX_FD7AAB9EF1CB264E (colaborador_id), INDEX IDX_FD7AAB9EF9E584F8 (motivo_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE puesto (id INT AUTO_INCREMENT NOT NULL, pst_nombre VARCHAR(255) NOT NULL, pst_eliminado TINYINT(1) NOT NULL, area_id INT NOT NULL, INDEX IDX_47C3D2DEBD0F409C (area_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE registro_cambios (id INT AUTO_INCREMENT NOT NULL, reg_tablaafectada VARCHAR(255) NOT NULL, reg_campoafectado VARCHAR(255) NOT NULL, reg_valoranterior VARCHAR(255) NOT NULL, reg_valornuevo VARCHAR(255) NOT NULL, reg_fecha DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE sede (id INT AUTO_INCREMENT NOT NULL, sed_nombre VARCHAR(255) NOT NULL, sed_pais VARCHAR(255) NOT NULL, sed_direccion VARCHAR(255) NOT NULL, sed_ubicacion JSON NOT NULL, sed_eliminado TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE sede (id INT AUTO_INCREMENT NOT NULL, sed_nombre VARCHAR(255) NOT NULL, sed_pais VARCHAR(255) NOT NULL, sed_direccion VARCHAR(255) NOT NULL, sed_ubicacion JSON NOT NULL, sed_eliminado TINYINT(1) NOT NULL, sed_radio INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('ALTER TABLE asistencia ADD CONSTRAINT FK_D8264A8DF1CB264E FOREIGN KEY (colaborador_id) REFERENCES colaborador (id)');
         $this->addSql('ALTER TABLE colaborador ADD CONSTRAINT FK_D2F80BB39C833003 FOREIGN KEY (grupo_id) REFERENCES grupo (id)');
         $this->addSql('ALTER TABLE configuracion_asistencia ADD CONSTRAINT FK_FB7656889C833003 FOREIGN KEY (grupo_id) REFERENCES grupo (id)');

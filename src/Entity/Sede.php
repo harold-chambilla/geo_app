@@ -36,6 +36,9 @@ class Sede
     #[ORM\OneToMany(targetEntity: ConfiguracionAsistencia::class, mappedBy: 'sede')]
     private Collection $configuracionAsistencias;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $sed_radio = 300;
+
     public function __construct()
     {
         $this->configuracionAsistencias = new ArrayCollection();
@@ -132,6 +135,18 @@ class Sede
     public function setSedUbicacion(array $sed_ubicacion): static
     {
         $this->sed_ubicacion = $sed_ubicacion;
+
+        return $this;
+    }
+
+    public function getSedRadio(): ?int
+    {
+        return $this->sed_radio;
+    }
+
+    public function setSedRadio(?int $sed_radio): static
+    {
+        $this->sed_radio = $sed_radio;
 
         return $this;
     }

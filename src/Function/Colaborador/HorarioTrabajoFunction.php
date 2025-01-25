@@ -17,7 +17,9 @@ class HorarioTrabajoFunction
     public function obtenerHorarioPorColaborador(int $colaboradorId, \DateTime $fecha): array
     {
         // 1. Buscar el colaborador por ID
-        $colaborador = $this->entityManager->getRepository(Colaborador::class)->find($colaboradorId);
+        $colaborador = $this->entityManager->getRepository(Colaborador::class)->findOneBy([
+            'id' => $colaboradorId
+        ]);
         if (!$colaborador) {
             throw new \Exception('Colaborador no encontrado');
         }

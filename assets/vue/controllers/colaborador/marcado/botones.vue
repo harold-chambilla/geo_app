@@ -16,10 +16,10 @@ import { ref, onMounted, computed, watch, onUnmounted } from "vue";
 const marcadoStore = useMarcadoStore();
 
 const horarioColaborador = computed(() => { return marcadoStore.horario; });
-
 const sede = computed(() => { return marcadoStore.sede; });
-
 const ubicacion = computed(() => { return marcadoStore.ubicacion; });
+const distanciaSede = computed(() => { return marcadoStore.distanciaSede; });
+const exactitudRadio = ref(null);
 
 // Funciones de marcar
 const marcarEntrada = () => {
@@ -32,10 +32,20 @@ const marcarSalida = () => {
 
 onMounted(async () => {
   try {
-    console.log("Ubicacion", ubicacion.value);
+    console.log("Distancia", distanciaSede.value);
 
   } catch (error) {
     console.error('Error al obtener el horario:', error);
+  }
+});
+
+watch(ubicacion.exactitud, (newValue) => {
+  if (newValue >= 50 && newValue <= 200) {
+    exactitudRadio.value = 'Exactitud baja.';
+  } else if (newValue >= 1 && newValue <= 50) {
+    exactitudRadio.value = 'Exactitud alta.';
+  } else {
+    exactitudRadio.value = 'Exactitud inaceptable. Por favor, actualiza la ubicación.';
   }
 });
 </script>
