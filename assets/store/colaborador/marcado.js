@@ -88,10 +88,13 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         } else {
           this.asistencias = [response.data];
         }
+        
         this.status = "success";
+        return response.data;
       } catch (error) {
         this.status = "error";
         this.error = error.response?.data?.error || "Error al crear asistencia";
+        throw new Error(this.error); 
       }
     },
     /**

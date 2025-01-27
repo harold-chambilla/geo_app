@@ -24,40 +24,8 @@ const horaActual = computed(() => { return marcadoStore.horaActual; })
 const exactitudRadio = ref(null);
 
 // Funciones de marcar
-const marcarEntrada = () => {
-  console.log("Intentando marcar entrada...", asistencias.value);
-
-  if (
-    marcadoStore.getAsistencias.length === 0 ||
-    (marcadoStore.getAsistencias.length === 1 && marcadoStore.getAsistencias[0].error)
-  ) 
-  {
-    console.log("No se encontraron asistencias, procediendo con el registro...");
-    const asistenciaData = {
-      colaborador_id: 1,
-      asi_fechaentrada: null,
-      asi_fechasalida: null,
-      asi_horaentrada: horaActual,
-      asi_horasalida: null,
-      asi_fotoentrada: null,
-      asi_fotosalida: null,
-      asi_ubicacionentrada: null,
-      asi_ubicacionsalida: null,
-      asi_estadoentrada: null,
-      asi_estadosalida: null,
-      asi_notas: null,
-      asi_eliminado: false,
-    };
-
-    try {
-      const response = marcadoStore.crearAsistencia(asistenciaData);
-      console.log("Entrada registrada exitosamente:", response);
-    } catch (error) {
-      console.error("Error al registrar la asistencia:", error);
-    }
-  } else {
-    console.log("Ya existe una asistencia registrada para hoy.");
-  }
+const marcarEntrada = async () => {
+  
 };
 
 const marcarSalida = async () => {
@@ -85,6 +53,7 @@ onMounted(async () => {
       colaborador_id: 1,
       fecha: horarioColaborador.value.horario.hot_fecha
     });
+    console.log('Asistencias:', marcadoStore.getAsistencias);
   } catch (error) {
     console.error('Error al obtener el horario:', error);
   }
