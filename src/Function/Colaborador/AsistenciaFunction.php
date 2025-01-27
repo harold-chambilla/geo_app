@@ -115,4 +115,75 @@ class AsistenciaFunction
             'colaborador_id' => $asistencia->getColaborador()->getId(),
         ];
     }
-}
+
+    public function actualizarAsistencia(int $id, array $data): array
+    {
+        $repository = $this->entityManager->getRepository(Asistencia::class);
+        $asistencia = $repository->find($id);
+
+        if (!$asistencia) {
+            return ['error' => 'Asistencia no encontrada'];
+        }
+
+        if (isset($data['asi_fechaentrada'])) {
+            $asistencia->setAsiFechaentrada(new \DateTime($data['asi_fechaentrada']));
+        }
+
+        if (isset($data['asi_fechasalida'])) {
+            $asistencia->setAsiFechasalida(new \DateTime($data['asi_fechasalida']));
+        }
+
+        if (isset($data['asi_horaentrada'])) {
+            $asistencia->setAsiHoraentrada(new \DateTime($data['asi_horaentrada']));
+        }
+
+        if (isset($data['asi_horasalida'])) {
+            $asistencia->setAsiHorasalida(new \DateTime($data['asi_horasalida']));
+        }
+
+        if (isset($data['asi_fotoentrada'])) {
+            $asistencia->setAsiFotoentrada($data['asi_fotoentrada']);
+        }
+
+        if (isset($data['asi_fotosalida'])) {
+            $asistencia->setAsiFotosalida($data['asi_fotosalida']);
+        }
+
+        if (isset($data['asi_ubicacionentrada'])) {
+            $asistencia->setAsiUbicacionentrada($data['asi_ubicacionentrada']);
+        }
+
+        if (isset($data['asi_ubicacionsalida'])) {
+            $asistencia->setAsiUbicacionsalida($data['asi_ubicacionsalida']);
+        }
+
+        if (isset($data['asi_estadoentrada'])) {
+            $asistencia->setAsiEstadoentrada($data['asi_estadoentrada']);
+        }
+
+        if (isset($data['asi_estadosalida'])) {
+            $asistencia->setAsiEstadosalida($data['asi_estadosalida']);
+        }
+
+        if (isset($data['asi_notas'])) {
+            $asistencia->setAsiNotas($data['asi_notas']);
+        }
+
+        if (isset($data['asi_eliminado'])) {
+            $asistencia->setAsiEliminado($data['asi_eliminado']);
+        }
+
+        if (isset($data['colaborador_id'])) {
+            $colaborador = $this->entityManager->getRepository(Colaborador::class)->find($data['colaborador_id']);
+            if (!$colaborador) {
+                return ['error' => 'Colaborador no encontrado'];
+            }
+            $asistencia->setColaborador($colaborador);
+        }
+
+        $this->entityManager->persist($asistencia);
+        $this->entityManager->flush();
+
+        return $this->formatAsistencia($asistencia);
+    }
+    }

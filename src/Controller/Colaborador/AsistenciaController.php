@@ -41,6 +41,20 @@ class AsistenciaController extends AbstractController
         return $this->json($response);
     }
 
+    #[Route('/api/actualizar/{id}', name: 'api_actualizar', methods: ['PUT'])]
+    public function actualizarAsistencia(int $id, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!$data) {
+            return $this->json(['error' => 'Datos inválidos'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $response = $this->asistenciaFunction->actualizarAsistencia($id, $data);
+
+        return $this->json($response);
+    }
+
     #[Route('/api/eliminar/{id}', name: 'eliminar', methods: ['DELETE'])]
     public function eliminarAsistencia(int $id): JsonResponse
     {

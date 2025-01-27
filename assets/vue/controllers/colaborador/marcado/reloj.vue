@@ -5,6 +5,10 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
+import { useMarcadoStore } from '@/store/colaborador/marcado';
+
+const marcadoStore = useMarcadoStore();
+
 const currentHour = ref("");
 const updateHour = () => {
     const now = new Date();
@@ -13,6 +17,7 @@ const updateHour = () => {
 
 onMounted(() => {
     updateHour();
+    marcadoStore.setHoraActual(currentHour.value);
     setInterval(updateHour, 60000);
 });
 </script>

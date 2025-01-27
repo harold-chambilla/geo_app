@@ -16,7 +16,8 @@ export const useMarcadoStore = defineStore("marcadoStore", {
       distancia: null,
       dentroRadio: null
     },
-    asistencias: []
+    asistencias: [],
+    horaActual: null,
   }),
 
   getters: {
@@ -26,7 +27,8 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     getError: (state) => state.error,
     getUbicacion: (state) => state.ubicacion,
     getDistanciaSede: (state) => state.distanciaSede,
-    getAsistencias: (state) => state.asistencias
+    getAsistencias: (state) => state.asistencias,
+    getHoraActual: (state) => state.horaActual,
   },
 
   actions: {
@@ -71,7 +73,7 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.error = error.response?.data?.message || "Error al obtener horario";
       }
     },
-        /**
+    /**
      * Crea una o varias asistencias.
      * @param {Object|Array} asistenciaData - Datos de la asistencia (objeto o array de asistencias).
      */
@@ -115,7 +117,27 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.error = error.response?.data?.error || "Error al obtener asistencia";
       }
     },
+    /**
+     * Actualiza una asistencia por ID.
+     * @param {number} id - ID de la asistencia a actualizar.
+     * @param {Object} asistenciaData - Datos a actualizar.
+     */
+    async actualizarAsistencia(id, asistenciaData) {
+      try {
+        this.status = "loading";
+        const response = await axios.put(`/asistencia/api/actualizar/${id}`, asistenciaData);
 
+        const index = this.asistencias.findIndex(asistencia => asistencia.id === id);
+        if (index !== -1) {
+          this.asistencias[index] = response.data;
+        }
+
+        this.status = "success";
+      } catch (error) {
+        this.status = "error";
+        this.error = error.response?.data?.error || "Error al actualizar asistencia";
+      }
+    },
     /**
      * Elimina una asistencia de forma lógica.
      * @param {number|Array<number>} ids - ID o array de IDs de asistencias a eliminar.
@@ -162,7 +184,13 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         distancia: null,
         dentroRadio: null
       };
-    }
+    },
+    setHoraActual(hora) {
+      this.horaActual = hora;
+    },
+    clearHoraActual() {
+      this.horaActual = null;
+    },
   },
   persist: {
     enabled: true,
