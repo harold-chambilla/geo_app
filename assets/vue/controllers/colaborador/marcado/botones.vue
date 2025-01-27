@@ -18,15 +18,15 @@ const marcadoStore = useMarcadoStore();
 const horarioColaborador = computed(() => { return marcadoStore.horario; });
 const sede = computed(() => { return marcadoStore.sede; });
 const ubicacion = computed(() => { return marcadoStore.ubicacion; });
-const distanciaSede = computed(() => { return marcadoStore.distanciaSede; });
+const distanciaSede = computed(() => { return marcadoStore.distanciaSede; })
 const exactitudRadio = ref(null);
 
 // Funciones de marcar
-const marcarEntrada = () => {
+const marcarEntrada = async () => {
     console.log("Entrada marcada");
 };
 
-const marcarSalida = () => {
+const marcarSalida = async () => {
     console.log("Salida marcada");
 };
 

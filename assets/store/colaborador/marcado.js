@@ -15,7 +15,8 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     distanciaSede: {
       distancia: null,
       dentroRadio: null
-    }
+    },
+    asistencias: []
   }),
 
   getters: {
@@ -24,7 +25,8 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     getStatus: (state) => state.status,
     getError: (state) => state.error,
     getUbicacion: (state) => state.ubicacion,
-    getDistanciaSede: (state) => state.distanciaSede
+    getDistanciaSede: (state) => state.distanciaSede,
+    getAsistencias: (state) => state.asistencias
   },
 
   actions: {
@@ -67,6 +69,72 @@ export const useMarcadoStore = defineStore("marcadoStore", {
       } catch (error) {
         this.status = "error";
         this.error = error.response?.data?.message || "Error al obtener horario";
+      }
+    },
+        /**
+     * Crea una o varias asistencias.
+     * @param {Object|Array} asistenciaData - Datos de la asistencia (objeto o array de asistencias).
+     */
+    async crearAsistencia(asistenciaData) {
+      try {
+        this.status = "loading";
+        let payload = Array.isArray(asistenciaData) ? asistenciaData : [asistenciaData];
+        const response = await axios.post("/asistencia/api/crear", payload);
+
+        if (Array.isArray(response.data)) {
+          this.asistencias = response.data;
+        } else {
+          this.asistencias = [response.data];
+        }
+        this.status = "success";
+      } catch (error) {
+        this.status = "error";
+        this.error = error.response?.data?.error || "Error al crear asistencia";
+      }
+    },
+    /**
+     * Obtiene asistencia por ID, colaborador y/o fecha.
+     * Puede devolver una única asistencia o un array de asistencias.
+     * @param {Object} criteria - Criterios de búsqueda (id, colaborador_id, fecha).
+     */
+    async obtenerAsistencia(criteria) {
+      try {
+        this.status = "loading";
+        const response = await axios.get("/asistencia/api/obtener", {
+          params: criteria,
+        });
+
+        if (Array.isArray(response.data)) {
+          this.asistencias = response.data;
+        } else {
+          this.asistencias = [response.data];
+        }
+        this.status = "success";
+      } catch (error) {
+        this.status = "error";
+        this.error = error.response?.data?.error || "Error al obtener asistencia";
+      }
+    },
+
+    /**
+     * Elimina una asistencia de forma lógica.
+     * @param {number|Array<number>} ids - ID o array de IDs de asistencias a eliminar.
+     */
+    async eliminarAsistencia(ids) {
+      try {
+        this.status = "loading";
+
+        let payload = Array.isArray(ids) ? ids : [ids];
+
+        const responses = await Promise.all(
+          payload.map((id) => axios.delete(`/asistencia/api/eliminar/${id}`))
+        );
+
+        this.status = "success";
+        return responses.map((response) => response.data);
+      } catch (error) {
+        this.status = "error";
+        this.error = error.response?.data?.error || "Error al eliminar asistencia";
       }
     },
     setUbicacion(lat, lng, accuracy) {
