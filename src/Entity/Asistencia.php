@@ -17,31 +17,31 @@ class Asistencia
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $asi_fechaentrada = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $asi_fechasalida = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $asi_horaentrada = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $asi_horasalida = null;
 
     #[ORM\Column(length: 255)]
     private ?string $asi_fotoentrada = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_fotosalida = null;
 
     #[ORM\Column(length: 255)]
     private ?string $asi_ubicacionentrada = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_ubicacionsalida = null;
 
     #[ORM\Column(length: 255)]
     private ?string $asi_estadoentrada = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $asi_estadosalida = null;
 
     #[ORM\Column(length: 255)]
@@ -76,7 +76,7 @@ class Asistencia
         return $this->asi_fechasalida;
     }
 
-    public function setAsiFechasalida(\DateTimeInterface $asi_fechasalida): static
+    public function setAsiFechasalida(?\DateTimeInterface $asi_fechasalida): static
     {
         $this->asi_fechasalida = $asi_fechasalida;
 
@@ -100,7 +100,7 @@ class Asistencia
         return $this->asi_horasalida;
     }
 
-    public function setAsiHorasalida(\DateTimeInterface $asi_horasalida): static
+    public function setAsiHorasalida(?\DateTimeInterface $asi_horasalida): static
     {
         $this->asi_horasalida = $asi_horasalida;
 
@@ -124,7 +124,7 @@ class Asistencia
         return $this->asi_fotosalida;
     }
 
-    public function setAsiFotosalida(string $asi_fotosalida): static
+    public function setAsiFotosalida(?string $asi_fotosalida): static
     {
         $this->asi_fotosalida = $asi_fotosalida;
 
@@ -148,7 +148,7 @@ class Asistencia
         return $this->asi_ubicacionsalida;
     }
 
-    public function setAsiUbicacionsalida(string $asi_ubicacionsalida): static
+    public function setAsiUbicacionsalida(?string $asi_ubicacionsalida): static
     {
         $this->asi_ubicacionsalida = $asi_ubicacionsalida;
 
@@ -172,7 +172,7 @@ class Asistencia
         return $this->asi_estadosalida;
     }
 
-    public function setAsiEstadosalida(string $asi_estadosalida): static
+    public function setAsiEstadosalida(?string $asi_estadosalida): static
     {
         $this->asi_estadosalida = $asi_estadosalida;
 

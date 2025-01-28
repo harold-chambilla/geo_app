@@ -47,6 +47,7 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.status = "success";
       } catch (error) {
         this.status = "error";
+        this.sede = null;
         this.error = error.response?.data?.message || "Error al obtener sede";
       }
     },
@@ -70,6 +71,7 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.status = "success";
       } catch (error) {
         this.status = "error";
+        this.horario = null;
         this.error = error.response?.data?.message || "Error al obtener horario";
       }
     },
@@ -80,23 +82,27 @@ export const useMarcadoStore = defineStore("marcadoStore", {
     async crearAsistencia(asistenciaData) {
       try {
         this.status = "loading";
-        let payload = Array.isArray(asistenciaData) ? asistenciaData : [asistenciaData];
+    
+        // Si es un array, se envía como está; si es un objeto, se envía como un objeto
+        const payload = Array.isArray(asistenciaData) ? asistenciaData : asistenciaData;
+    
         const response = await axios.post("/asistencia/api/crear", payload);
-
+    
+        // Manejo de respuesta, asegurando que this.asistencias siempre sea un array
         if (Array.isArray(response.data)) {
           this.asistencias = response.data;
         } else {
           this.asistencias = [response.data];
         }
-        
+    
         this.status = "success";
         return response.data;
       } catch (error) {
         this.status = "error";
         this.error = error.response?.data?.error || "Error al crear asistencia";
-        throw new Error(this.error); 
+        throw new Error(this.error);
       }
-    },
+    },    
     /**
      * Obtiene asistencia por ID, colaborador y/o fecha.
      * Puede devolver una única asistencia o un array de asistencias.
@@ -117,6 +123,7 @@ export const useMarcadoStore = defineStore("marcadoStore", {
         this.status = "success";
       } catch (error) {
         this.status = "error";
+        this.asistencias = [];
         this.error = error.response?.data?.error || "Error al obtener asistencia";
       }
     },

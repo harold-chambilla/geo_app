@@ -20,9 +20,9 @@ class AsistenciaFunction
 
         $asistencia = new \App\Entity\Asistencia();
         $asistencia->setAsiFechaentrada(new \DateTime($data['asi_fechaentrada']))
-            ->setAsiFechasalida(new \DateTime($data['asi_fechasalida']))
+            ->setAsiFechasalida($data['asi_fechasalida'] !== null ? new \DateTime($data['asi_fechasalida']) : null)
             ->setAsiHoraentrada(new \DateTime($data['asi_horaentrada']))
-            ->setAsiHorasalida(new \DateTime($data['asi_horasalida']))
+            ->setAsiHorasalida($data['asi_horasalida'] !== null ? new \DateTime($data['asi_horasalida']) : null)
             ->setAsiFotoentrada($data['asi_fotoentrada'])
             ->setAsiFotosalida($data['asi_fotosalida'])
             ->setAsiUbicacionentrada($data['asi_ubicacionentrada'])
@@ -101,9 +101,9 @@ class AsistenciaFunction
         return [
             'id' => $asistencia->getId(),
             'asi_fechaentrada' => $asistencia->getAsiFechaentrada()->format('Y-m-d H:i:s'),
-            'asi_fechasalida' => $asistencia->getAsiFechasalida()->format('Y-m-d H:i:s'),
+            'asi_fechasalida' => $asistencia->getAsiFechasalida() ? $asistencia->getAsiFechasalida()->format('Y-m-d H:i:s') : null,
             'asi_horaentrada' => $asistencia->getAsiHoraentrada()->format('H:i:s'),
-            'asi_horasalida' => $asistencia->getAsiHorasalida()->format('H:i:s'),
+            'asi_horasalida' => $asistencia->getAsiHorasalida() ? $asistencia->getAsiHorasalida()->format('H:i:s') : null,
             'asi_fotoentrada' => $asistencia->getAsiFotoentrada(),
             'asi_fotosalida' => $asistencia->getAsiFotosalida(),
             'asi_ubicacionentrada' => $asistencia->getAsiUbicacionentrada(),
