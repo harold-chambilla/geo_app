@@ -18,18 +18,22 @@ pinia.use(piniaPersist);
 import EOSede from './vue/controllers/empresa/opciones/sede.vue';
 import EEEmpleados from './vue/controllers/empresa/empleados/empleados.vue';
 import EHHorario from './vue/controllers/empresa/horario/horario.vue';
+import EAAsistencia from './vue/controllers/empresa/asistencia/asistencia.vue';
 
 const eosede = createApp(EOSede);
 const eeempleados = createApp(EEEmpleados);
 const ehhorario = createApp(EHHorario);
+const eaasistencia = createApp(EAAsistencia);
 
 eosede.use(pinia);
 eeempleados.use(pinia);
 ehhorario.use(pinia);
+eaasistencia.use(pinia);
 
 eosede.mount('#eosede');
 eeempleados.mount('#eeempleados');
 ehhorario.mount('#ehhorario');
+eaasistencia.mount('#eaasistencia');
 
 // Importar los componentes de Vue - Colaborador
 
