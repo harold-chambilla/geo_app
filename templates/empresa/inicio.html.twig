@@ -3,32 +3,50 @@
 {% block title %}Inicio - Empresa{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3">
-    <div class="row g-3">
-        
-        <!-- Tarjeta Empleados -->
-        <div class="col-12 col-md-6 d-flex align-items-center justify-content-center" style="height: calc(100vh - 40px);">
-            <a href="{{ path('app_empresa_empleados_inicio') }}" class="text-decoration-none w-100 h-100">
-                <div class="card text-center shadow-sm w-100 h-100 border-0" style="background-color: #eaf4ff; border-radius: 20px;">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                        <i class="bi bi-people-fill" style="font-size: 3rem; color: #3b82f6;"></i>
-                        <h4 class="card-title fw-bold mt-3 text-dark">Empleados</h4>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="row gx-4 gy-3 d-flex flex-wrap justify-content-center text-center w-100">
+            
+            <!-- Tarjeta Empleados -->
+            <div class="col-auto d-flex justify-content-center">
+                <a href="{{ path('app_empresa_empleados_inicio') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 d-flex justify-content-center align-items-center" 
+                        style="background-color: #eaf4ff; border-radius: 20px; width: 30vh; height: 30vh; min-width: 250px; aspect-ratio: 1/1;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                            <i class="bi bi-people-fill" style="font-size: 5rem; color: #3b82f6;"></i>
+                            <h3 class="card-title fw-bold mt-3 text-dark">Empleados</h3>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <!-- Tarjeta Horario -->
-        <div class="col-12 col-md-6 d-flex align-items-center justify-content-center" style="height: calc(100vh - 40px);">
-            <a href="{{ path('app_empresa_horario_inicio') }}" class="text-decoration-none w-100 h-100">
-                <div class="card text-center shadow-sm w-100 h-100 border-0" style="background-color: #e0f7fa; border-radius: 20px;">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                        <i class="bi bi-clock-fill" style="font-size: 3rem; color: #00bcd4;"></i>
-                        <h4 class="card-title fw-bold mt-3 text-dark">Horario</h4>
+            <!-- Tarjeta Horario -->
+            <div class="col-auto d-flex justify-content-center">
+                <a href="{{ path('app_empresa_horario_inicio') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 d-flex justify-content-center align-items-center" 
+                        style="background-color: #e0f7fa; border-radius: 20px; width: 30vh; height: 30vh; min-width: 250px; aspect-ratio: 1/1;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                            <i class="bi bi-clock-fill" style="font-size: 5rem; color: #00bcd4;"></i>
+                            <h3 class="card-title fw-bold mt-3 text-dark">Horario</h3>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+
+            <!-- Tarjeta Asistencias -->
+            <div class="col-auto d-flex justify-content-center">
+                <a href="{{ path('app_empresa_asistencia_inicio') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 d-flex justify-content-center align-items-center" 
+                        style="background-color: rgb(241, 235, 245); border-radius: 20px; width: 30vh; height: 30vh; min-width: 250px; aspect-ratio: 1/1;">
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                            <i class="bi bi-list-ol" style="font-size: 5rem; color:rgb(104, 3, 124);"></i>
+                            <h3 class="card-title fw-bold mt-3 text-dark">Asistencia</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
-</div>
 {% endblock %}
+
+
