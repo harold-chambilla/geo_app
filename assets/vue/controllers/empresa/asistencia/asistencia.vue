@@ -51,11 +51,11 @@
         </div>
     </div>
 
-    <div>
-        <h2>🕒 Hora Actual: {{ timeStore.getHoraActual }}</h2>
-        <h3>📅 Fecha Actual: {{ timeStore.getFechaActual }}</h3>
-        <h4>🌍 Zona Horaria: {{ timeStore.getZonaHoraria }}</h4>
-        <h4>🗣️ Idioma: {{ timeStore.getIdioma }}</h4>
+    <div class="position-fixed top-0 end-0 p-3 text-dark font-monospace fs-6">
+        <h2 class="mb-2">🕒 {{ timeStore.getHoraActual }}</h2>
+        <h3 class="mb-2">📅 {{ timeStore.getFechaActual }}</h3>
+        <h4 class="mb-2">🌍 {{ timeStore.getZonaHoraria }}</h4>
+        <h4 class="mb-2">🗣️ {{ timeStore.getIdioma }}</h4>
     </div>
 </template>
 
