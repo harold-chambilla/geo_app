@@ -50,10 +50,20 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <h2>🕒 Hora Actual: {{ timeStore.getHoraActual }}</h2>
+        <h3>📅 Fecha Actual: {{ timeStore.getFechaActual }}</h3>
+        <h4>🌍 Zona Horaria: {{ timeStore.getZonaHoraria }}</h4>
+        <h4>🗣️ Idioma: {{ timeStore.getIdioma }}</h4>
+    </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useTimeStore } from "@/store/tiempo.js";
+
+const timeStore = useTimeStore();
 
 const fechaSeleccionada = ref('2025-02-06');
 const busqueda = ref('');
@@ -93,6 +103,10 @@ const getEstadoClase = (estado) => {
 
 watch(fechaSeleccionada, (newFecha) => {
     console.log("Fecha seleccionada:", newFecha);
+});
+
+onMounted(() => {
+  timeStore.iniciarSincronizacion();
 });
 </script>
 
