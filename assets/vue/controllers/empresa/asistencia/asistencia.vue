@@ -1,16 +1,30 @@
 <template>
     <div class="container mt-4">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-            <input type="date" v-model="fechaSeleccionada" class="form-control w-100 w-md-25 rounded-pill shadow-sm border-0 mb-2 mb-md-0 mr-1">
-            <input v-model="busqueda" type="text" class="form-control w-100 w-md-25 rounded-pill shadow-sm border-0 ml-1" placeholder="Buscar">
+        <!-- Separación entre la fecha y el campo de búsqueda -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <input 
+                type="date" 
+                v-model="fechaSeleccionada" 
+                class="form-control w-100 w-md-25 rounded-pill shadow-sm border-0"
+            >
+            <input 
+                v-model="busqueda" 
+                type="text" 
+                class="form-control w-100 w-md-25 rounded-pill shadow-sm border-0"
+                placeholder="Buscar"
+            >
         </div>
+
+        <!-- Filtros -->
         <div class="d-flex flex-wrap gap-2 mt-3 justify-content-center justify-content-md-start">
             <button class="btn btn-outline-light border rounded-pill shadow-sm text-dark" @click="toggleFiltro('area')">Área ▼</button>
             <button class="btn btn-outline-light border rounded-pill shadow-sm text-dark" @click="toggleFiltro('puesto')">Puesto ▼</button>
-            <button class="btn btn-warning border rounded-pill shadow-sm text-dark" @click="toggleFiltro('ingreso')">Estado Ingreso ▼</button>
-            <button class="btn btn-warning border rounded-pill shadow-sm text-dark" @click="toggleFiltro('salida')">Estado Salida ▼</button>
+            <button class="btn btn-warning border rounded-pill shadow-sm text-dark" @click="toggleFiltro('estado_entrada')">Estado Ingreso ▼</button>
+            <button class="btn btn-warning border rounded-pill shadow-sm text-dark" @click="toggleFiltro('estado_salida')">Estado Salida ▼</button>
             <button class="btn btn-outline-light border rounded-pill shadow-sm text-dark" @click="toggleFiltro('modalidad')">Modalidad ▼</button>
         </div>
+
+        <!-- Sección de opciones de filtro -->
         <div class="d-flex flex-wrap gap-3 mt-3 justify-content-center">
             <div v-for="(valores, filtro) in filtrosActivos" :key="filtro" class="p-2 border rounded shadow-sm">
                 <label class="form-label text-muted">{{ filtro }}</label>
@@ -19,14 +33,16 @@
                 </select>
             </div>
         </div>
+
         <div class="card mt-3 p-3 shadow-sm border-0 rounded-4">
             <div class="table-responsive">
                 <table class="table table-hover text-center">
                     <thead class="table-light">
                         <tr>
-                            <th>Nombre</th>
-                            <th>Puesto</th>
+                            <th>ID</th>
+                            <th>Colaborador</th>
                             <th>Área</th>
+                            <th>Puesto</th>
                             <th>Fecha</th>
                             <th>Ingreso</th>
                             <th>Salida</th>
@@ -35,50 +51,93 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="empleado in empleadosFiltrados" :key="empleado.id">
-                            <td>{{ empleado.nombre }}</td>
-                            <td>{{ empleado.puesto }}</td>
-                            <td>{{ empleado.area }}</td>
-                            <td>{{ empleado.fecha }}</td>
-                            <td :class="getEstadoClase(empleado.ingreso)"><strong>{{ empleado.ingreso }}</strong></td>
-                            <td :class="getEstadoClase(empleado.salida)"><strong>{{ empleado.salida }}</strong></td>
-                            <td>{{ empleado.modalidad }}</td>
-                            <td>{{ empleado.horasExtra }}</td>
+                        <tr v-for="asistencia in asistenciasFiltradas" :key="asistencia.id">
+                            <td>{{ asistencia.id }}</td>
+                            <td>{{ asistencia.colaborador }}</td>
+                            <td>{{ asistencia.area }}</td>
+                            <td>{{ asistencia.puesto }}</td>
+                            <!-- ✅ Fecha sin hora -->
+                            <td>{{ formatearSoloFecha(asistencia.fecha_entrada) }}</td>
+                            <!-- Celda dinámica para Ingreso con colores -->
+                            <td :class="getEstadoClase(asistencia.estado_entrada)">
+                                <span v-if="asistencia.estado_entrada !== 'pendiente'">
+                                    {{ asistencia.hora_entrada }}
+                                </span>
+                            </td>
+                            <!-- Celda dinámica para Salida con colores -->
+                            <td :class="getEstadoClase(asistencia.estado_salida)">
+                                <span v-if="asistencia.estado_salida !== 'pendiente'">
+                                    {{ asistencia.hora_salida }}
+                                </span>
+                            </td>
+                            <td>{{ asistencia.modalidad }}</td>
+                            <td>{{ asistencia.horas_extra }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-    <div class="position-fixed top-0 end-0 p-3 text-dark font-monospace fs-6">
-        <h2 class="mb-2">🕒 {{ timeStore.getHoraActual }}</h2>
-        <h3 class="mb-2">📅 {{ timeStore.getFechaActual }}</h3>
-        <h4 class="mb-2">🌍 {{ timeStore.getZonaHoraria }}</h4>
-        <h4 class="mb-2">🗣️ {{ timeStore.getIdioma }}</h4>
-    </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { useTimeStore } from "@/store/tiempo.js";
+import { useAsistenciaStore } from "@/store/empresa/asistencia.js";
 
 const timeStore = useTimeStore();
+const asistenciaStore = useAsistenciaStore();
 
-const fechaSeleccionada = ref('2025-02-06');
 const busqueda = ref('');
 const filtrosActivos = ref({});
-const empleados = ref([
-    { id: 1, nombre: 'Juan Marco Sanchez Rodriguez', puesto: 'Asist. Contabilidad', area: 'Contabilidad', fecha: '2025-02-06', ingreso: '08:30', salida: '17:00', modalidad: 'Presencial', horasExtra: '15 min' },
-    { id: 2, nombre: 'Maria Alejandra Linares Ramirez', puesto: 'Asist. Sistemas', area: 'Sistemas', fecha: '2025-02-06', ingreso: 'Vacaciones', salida: 'Vacaciones', modalidad: 'Presencial', horasExtra: '15 min' },
-    { id: 3, nombre: 'Alex Martinez Perez', puesto: 'Jefe de Sistemas', area: 'Sistemas', fecha: '2025-02-06', ingreso: 'Vacaciones', salida: 'Vacaciones', modalidad: 'Presencial', horasExtra: '00 min' },
-    { id: 4, nombre: 'José Mario Ruiz Rojas', puesto: 'Asist. Contabilidad', area: 'Contabilidad', fecha: '2025-02-06', ingreso: 'Permiso', salida: 'Permiso', modalidad: 'Presencial', horasExtra: '00 min' }
-]);
+const empresaId = 1; // ID de la empresa fija por el momento
 
+// ✅ Computed para sincronizar la fecha con el store sin modificar la lógica de la fecha
+const fechaSeleccionada = computed({
+    get: () => {
+        console.log("📅 Fecha en timeStore:", timeStore.getFechaActual);
+        return convertirFechaAFormato(timeStore.getFechaActual);
+    },
+    set: (nuevaFecha) => {
+        console.log("📅 Nueva fecha seleccionada:", nuevaFecha);
+        timeStore.setFecha(nuevaFecha);
+    }
+});
+
+// ✅ Función para convertir `DD-MM-YYYY` a `YYYY-MM-DD`
+function convertirFechaAFormato(fecha) {
+    if (!fecha) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return fecha;
+    if (/^\d{2}-\d{2}-\d{4}$/.test(fecha)) {
+        const [dia, mes, año] = fecha.split("-");
+        return `${año}-${mes}-${dia}`;
+    }
+    return fecha;
+}
+
+// ✅ Función para formatear solo la fecha `DD-MM-YYYY`
+function formatearSoloFecha(fechaCompleta) {
+    if (!fechaCompleta) return "";
+    return convertirFechaAFormato(fechaCompleta.split(" ")[0]).split("-").reverse().join("-");
+}
+
+// ✅ Computed para filtrar asistencias según fecha y filtros
+const asistenciasFiltradas = computed(() => {
+    return asistenciaStore.getAsistencias.filter(asistencia => {
+        const fechaAsistencia = convertirFechaAFormato(asistencia.fecha_entrada.split(" ")[0]);
+
+        return fechaAsistencia === fechaSeleccionada.value &&
+            (busqueda.value === '' || asistencia.colaborador.toLowerCase().includes(busqueda.value.toLowerCase())) &&
+            Object.entries(filtrosActivos.value).every(([filtro, valores]) => valores.length === 0 || valores.includes(asistencia[filtro]));
+    });
+});
+
+// ✅ Función para obtener opciones de filtros
 const obtenerOpcionesFiltro = (filtro) => {
-    return [...new Set(empleados.value.map(emp => emp[filtro]).filter(val => val))];
+    return [...new Set(asistenciaStore.getAsistencias.map(asistencia => asistencia[filtro]).filter(val => val))];
 };
 
+// ✅ Función para activar o desactivar filtros
 const toggleFiltro = (filtro) => {
     if (filtrosActivos.value[filtro]) {
         delete filtrosActivos.value[filtro];
@@ -87,56 +146,32 @@ const toggleFiltro = (filtro) => {
     }
 };
 
-const empleadosFiltrados = computed(() => {
-    return empleados.value.filter(emp =>
-        emp.fecha === fechaSeleccionada.value &&
-        (busqueda.value === '' || emp.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) || emp.puesto.toLowerCase().includes(busqueda.value.toLowerCase())) &&
-        Object.entries(filtrosActivos.value).every(([filtro, valores]) => valores.length === 0 || valores.includes(emp[filtro]))
-    );
-});
-
+// ✅ Función para asignar clases de estado dinámicamente en `Ingreso` y `Salida`
 const getEstadoClase = (estado) => {
-    if (estado === 'Vacaciones') return 'bg-light text-secondary fw-bold';
-    if (estado === 'Permiso') return 'bg-light text-info fw-bold';
-    return 'fw-bold';
+    if (estado === 'pendiente') return 'badge bg-light text-muted p-2'; // Fondo gris claro
+    if (estado === 'Vacaciones') return 'badge bg-secondary text-white p-2'; // Fondo gris oscuro
+    if (estado === 'Permiso') return 'badge bg-info text-white p-2'; // Fondo celeste
+    if (estado === 'tardanza') return 'badge bg-warning text-dark p-2'; // Fondo amarillo
+    if (estado === 'puntual') return 'badge bg-success text-white p-2'; // Fondo verde
+    return '';
 };
 
-watch(fechaSeleccionada, (newFecha) => {
-    console.log("Fecha seleccionada:", newFecha);
+// ✅ Obtener colaboradores y asistencias cuando el componente se monta
+onMounted(async () => {
+    console.log("🚀 Montando componente...");
+    timeStore.iniciarSincronizacion();
+
+    await asistenciaStore.fetchColaboradores(empresaId);
+    const idsColaboradores = asistenciaStore.getColaboradores.map(colaborador => colaborador.colaborador_id);
+
+    if (idsColaboradores.length > 0) {
+        await asistenciaStore.fetchAsistencias(idsColaboradores);
+    }
 });
 
-onMounted(() => {
-  timeStore.iniciarSincronizacion();
+// ✅ Observa cambios en la fecha seleccionada y recarga los datos
+watch(fechaSeleccionada, async (newFecha) => {
+    console.log("🕒 Fecha seleccionada ha cambiado:", newFecha);
+    await asistenciaStore.fetchColaboradores(empresaId);
 });
 </script>
-
-<style>
-body {
-    background-color: #f8f9fa;
-}
-.table-hover tbody tr:hover {
-    background-color: #f9f9f9;
-}
-.table thead {
-    background-color: #fff7d6;
-}
-.table tbody tr:nth-child(odd) {
-    background-color: #fffdf5;
-}
-.table tbody tr:nth-child(even) {
-    background-color: #fefaf0;
-}
-.bg-light.text-info {
-    color: #5bc0de !important;
-    font-weight: bold;
-}
-.bg-light.text-secondary {
-    color: #6c757d !important;
-    font-weight: bold;
-}
-@media (max-width: 768px) {
-    .table-responsive {
-        overflow-x: auto;
-    }
-}
-</style>
