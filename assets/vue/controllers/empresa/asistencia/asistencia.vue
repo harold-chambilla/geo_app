@@ -24,18 +24,17 @@
             <button class="btn btn-outline-light border rounded-pill shadow-sm text-dark" @click="toggleFiltro('modalidad')">Modalidad ▼</button>
         </div>
 
-        <!-- Sección de opciones de filtro -->
         <div class="d-flex flex-wrap gap-3 mt-3 justify-content-center">
             <div v-for="(valores, filtro) in filtrosActivos" :key="filtro" class="p-2 border rounded shadow-sm">
-                <label class="form-label text-muted">{{ filtro }}</label>
+                <label class="form-label text-muted">{{ formatFiltroLabel(filtro) }}</label>
                 <select v-model="filtrosActivos[filtro]" class="form-select w-100" multiple>
-                    <option v-for="opcion in obtenerOpcionesFiltro(filtro)" :key="opcion" :value="opcion">{{ opcion }}</option>
+                    <option v-for="opcion in obtenerOpcionesFiltro(filtro)" :key="opcion" :value="opcion">{{ formatFiltroValor(filtro, opcion) }}</option>
                 </select>
             </div>
         </div>
 
         <div class="card mt-3 p-3 shadow-sm border-0 rounded-4">
-            <div class="table-responsive">
+            <div v-if="!esPantallaPequena" class="table-responsive">
                 <table class="table table-hover text-center">
                     <thead class="table-light">
                         <tr>
@@ -54,55 +53,79 @@
                         <tr v-for="asistencia in asistenciasFiltradas" :key="asistencia.id">
                             <td>{{ asistencia.id }}</td>
                             <td>{{ asistencia.colaborador }}</td>
-                            <td>{{ asistencia.area }}</td>
-                            <td>{{ asistencia.puesto }}</td>
-                            <!-- ✅ Fecha sin hora -->
+                            <td>{{ capitalizeWords(asistencia.area) }}</td>
+                            <td>{{ capitalizeWords(asistencia.puesto) }}</td>
                             <td>{{ formatearSoloFecha(asistencia.fecha_entrada) }}</td>
-                            <!-- Celda dinámica para Ingreso con colores -->
-                            <td :class="getEstadoClase(asistencia.estado_entrada)">
-                                <span v-if="asistencia.estado_entrada !== 'pendiente'">
-                                    {{ asistencia.hora_entrada }}
+                            <td>
+                                <span :class="getEstadoClase(asistencia.estado_entrada)">
+                                    {{ asistencia.estado_entrada === 'pendiente' ? 'Pendiente' : asistencia.hora_entrada }}
                                 </span>
                             </td>
-                            <!-- Celda dinámica para Salida con colores -->
-                            <td :class="getEstadoClase(asistencia.estado_salida)">
-                                <span v-if="asistencia.estado_salida !== 'pendiente'">
-                                    {{ asistencia.hora_salida }}
+                            <td>
+                                <span :class="getEstadoClase(asistencia.estado_salida)">
+                                    {{ asistencia.estado_salida === 'pendiente' ? 'Pendiente' : asistencia.hora_salida }}
                                 </span>
                             </td>
-                            <td>{{ asistencia.modalidad }}</td>
-                            <td>{{ asistencia.horas_extra }}</td>
+                            <td>{{ formatModalidad(asistencia.modalidad) }}</td>
+                            <td>
+                                <span class="horas-extra-badge">
+                                    {{ asistencia.horas_extra ? asistencia.horas_extra + ' min' : '00 min' }}
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- ✅ Versión de Tarjetas (Pantallas pequeñas) -->
+            <div v-else class="tarjetas-responsive">
+                <div v-for="asistencia in asistenciasFiltradas" :key="asistencia.id" class="card asistencia-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ asistencia.colaborador }}</h5>
+                        <p class="card-text"><strong>Fecha:</strong> {{ formatearSoloFecha(asistencia.fecha_entrada) }}</p>
+                        <p class="card-text"><strong>Ingreso:</strong> 
+                            <span :class="getEstadoClase(asistencia.estado_entrada)">
+                                {{ asistencia.estado_entrada === 'pendiente' ? 'Pendiente' : asistencia.hora_entrada }}
+                            </span>
+                        </p>
+                        <p class="card-text"><strong>Salida:</strong> 
+                            <span :class="getEstadoClase(asistencia.estado_salida)">
+                                {{ asistencia.estado_salida === 'pendiente' ? 'Pendiente' : asistencia.hora_salida }}
+                            </span>
+                        </p>
+                        <p class="card-text"><strong>Modalidad:</strong> {{ formatModalidad(asistencia.modalidad) }}</p>
+                        <p class="card-text"><strong>Horas Extra:</strong> 
+                            <span class="horas-extra-badge">
+                                {{ asistencia.horas_extra ? asistencia.horas_extra + ' min' : '00 min' }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useTimeStore } from "@/store/tiempo.js";
 import { useAsistenciaStore } from "@/store/empresa/asistencia.js";
 
 const timeStore = useTimeStore();
 const asistenciaStore = useAsistenciaStore();
 
+const esPantallaPequena = ref(window.innerWidth < 940);
+
+const actualizarAnchoPantalla = () => {
+    esPantallaPequena.value = window.innerWidth < 940;
+};
+
 const busqueda = ref('');
 const filtrosActivos = ref({});
 const empresaId = 1; // ID de la empresa fija por el momento
 
 // ✅ Computed para sincronizar la fecha con el store sin modificar la lógica de la fecha
-const fechaSeleccionada = computed({
-    get: () => {
-        console.log("📅 Fecha en timeStore:", timeStore.getFechaActual);
-        return convertirFechaAFormato(timeStore.getFechaActual);
-    },
-    set: (nuevaFecha) => {
-        console.log("📅 Nueva fecha seleccionada:", nuevaFecha);
-        timeStore.setFecha(nuevaFecha);
-    }
-});
+const fechaSeleccionada = ref("");
 
 // ✅ Función para convertir `DD-MM-YYYY` a `YYYY-MM-DD`
 function convertirFechaAFormato(fecha) {
@@ -149,17 +172,43 @@ const toggleFiltro = (filtro) => {
 // ✅ Función para asignar clases de estado dinámicamente en `Ingreso` y `Salida`
 const getEstadoClase = (estado) => {
     if (estado === 'pendiente') return 'badge bg-light text-muted p-2'; // Fondo gris claro
-    if (estado === 'Vacaciones') return 'badge bg-secondary text-white p-2'; // Fondo gris oscuro
-    if (estado === 'Permiso') return 'badge bg-info text-white p-2'; // Fondo celeste
+    if (estado === 'vacaciones') return 'badge bg-secondary text-white p-2'; // Fondo gris oscuro
+    if (estado === 'permiso') return 'badge bg-info text-white p-2'; // Fondo celeste
     if (estado === 'tardanza') return 'badge bg-warning text-dark p-2'; // Fondo amarillo
     if (estado === 'puntual') return 'badge bg-success text-white p-2'; // Fondo verde
     return '';
+};
+
+const formatFiltroLabel = (filtro) => {
+    const labels = {
+        estado_entrada: "Estado Entrada",
+        estado_salida: "Estado Salida",
+        modalidad: "Modalidad",
+        area: "Área",
+        puesto: "Puesto"
+    };
+    return labels[filtro] || filtro;
+};
+
+const formatFiltroValor = (filtro, valor) => {
+    if (filtro === "modalidad") return valor.includes("MOD_PRESENCIAL") ? "Presencial" : "Remoto";
+    return capitalizeWords(valor);
+};
+
+const formatModalidad = (modalidad) => {
+    return modalidad && modalidad.includes("MOD_PRESENCIAL") ? "Presencial" : "Remoto";
+};
+
+const capitalizeWords = (text) => {
+    if (!text) return '';
+    return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
 };
 
 // ✅ Obtener colaboradores y asistencias cuando el componente se monta
 onMounted(async () => {
     console.log("🚀 Montando componente...");
     timeStore.iniciarSincronizacion();
+    fechaSeleccionada.value = convertirFechaAFormato(timeStore.getFechaActual);
 
     await asistenciaStore.fetchColaboradores(empresaId);
     const idsColaboradores = asistenciaStore.getColaboradores.map(colaborador => colaborador.colaborador_id);
@@ -167,6 +216,12 @@ onMounted(async () => {
     if (idsColaboradores.length > 0) {
         await asistenciaStore.fetchAsistencias(idsColaboradores);
     }
+
+    window.addEventListener("resize", actualizarAnchoPantalla);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", actualizarAnchoPantalla);
 });
 
 // ✅ Observa cambios en la fecha seleccionada y recarga los datos
@@ -175,3 +230,41 @@ watch(fechaSeleccionada, async (newFecha) => {
     await asistenciaStore.fetchColaboradores(empresaId);
 });
 </script>
+
+<style scoped>
+    .horas-extra-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    /* ✅ Estilos para tarjetas en versión móvil */
+    .tarjetas-responsive {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .asistencia-card {
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+
+    .horas-extra-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 1px solid black;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+</style>
